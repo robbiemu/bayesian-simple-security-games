@@ -248,5 +248,16 @@
     "nodes": [
       "A4h8"
     ]
+  },
+  {
+    "id": "hybrid",
+    "title": "Use price jumps to find and test contractions",
+    "date": "2026-11-22",
+    "person": "Robert Thomas Collins",
+    "role": "Proposed combination and supplied an example",
+    "account": "Proposed feeding price-jump events into forced-tie tests, contracting certified relations, and using fixed-quote dominance after contraction. Supplied a three-buyer market where an ascent tie disappears before the minimum.",
+    "nodes": [
+      "A4h9"
+    ]
   }
 ]

@@ -187,3 +187,13 @@ Robert Thomas Collins · Submitted fallback direction · 2026-11-22T14:59:56Z
 Requested this budgeted-shortest-path analogy after the first two routes if needed. The report obtains one representative at fixed boundary quotes and an antichain obstruction for lists of committed residual loads.
 
 [A4h8](investigation/A4h8.md)
+
+<a name="direction-hybrid"></a>
+
+## Use price jumps to find and test contractions
+
+Robert Thomas Collins · Proposed combination and supplied an example · 2026-11-22
+
+Proposed feeding price-jump events into forced-tie tests, contracting certified relations, and using fixed-quote dominance after contraction. Supplied a three-buyer market where an ascent tie disappears before the minimum.
+
+[A4h9](investigation/A4h9.md)

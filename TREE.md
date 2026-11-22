@@ -55,7 +55,8 @@ R    Exact equilibrium in polynomial time
 │           ├── A4h5  Generate complete candidates using the supplied capacities
 │           ├── A4h6  Jump to new demand ties using alternating forests
 │           ├── A4h7  Find and contract forced price relations
-│           └── A4h8  Preserve completions when discarding partial solutions
+│           ├── A4h8  Preserve completions when discarding partial solutions
+│           └── A4h9  Combine price jumps, certified ties, and boundary load queries
 └── H    Complexity and counterexamples
     ├── H1   Pin down compact complexity and certificate bounds
     └── H2   Test a structural conjecture or a candidate hardness reduction
@@ -96,6 +97,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h6 | Finite ascent, polynomial subclasses, and step lower bounds | [Safe jumps, rational directions, and restricted Hall solves](notes/A4h-alternating-tree.md) |
 | A4h7 | Exact contraction after certification | [Forced demand and trade, price groups, and disjunction limits](notes/A4h-forced-price-relations.md) |
 | A4h8 | One representative at fixed quotes | [Shared goods and buyers, joint loads, and antichains](notes/A4h-boundary-dominance.md) |
+| A4h9 | Exact relation tests and a polynomial subclass | [Grouped comparisons and safe restarts](notes/A4h-hybrid-jumps.md) · [Branches at shared buyers and goods](notes/A4h-mixed-port-composition.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points

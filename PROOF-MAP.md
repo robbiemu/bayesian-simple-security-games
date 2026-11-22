@@ -85,6 +85,10 @@ flowchart TB
     AJ --> AJT["A4h6 · Safe alternating price jumps<br/>Finite ascent · superpolynomial general path count"]
     AJ --> AJR["A4h7 · Certified tied price groups<br/>Exact polynomial recovery on group forests"]
     AJ --> AJD["A4h8 · Fixed boundary quotes<br/>One conditional price vector preserves every completion"]
+    AJT --> AHY["A4h9 · Test and contract ties found during ascent<br/>Exact sign via one smaller grouped solve"]
+    AJR --> AHY
+    AJD --> AHM["A4h9 · Tractable branches at single buyers or goods<br/>Polynomial exact solving on a factorized core"]
+    AHY -.-> AHM
     AS --> F["A4a · Near-factorized slopes<br/>Exact polynomial-time solver"]
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
@@ -107,8 +111,8 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AL,S,O settled
-    class CL,PL,NH,CD,AQ,AJT cap
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AL,S,O settled
+    class CL,PL,NH,CD,AQ,AJT,AHY cap
 ```
 
 [Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
@@ -117,4 +121,4 @@ flowchart TB
 
 [Bounded support search and Lemke lower bound](notes/A4g-budgeted-support-search.md) · [Complete candidate generation](notes/A4h-complete-candidate-generation.md) · [Table count hardness](notes/A4h-table-count-hardness.md) · [Candidates at the supplied capacity](notes/A4h-supplied-capacity.md)
 
-[Alternating price jumps](notes/A4h-alternating-tree.md) · [Forced price relations](notes/A4h-forced-price-relations.md) · [Boundary dominance](notes/A4h-boundary-dominance.md)
+[Alternating price jumps](notes/A4h-alternating-tree.md) · [Forced price relations](notes/A4h-forced-price-relations.md) · [Boundary dominance](notes/A4h-boundary-dominance.md) · [Grouped comparisons](notes/A4h-hybrid-jumps.md) · [Composition at shared buyers and goods](notes/A4h-mixed-port-composition.md)
