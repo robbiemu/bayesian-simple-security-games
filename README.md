@@ -2,21 +2,13 @@
 
 The research question is whether an exact Bayes–Nash equilibrium can be computed in polynomial time when targets, attacker types, payoffs, and the type distribution are explicitly given. [Conitzer, arXiv:2610.08796](https://arxiv.org/pdf/2610.08796)
 
-**The general polynomial-time question is open.** This is a public working investigation of algorithms, restricted cases, and obstacles. Computational examples and model-assisted proof sketches are available for independent checking.
+**The general polynomial-time question is open.** Two main lines organize this investigation. **L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps could be skipped. **A4** seeks a polynomial-time algorithm for exact market clearing that would give an equilibrium at the requested budget.
 
-[**Choose an open question**](investigation/README.md) · [**How to contribute**](CONTRIBUTING.md) · [Who proposed each direction](DIRECTIONS.md) · [Proof map](PROOF-MAP.md)
-
-A few places to start:
-
-- **Try a new idea.** Can one supplied set of capacities yield a short, complete list of candidate prices for a general market? The node shows what already works and why the difficulty of counting a full price table has a narrower scope. [A4h5](investigation/A4h5.md)
-- **Analyze an algorithm.** Each reweighted covering step costs polynomial work. Can one bound the number of steps, or force a long run for that particular rule? [A4e](investigation/A4e.md)
-- **Check a concrete result.** Replay the small rational edge-revisit examples or examine the fixed-flow lower bound, including exactly which algorithms it rules out. [Reproduction record](records/b550a724-e9aa-4fb3-9668-c0ca5c9e8142.md) · [Audit](notes/B3g-lower-bound-audit.md)
-
-Open the contribution form on any node to ask a child question, post a competing approach or share a negative result. The repository records individual contributions and the tools or models used. [Investigation notes and resume points](TREE.md) · [Publication and source information](PUBLICATION.md) · [CC BY 4.0 writing and MIT code](LICENSE.md)
+[**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Exact market clearing**](#open-a4-market-questions) · [All open questions](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
 
 ## Open L1/L2 continuation questions
 
-L1 describes the published algorithm that increases the defender’s budget step by step. L2 gives an exact implementation and bounds its runtime. Three questions about that same algorithm remain open in this investigation.
+L1 describes the published continuation. L2 gives an exact implementation. Some games force superpolynomially many changes of attack flow, even when each step takes the largest possible jump at fixed flow. A general polynomial-time algorithm along this line would have to skip those changes. The questions below measure the cost of following the original path. [Lower bound and its scope](investigation/B3f.md) · [Exact upper bound](investigation/L2.md)
 
 | Question | What would advance it | Join |
 | --- | --- | --- |
@@ -24,7 +16,23 @@ L1 describes the published algorithm that increases the defender’s budget step
 | [L2a · Tight worst-case run length](investigation/L2a.md) | Narrow the gap between the superpolynomial number of steps forced on one run and the general upper bound. | [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4) |
 | [L2b · Intermediate bit lengths](investigation/L2b.md) | Prove an input-only polynomial bit bound for the reduced fractions representing intermediate coverages and flows, or give a family requiring more. | [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5) |
 
-Another route computes the requested budget directly. L4b proves how to do this given a market-clearing oracle. Finding a polynomial-time oracle on general inputs remains open in A4. [Endpoint reduction](investigation/L4b.md) · [Market search](investigation/A4.md)
+## Open A4 market questions
+
+Each buyer’s utility for a good is a decreasing affine function of its price. The slope can differ for every buyer and good. With masses, capacities and payoffs given as binary rationals, can we find any exact clearing equilibrium in polynomial bit time? A proposed vector of minimum prices can already be checked in polynomial time. [A4 question and certificate](investigation/A4.md)
+
+A polynomial-time solver for all such markets would settle the original game. A4c shows that any clearing equilibrium after a small capacity increase gives the original componentwise minimum prices. L4b uses polynomially many clearing calls on polynomial-bit inputs to recover an exact game equilibrium at the requested budget. [Game-to-market reduction](notes/L3-prior-partials.md#conditional-exact-reduction-to-a-minimum-price-oracle) · [A4c supply perturbation](investigation/A4c.md) · [L4b budget recovery](investigation/L4b.md)
+
+| Question | What would advance it | Join |
+| --- | --- | --- |
+| [A4h · Complete candidate prices](investigation/A4h.md) | For one supplied capacity vector, generate polynomial-size lists in polynomial bit time. Each good’s list must contain its minimum price. | [A4h5 node](investigation/A4h5.md) · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1) |
+| [A4e · Reweighted covering LP](investigation/A4e.md) | Each iteration costs polynomial work. Prove a polynomial bound on the number of iterations or construct a family forcing a superpolynomial run for this rule. | [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2) |
+| [A4f · Complementarity formulation](investigation/A4f.md) | Find an equivalent formulation with polynomially bounded handicap, the parameter controlling the Newton iteration bound. Show that solving it and recovering an exact equilibrium take polynomial bit time. | [Contribute to A4f](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4f%5D+) |
+
+A4d also reduces the game directly to one P-matrix linear complementarity problem, placing exact equilibrium search in **UniqueEOPL**. A polynomial-time solver for the instances produced by that reduction would settle the game question directly. [Direct game reduction](notes/A4d-p-matrix-complementarity.md)
+
+Open the contribution form on any node to propose a question, post a competing approach, or share a negative result. Each record credits the people and tools involved. To check an existing result, replay the rational edge-revisit examples or audit the model-assisted fixed-flow proof. [Reproduction record](records/b550a724-e9aa-4fb3-9668-c0ca5c9e8142.md) · [Lower-bound audit](notes/B3g-lower-bound-audit.md)
+
+[Who proposed each direction](DIRECTIONS.md) · [Proof map](PROOF-MAP.md) · [Investigation notes and resume points](TREE.md) · [Publication and source information](PUBLICATION.md) · [CC BY 4.0 writing and MIT code](LICENSE.md)
 
 ## Results at a glance
 
@@ -33,8 +41,6 @@ Another route computes the requested budget directly. L4b proves how to do this 
 - **General upper bound.** With $n$ targets, $k$ positive-prior types and binary input length $L$, an exact implementation of the resource-augmentation algorithm takes $2^{O(\min(n,k)\log(nk+1))}\cdot \mathrm{poly}(L)$ bit time. The proof covers weak payoff inequalities through rational perturbation and exact repair. Direct enumeration of payoff patterns gives an independent bound of the same order. [Iteration count](notes/B1-classify-run-lengths.md) · [Exact arithmetic and non-repetition proof](notes/L2-exact-arithmetic-audit.md)
 - **Tractable structure.** Polynomial time suffices when each connected component of the graph of potentially optimal choices has a bounded number of types. There may be arbitrarily many components sharing one defender budget. A different polynomial-time case allows arbitrary attacker-loss slopes when the uncovered utilities can be written $a_{it}=A_i+d_{it}c_t$ for type offsets $A_i$ and target offsets $c_t$. [Component composition](notes/B2-component-composition.md) · [Exact log-price algorithm](notes/A3-mixed-offsets.md)
 - **Prior partials.** The supplied collection already gives the fixed-type arrangement, the rank-one algorithm, the threshold ordering used in component composition, and the affine rent-division correspondence. The review records the evidence for its approximation argument and a zero-threshold endpoint correction for its rank-one algorithm. [Prior research collection](sources/prior-collection.md) · [Partial-results review](notes/L3-prior-partials.md)
-
-The unrestricted polynomial-time question remains open. Exact equilibrium search is in **UniqueEOPL** by a direct reduction to one P-matrix linear complementarity problem. An independent market approach reduces the game to clearing fractional assignment markets with pair-specific affine utilities and binary-encoded masses and capacities. [P-matrix reduction](notes/A4d-p-matrix-complementarity.md) · [Market oracle reduction](notes/L3-prior-partials.md#conditional-exact-reduction-to-a-minimum-price-oracle) · [Supply perturbation](notes/A4c-any-clearing-equilibrium.md)
 
 The two Oki–Sato directional auctions can take superpolynomially many steps even with two units of every good. A direct solver finds the minimum prices on that hard family in polynomial time because its slopes are nearly factorized. Other exact polynomial-time algorithms cover markets whose interaction graphs have bounded elimination depth or become forests after deleting a fixed number of goods. [A4 certificate and auction lower bound](notes/A4-minimum-price-markets.md) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and elimination](notes/A4b-direct-hall-search.md)
 
