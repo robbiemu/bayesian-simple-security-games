@@ -22,10 +22,12 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 
 ## Contributions elsewhere that cite this work
 
+- [Find synchronized boundary quotes using signed branch loads](../records/b0f2709c-7011-4504-b5d9-c80c48ba7687.md)
 - [Find synchronized boundary quotes using signed branch loads](../records/d06b6e2a-b651-41a9-8c35-cb646e637913.md)
 
 ## Contribution log
 
-- [Use one answer endpoint to certify the threshold search](../records/835e8a45-90e9-432d-a45c-dbf2f80f1444.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6
+- [Use one answer endpoint to certify the threshold search](../records/835e8a45-90e9-432d-a45c-dbf2f80f1444.md) · result · proof · superseded · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6
+- [Use one answer endpoint to certify the threshold search](../records/70afccbf-e6a3-451d-9dac-08ae1cf33159.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
 
 [Join the discussion in issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1) · [Find other discussions](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BL4c%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BL4c%5D+) · [Contributor guide](../CONTRIBUTING.md)

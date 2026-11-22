@@ -4,6 +4,8 @@
 
 🟦 Proof step or open route · 🟩 Complexity settled for the stated case · 🟨 Bound on a case that remains open
 
+A result can appear in both diagrams when its market theorem supplies a game solver. The generated [investigation index](investigation/README.md) links to one page per question.
+
 ## Exact Bayes–Nash equilibrium
 
 ```mermaid

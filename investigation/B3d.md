@@ -25,6 +25,8 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 ## Contributions elsewhere that cite this work
 
 - [Preserve all completions at fixed boundary quotes](../records/454e63b5-abcb-4b53-8486-e516938db306.md)
+- [Reduce mixed buyer and good articulations to the one-good block solver](../records/9633dd66-8ec4-4f53-91b2-447e98e34710.md)
+- [Find synchronized boundary quotes using signed branch loads](../records/b0f2709c-7011-4504-b5d9-c80c48ba7687.md)
 - [Find synchronized boundary quotes using signed branch loads](../records/d06b6e2a-b651-41a9-8c35-cb646e637913.md)
 - [Reduce mixed buyer and good articulations to the one-good block solver](../records/e1fb17e8-e666-42cd-9900-778c96ddd3c6.md)
 

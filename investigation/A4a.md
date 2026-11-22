@@ -24,6 +24,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 ## Contributions elsewhere that cite this work
 
+- [Clear a common-offset core with heterogeneous single-vertex branches](../records/050f6342-7cce-48ec-b308-036810d0c200.md)
 - [Clip branch loads and query just the supplied capacity](../records/6857a320-2a84-432c-ae71-c8322042dbcf.md)
 - [Clear a common-offset core with heterogeneous single-vertex branches](../records/e1fcfa01-8d57-4849-b50f-d8773258ea1e.md)
 
