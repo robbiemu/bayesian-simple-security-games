@@ -4,6 +4,8 @@
 
 🟦 Proof step or open route · 🟩 Complexity settled for the stated case · 🟨 Bound on a case that remains open
 
+A result can appear in both diagrams when its market theorem supplies a game solver. The generated [investigation index](investigation/README.md) links to one page per question.
+
 ## Exact Bayes–Nash equilibrium
 
 ```mermaid
@@ -28,6 +30,9 @@ flowchart TB
     C --> W["L2a · OPEN<br/>Tight worst-case outer-call count"]
     C --> BL["L2b · OPEN<br/>Polynomial input-only bit length at every step?"]
     C --> J["L4 · Least and greatest coverage at one threshold<br/>Exact jumps with a clearing oracle"]
+    J --> JE["L4c · Structure at one answer endpoint<br/>Polynomial exact budget search"]
+    S --> IB["A4h12 + L4b · Bounded viable incidence blocks<br/>Exact polynomial-time equilibrium"]
+    J --> IB
     C --> B["B3f · Parametric paths<br/>force distinct attack assignments"]
     B --> N["Fixed-flow continuation<br/>n^Ω(log n) steps in the worst case"]
     N --> W
@@ -41,7 +46,7 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class R,A,P,S,L,C,J,B,O,AS,HW,BL proof
-    class F,SP,LP,CP,N,E settled
+    class F,SP,LP,CP,N,E,JE,IB settled
     class U,W,PL cap
 ```
 
@@ -54,6 +59,8 @@ flowchart TB
 [Sparse cycles](notes/B3a-fixed-flow-jump.md) · [Bounded slope and mass classes](notes/B3b-closed-group-rank.md) · [Forced-flow lower bound](notes/B3f-forced-flow-switches.md)
 
 [Direct P-matrix reduction for the Bayesian game](notes/A4d-p-matrix-complementarity.md) · [Newton bounds and exact threshold jumps](notes/L4-newton-and-continuation.md)
+
+[Structure at one budget endpoint](notes/L4-structured-endpoints.md) · [Mixed articulations via buyer proxies](notes/A4h-buyer-proxy.md)
 
 ## A4 minimum-price market branch
 
@@ -89,11 +96,16 @@ flowchart TB
     AJR --> AHY
     AJD --> AHM["A4h9 · Tractable branches at single buyers or goods<br/>Polynomial exact solving on a factorized core"]
     AHY -.-> AHM
+    AHY --> AJG["A4h10 · Certified synchronized quotes<br/>Exact search using signed branch loads"]
+    AJD --> AJG
+    AHM --> AJC["A4h11 · Common-offset core<br/>Exact polynomial solver with mixed branches"]
+    AB --> AJP["A4h12 · Buyer-to-good proxy<br/>Exact polynomial solver on bounded incidence blocks"]
     AS --> F["A4a · Near-factorized slopes<br/>Exact polynomial-time solver"]
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
     CV --> CD["Reweighted cover with slope tie-break<br/>Exact search · exponential iteration bound"]
     CV --> CO["Common intercept offsets with arbitrary slopes<br/>Exact polynomial-time solver"]
+    CO --> AJC
 
     B["B3f · Forced attack assignments"] --> M["A4 · Hard market<br/>n goods · two units each · 2n+1 unit buyers<br/>Zero reserves · affine utilities"]
     AS -.-> M
@@ -111,7 +123,7 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AL,S,O settled
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O settled
     class CL,PL,NH,CD,AQ,AJT,AHY cap
 ```
 
@@ -122,3 +134,5 @@ flowchart TB
 [Bounded support search and Lemke lower bound](notes/A4g-budgeted-support-search.md) · [Complete candidate generation](notes/A4h-complete-candidate-generation.md) · [Table count hardness](notes/A4h-table-count-hardness.md) · [Candidates at the supplied capacity](notes/A4h-supplied-capacity.md)
 
 [Alternating price jumps](notes/A4h-alternating-tree.md) · [Forced price relations](notes/A4h-forced-price-relations.md) · [Boundary dominance](notes/A4h-boundary-dominance.md) · [Grouped comparisons](notes/A4h-hybrid-jumps.md) · [Composition at shared buyers and goods](notes/A4h-mixed-port-composition.md)
+
+[Synchronized shared quotes](notes/A4h-synchronized-ports.md) · [Offset cores and weak-game repairs](notes/A4h-core-composition-closures.md) · [Buyer proxies and mixed block trees](notes/A4h-buyer-proxy.md)

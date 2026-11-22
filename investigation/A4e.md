@@ -23,10 +23,16 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [A4e1 · Identify when one weighted cover gives an unweighted flow](A4e1.md) **limits** A4e. Weighted capacity use in the LP dual differs from the physical flow requirement. [Evidence](../notes/A4e-covering-lp.md#the-weighted-dual-can-miss-clearance)
 - [A4e2 · Test cuts across changing demand graphs](A4e2.md) **limits** A4e. Changing the tight graph can invalidate a proposed global cut. [Evidence](../notes/A4e-covering-lp.md#failed-hall-tests-and-linear-cuts)
 - [A4e3 · Prove strict descent and solve common-offset markets](A4e3.md) **answers part of** A4e. Strict descent establishes termination with polynomial work at each step. [Evidence](../notes/A4e-covering-lp.md#an-exact-descent-rule)
+- [A4h11 · Combine common-offset cores and heterogeneous conditional solvers](A4h11.md) **uses** A4e. Common offsets allow a monotone transformation before near-factorized core solves. [Evidence](../notes/A4h-core-composition-closures.md#transform-only-the-core)
 
 ## Where the direction came from
 
 - Robert Thomas Collins · [Try fractional bipartite covering](../DIRECTIONS.md#direction-cover) · Stated intuition and research brief
+
+## Contributions elsewhere that cite this work
+
+- [Clear a common-offset core with heterogeneous single-vertex branches](../records/050f6342-7cce-48ec-b308-036810d0c200.md)
+- [Clear a common-offset core with heterogeneous single-vertex branches](../records/e1fcfa01-8d57-4849-b50f-d8773258ea1e.md)
 
 ## Contribution log
 

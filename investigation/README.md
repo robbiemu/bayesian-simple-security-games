@@ -45,6 +45,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
     - [L4 · Compare the Newton bound with the continuation landscape](L4.md) · 🟨 Partial result
       - [L4a · Apply the handicap-dependent theorem to A4d](L4a.md) · 🟩 Result for the stated scope
       - [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) · 🟩 Result for the stated scope
+      - [L4c · Use structure at one answer endpoint and test reusable price lists](L4c.md) · 🟩 Result for the stated scope
   - [B · Worst-case run length by instance class](B.md) · Background
     - [B1 · Define a restricted Busy Beaver and test a state classification](B1.md) · 🟩 Result for the stated scope
     - [B2 · Combine independent preference components at one threshold](B2.md) · 🟩 Result for the stated scope
@@ -86,6 +87,9 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
         - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
         - [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) · 🟨 Partial result
+        - [A4h10 · Search synchronized boundary quotes and test persistent ties](A4h10.md) · 🟩 Result for the stated scope
+        - [A4h11 · Combine common-offset cores and heterogeneous conditional solvers](A4h11.md) · 🟩 Result for the stated scope
+        - [A4h12 · Use one-good block solvers for shared buyers and goods](A4h12.md) · 🟩 Result for the stated scope
       - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) · 🟦 Open
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open

@@ -15,7 +15,8 @@ R    Exact equilibrium in polynomial time
 │   ├── L3   Check the prior partial results and reconcile overlap
 │   └── L4   Compare the Newton bound with the continuation landscape
 │       ├── L4a  Apply the handicap-dependent theorem to A4d
-│       └── L4b  Transfer market endpoints and exact threshold search to L1/L2
+│       ├── L4b  Transfer market endpoints and exact threshold search to L1/L2
+│       └── L4c  Use structure at one answer endpoint and test reusable price lists
 ├── B    Worst-case run length by instance class
 │   ├── B1   Define a restricted Busy Beaver and test a state classification
 │   ├── B2   Combine independent preference components at one threshold
@@ -56,7 +57,10 @@ R    Exact equilibrium in polynomial time
 │           ├── A4h6  Jump to new demand ties using alternating forests
 │           ├── A4h7  Find and contract forced price relations
 │           ├── A4h8  Preserve completions when discarding partial solutions
-│           └── A4h9  Combine price jumps, certified ties, and boundary load queries
+│           ├── A4h9  Combine price jumps, certified ties, and boundary load queries
+│           ├── A4h10  Search synchronized boundary quotes and test persistent ties
+│           ├── A4h11  Combine common-offset cores and heterogeneous conditional solvers
+│           └── A4h12  Use one-good block solvers for shared buyers and goods
 └── H    Complexity and counterexamples
     ├── H1   Pin down compact complexity and certificate bounds
     └── H2   Test a structural conjecture or a candidate hardness reduction
@@ -73,6 +77,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | L2 | Complete | [Prove non-repetition and subexponential exact bit time](notes/L2-exact-arithmetic-audit.md) |
 | L3 | Complete | [Check prior partials and reduce the open question to a market oracle](notes/L3-prior-partials.md) |
 | L4 | Exact oracle reduction and runtime comparison | [Newton solve counts, two-sided market endpoints, and continuation seed criterion](notes/L4-newton-and-continuation.md) |
+| L4c | Polynomial search under either endpoint promise | [Threshold cuts, reciprocal endpoint, and exact library tests](notes/L4-structured-endpoints.md) |
 | A2 | Complete | [Exact log-price solver for common intercepts](notes/A2-log-price-subclass.md) |
 | A3 | Complete | [Exact solver for common affine offsets with weak signs](notes/A3-mixed-offsets.md) |
 | B3 | Lower bound proved | [Superpolynomial fixed-flow continuation and tractable subclasses](notes/B3-overlapping-types.md) |
@@ -98,6 +103,9 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h7 | Exact contraction after certification | [Forced demand and trade, price groups, and disjunction limits](notes/A4h-forced-price-relations.md) |
 | A4h8 | One representative at fixed quotes | [Shared goods and buyers, joint loads, and antichains](notes/A4h-boundary-dominance.md) |
 | A4h9 | Exact relation tests and a polynomial subclass | [Grouped comparisons and safe restarts](notes/A4h-hybrid-jumps.md) · [Branches at shared buyers and goods](notes/A4h-mixed-port-composition.md) |
+| A4h10 | Polynomial search with certified synchronized quotes | [Signed loads and persistent ties](notes/A4h-synchronized-ports.md) |
+| A4h11 | Polynomial subclass and weak-sign transfer | [Offset cores and heterogeneous conditional solvers](notes/A4h-core-composition-closures.md) |
+| A4h12 | Polynomial on bounded incidence blocks | [Buyer proxies, mixed articulations, and margin counts](notes/A4h-buyer-proxy.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points
