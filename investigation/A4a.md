@@ -16,6 +16,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) **uses** A4a. The embedded hard trajectory has near-factorized slopes at a fixed budget. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
 - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) **uses** A4a. A near-factorized contraction recovers an exact candidate. [Evidence](../notes/A4h-complete-candidate-generation.md#guess-aggregate-slope-corrections)
 - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) **uses** A4a. Contraction solves the near-factorized core at the supplied capacity. [Evidence](../notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices)
+- [A4h11 · Combine common-offset cores and heterogeneous conditional solvers](A4h11.md) **uses** A4a. Column sensitivity controls the frozen map after the transformation. [Evidence](../notes/A4h-core-composition-closures.md#exact-surrogate-and-exact-repair)
 
 ## Where the direction came from
 
@@ -24,5 +25,6 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 ## Contributions elsewhere that cite this work
 
 - [Clip branch loads and query just the supplied capacity](../records/6857a320-2a84-432c-ae71-c8322042dbcf.md)
+- [Clear a common-offset core with heterogeneous single-vertex branches](../records/e1fcfa01-8d57-4849-b50f-d8773258ea1e.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4a%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4a%5D+) · [Contributor guide](../CONTRIBUTING.md)

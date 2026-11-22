@@ -197,3 +197,13 @@ Robert Thomas Collins · Proposed combination and supplied an example · 2026-11
 Proposed feeding price-jump events into forced-tie tests, contracting certified relations, and using fixed-quote dominance after contraction. Supplied a three-buyer market where an ascent tie disappears before the minimum.
 
 [A4h9](investigation/A4h9.md)
+
+<a name="direction-compose-solvers"></a>
+
+## Use existing solvers to close gaps across the market and game approaches
+
+Robert Thomas Collins · Selected the research direction and supplied the comparison · 2026-11-22
+
+Connected A4h9's jump and contraction loop to B3d's fixed-quote switching and L4b's fixed-threshold endpoints. Asked which existing results could solve missing steps in the other approaches.
+
+[A4h10](investigation/A4h10.md) · [A4h11](investigation/A4h11.md) · [A4h12](investigation/A4h12.md) · [L4c](investigation/L4c.md)

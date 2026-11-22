@@ -115,8 +115,16 @@ flowchart TD
   n52 --> n53
   n54["H2"]:::open
   n52 --> n54
-  n55["2cda0f31-ecad-4bb0-b12e-b040dafa66cd"]:::open
-  n26 --> n55
+  n55["L4c"]:::scoped
+  n8 --> n55
+  n56["A4h10"]:::scoped
+  n42 --> n56
+  n57["A4h11"]:::scoped
+  n42 --> n57
+  n58["A4h12"]:::scoped
+  n42 --> n58
+  n59["2cda0f31-ecad-4bb0-b12e-b040dafa66cd"]:::open
+  n26 --> n59
   classDef open fill:#deebff,color:#142f4e,stroke:#4275ad
   classDef partial fill:#fff0cf,color:#502e07,stroke:#a86c18
   classDef scoped fill:#dcf5e7,color:#143e2a,stroke:#38805c

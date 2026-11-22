@@ -259,5 +259,19 @@
     "nodes": [
       "A4h9"
     ]
+  },
+  {
+    "id": "compose-solvers",
+    "title": "Use existing solvers to close gaps across the market and game approaches",
+    "date": "2026-11-22",
+    "person": "Robert Thomas Collins",
+    "role": "Selected the research direction and supplied the comparison",
+    "account": "Connected A4h9's jump and contraction loop to B3d's fixed-quote switching and L4b's fixed-threshold endpoints. Asked which existing results could solve missing steps in the other approaches.",
+    "nodes": [
+      "A4h10",
+      "A4h11",
+      "A4h12",
+      "L4c"
+    ]
   }
 ]

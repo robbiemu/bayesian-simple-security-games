@@ -470,6 +470,42 @@
       "summary": "Threshold-zero selection and rent-division embeddings expose narrower hardness questions.",
       "source": "notes/A1-threshold-transport.md",
       "next": "State a precise conjecture or reduction and show which exact equilibrium problem it addresses."
+    },
+    {
+      "id": "L4c",
+      "parent": "L4",
+      "title": "Use structure at one answer endpoint and test reusable price lists",
+      "state": "scoped",
+      "summary": "The supplied-budget search is polynomial if a recognizable hereditary market class applies at either specified answer endpoint. Failed class tests can guide threshold bisection.",
+      "source": "notes/L4-structured-endpoints.md",
+      "issue": 1
+    },
+    {
+      "id": "A4h10",
+      "parent": "A4h",
+      "title": "Search synchronized boundary quotes and test persistent ties",
+      "state": "scoped",
+      "summary": "Certified synchronized quotes reduce a branch's joint boundary flow to a signed load for exact minimum-price search. Independent groups can be combined on a factorized core.",
+      "source": "notes/A4h-synchronized-ports.md",
+      "issue": 1
+    },
+    {
+      "id": "A4h11",
+      "parent": "A4h",
+      "title": "Combine common-offset cores and heterogeneous conditional solvers",
+      "state": "scoped",
+      "summary": "A rational piecewise-affine transformation solves a common-offset core of arbitrary slopes with tractable one-vertex branches. A final LP recovers the original prices.",
+      "source": "notes/A4h-core-composition-closures.md",
+      "issue": 1
+    },
+    {
+      "id": "A4h12",
+      "parent": "A4h",
+      "title": "Use one-good block solvers for shared buyers and goods",
+      "state": "scoped",
+      "summary": "A buyer proxy preserves clearance and turns the viable incidence graph into a goods-interaction graph. The existing block algorithm then handles arbitrary mixed articulations in bounded blocks.",
+      "source": "notes/A4h-buyer-proxy.md",
+      "issue": 1
     }
   ],
   "links": [
@@ -836,6 +872,90 @@
       "target": "A4h8",
       "reason": "The conditional price swap lets one flow interval describe all branch loads at a fixed quote.",
       "source": "notes/A4h-mixed-port-composition.md#the-full-interval-at-one-boundary-quote"
+    },
+    {
+      "origin": "A4h10",
+      "relation": "extends",
+      "target": "A4h9",
+      "reason": "Several physical ports can share one certified quote parameter.",
+      "source": "notes/A4h-synchronized-ports.md#one-parameter-can-replace-an-arbitrarily-large-separator"
+    },
+    {
+      "origin": "A4h10",
+      "relation": "uses",
+      "target": "A4h8",
+      "reason": "The conditional swap preserves the load interval at every fixed boundary quote.",
+      "source": "notes/A4h-synchronized-ports.md#a-signed-load-at-fixed-shared-quotes"
+    },
+    {
+      "origin": "A4h10",
+      "relation": "is related to",
+      "target": "B3d",
+      "reason": "Fixed-quote switching retains the joint flow feasibility needed for final physical recovery.",
+      "source": "notes/A4h-synchronized-ports.md#a-signed-load-at-fixed-shared-quotes"
+    },
+    {
+      "origin": "A4h11",
+      "relation": "extends",
+      "target": "A4h9",
+      "reason": "Transforming only the core allows common offsets while preserving separate branch solvers.",
+      "source": "notes/A4h-core-composition-closures.md#a-common-offset-core-with-single-vertex-branches"
+    },
+    {
+      "origin": "A4h11",
+      "relation": "uses",
+      "target": "A4e",
+      "reason": "Common offsets allow a monotone transformation before near-factorized core solves.",
+      "source": "notes/A4h-core-composition-closures.md#transform-only-the-core"
+    },
+    {
+      "origin": "A4h11",
+      "relation": "uses",
+      "target": "A4a",
+      "reason": "Column sensitivity controls the frozen map after the transformation.",
+      "source": "notes/A4h-core-composition-closures.md#exact-surrogate-and-exact-repair"
+    },
+    {
+      "origin": "A4h12",
+      "relation": "uses",
+      "target": "A4h1",
+      "reason": "The proxy turns an incidence block into a goods-interaction block for the one-good algorithm.",
+      "source": "notes/A4h-buyer-proxy.md#an-exact-solver-on-bounded-incidence-blocks"
+    },
+    {
+      "origin": "A4h12",
+      "relation": "uses",
+      "target": "A4b",
+      "reason": "Elimination on a bounded vertex cover supplies local solves for the margin-count extension.",
+      "source": "notes/A4h-buyer-proxy.md#larger-blocks-when-the-original-margins-have-few-values"
+    },
+    {
+      "origin": "A4h12",
+      "relation": "supplies an oracle to",
+      "target": "L4b",
+      "reason": "The bounded incidence block condition survives the capacity and reserve queries.",
+      "source": "notes/A4h-buyer-proxy.md#an-exact-solver-on-bounded-incidence-blocks"
+    },
+    {
+      "origin": "L4c",
+      "relation": "extends",
+      "target": "L4b",
+      "reason": "A failed structure test can guide threshold bisection on the appropriate side of the requested budget.",
+      "source": "notes/L4-structured-endpoints.md#the-two-endpoint-promises"
+    },
+    {
+      "origin": "L4c",
+      "relation": "uses",
+      "target": "A4h6",
+      "reason": "Restricted Hall search exposes only goods certified active for the queried market.",
+      "source": "notes/L4-structured-endpoints.md#search-from-the-greatest-compatible-threshold"
+    },
+    {
+      "origin": "L4c",
+      "relation": "uses",
+      "target": "A4g3",
+      "reason": "Rank-based Hall search tests whether a supplied affine library covers a reserve query.",
+      "source": "notes/L4-structured-endpoints.md#testing-a-supplied-affine-library-of-endpoint-candidates"
     },
     {
       "origin": "H1",

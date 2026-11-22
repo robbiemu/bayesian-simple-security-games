@@ -23,6 +23,9 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h10 · Search synchronized boundary quotes and test persistent ties](A4h10.md) · 🟩 Result for the stated scope · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h11 · Combine common-offset cores and heterogeneous conditional solvers](A4h11.md) · 🟩 Result for the stated scope · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h12 · Use one-good block solvers for shared buyers and goods](A4h12.md) · 🟩 Result for the stated scope · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 
 ## Relevant work
 

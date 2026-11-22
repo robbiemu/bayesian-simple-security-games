@@ -25,5 +25,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [Preserve all completions at fixed boundary quotes](../records/454e63b5-abcb-4b53-8486-e516938db306.md)
 - [Contract certified ties and recover the original allocation](../records/4becb293-dc4a-4f61-a4f5-af881f58eaa2.md)
 - [Solve a factorized core with branches at shared buyers and goods](../records/c21ceda9-a451-4c9f-8ad0-8902f8678e95.md)
+- [Find synchronized boundary quotes using signed branch loads](../records/d06b6e2a-b651-41a9-8c35-cb646e637913.md)
+- [Clear a common-offset core with heterogeneous single-vertex branches](../records/e1fcfa01-8d57-4849-b50f-d8773258ea1e.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4c%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4c%5D+) · [Contributor guide](../CONTRIBUTING.md)
