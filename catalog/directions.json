@@ -94,6 +94,18 @@
     ]
   },
   {
+    "id": "first-market-pass",
+    "title": "Open the first A4 market investigation and connect its findings to the graph",
+    "date": "2026-11-22T03:53:42Z",
+    "person": "Robert Thomas Collins",
+    "role": "Research prompt and graph handoff",
+    "account": "Asked what was missing from L3/A4 after the continuation lower bound. L3 had already identified the market oracle. The first A4 pass derived a candidate certificate and bounds for two directional auctions. At 04:03 UTC Collins asked that the results go back to the main investigation and that the graph have an editable source. The main investigation incorporated them by 04:07 UTC.",
+    "nodes": [
+      "L3",
+      "A4"
+    ]
+  },
+  {
     "id": "lean",
     "title": "Check the library pieces for a constructive proof",
     "date": "2026-11-22T04:31:07Z",

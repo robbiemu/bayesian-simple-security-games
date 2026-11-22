@@ -16,6 +16,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 - B3f **extends** [B3e · Embed a parametric path in one unchanged flow](B3e.md). The assignment construction forces changes of the flow itself. [Evidence](../notes/B3f-forced-flow-switches.md)
 - [B3g · Independently check the forced-switch proof](B3g.md) **checks** B3f. The audit checks assignment encoding, separation, input size and the final-budget exception. [Evidence](../notes/B3g-lower-bound-audit.md)
 - [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) **uses** B3f. The forced assignments also yield a lower-bound family for directional auctions. [Evidence](../notes/A4-minimum-price-markets.md)
+- [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) **applies to** B3f. Endpoint search can skip B3f’s forced flow switches. On that family the near-factorized solver makes the clearing calls polynomial-time. [Evidence](../notes/L4-newton-and-continuation.md#limits-on-following-the-entire-path)
 
 ## Where the direction came from
 
@@ -23,6 +24,10 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 - Robert Thomas Collins · [Pursue the unresolved continuation case](../DIRECTIONS.md#direction-single) · Research direction
 - Robert Thomas Collins · [Expose the scope of the counterexample](../DIRECTIONS.md#direction-sketch) · Manuscript direction
 - Robert Thomas Collins · [Check the library pieces for a constructive proof](../DIRECTIONS.md#direction-lean) · Verification direction
+
+## Contributions elsewhere that cite this work
+
+- [Certify minimum prices and bound two directional auctions](../records/f9e2da42-7475-4d20-a172-557b2a852ea3.md)
 
 ## Contribution log
 

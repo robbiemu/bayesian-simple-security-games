@@ -31,5 +31,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 ## Contribution log
 
 - [Test a fractional-cover LP against unweighted clearance](../records/d995764c-0859-4256-adfa-f89596cc04ab.md) · attempt · started · Robert Thomas Collins
+- [Finish the covering-LP research pass](../records/89dc2dfb-d879-4c18-9103-191dd80ef0ed.md) · attempt · finished · OpenAI Codex · GPT-6.2 Sol
+- [Reweight the covering LP and test strict descent](../records/bdb46275-3976-4076-b365-431d7784b1bc.md) · result · partial · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6.2 Sol, Python
 
-[Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4e%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4e%5D+) · [Contributor guide](../CONTRIBUTING.md)
+[Join the discussion in issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2) · [Find other discussions](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4e%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4e%5D+) · [Contributor guide](../CONTRIBUTING.md)

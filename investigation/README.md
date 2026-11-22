@@ -6,13 +6,27 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Open questions
 
-- [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) — Find a polynomial-bit-time clearing algorithm for arbitrary positive pair-specific slopes.
+- [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) — Find a polynomial-bit-time algorithm returning any clearing equilibrium for arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover the minimum prices.
 - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule.
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Extend the supplied-capacity generator beyond the supported core structures.
+- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length.
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
+- [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
+
+## Partial results with open work
+
+- [L4 · Compare the Newton bound with the continuation landscape](L4.md) — Use a general polynomial-time clearing method to make the threshold recovery unconditional.
+- [B3 · Bound progress with overlapping types](B3.md) — Find a tighter worst-case bound or a broader tractable class with a stated structural assumption.
+- [B3d · Compose groups that share targets](B3d.md) — Determine which budget and flow relations compose over a tree of small separators.
+- [A4f2 · Construct equivalent buyer–good formulations](A4f2.md) — Find the right support or a global formulation in polynomial time.
+- [A4g · Test bounded search and shortcuts in the implicit basis graph](A4g.md) — Give a complete polynomial-time choice of guesses or prove tractability for a wider class.
+- [A4g3 · Generate and search price lists from anchored paths](A4g3.md) — Generate complete short lists without enumerating all anchored paths in a general market.
+- [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) — Remove or weaken the normalization assumptions while retaining completeness.
+- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) — Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps.
+- [A4h7 · Find and contract forced price relations](A4h7.md) — Find enough forced relations in polynomial time without enumerating a large disjunction.
+- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) — Find the boundary prices and buyer utilities efficiently for broader separator classes.
 
 ## Full tree
 
@@ -64,6 +78,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
         - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
         - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
+      - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) · 🟦 Open
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open
     - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) · 🟦 Open

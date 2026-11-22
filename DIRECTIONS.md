@@ -68,6 +68,16 @@ Commissioned a readable standalone sketch, specified his provisional human bylin
 
 [B3f](investigation/B3f.md) · [B3g](investigation/B3g.md)
 
+<a name="direction-first-market-pass"></a>
+
+## Open the first A4 market investigation and connect its findings to the graph
+
+Robert Thomas Collins · Research prompt and graph handoff · 2026-11-22T03:53:42Z
+
+Asked what was missing from L3/A4 after the continuation lower bound. L3 had already identified the market oracle. The first A4 pass derived a candidate certificate and bounds for two directional auctions. At 04:03 UTC Collins asked that the results go back to the main investigation and that the graph have an editable source. The main investigation incorporated them by 04:07 UTC.
+
+[L3](investigation/L3.md) · [A4](investigation/A4.md)
+
 <a name="direction-lean"></a>
 
 ## Check the library pieces for a constructive proof

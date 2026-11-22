@@ -21,4 +21,8 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 - Robert Thomas Collins · [Switch from tracing the path to the market oracle](../DIRECTIONS.md#direction-pivot) · Selection of direction
 
+## Contributions elsewhere that cite this work
+
+- [Clip branch loads and query just the supplied capacity](../records/6857a320-2a84-432c-ae71-c8322042dbcf.md)
+
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4a%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4a%5D+) · [Contributor guide](../CONTRIBUTING.md)

@@ -134,6 +134,9 @@ nodes = {}
   ensure_value(id.match?(/\A[A-Za-z0-9][A-Za-z0-9-]*\z/) && !nodes.key?(id), "Invalid or duplicate node #{id}")
   %w[title summary].each { |k| text_field(n, k, id) }
   ensure_value(STATES.key?(n["state"]), "#{id}: invalid state")
+  if n.key?("issue")
+    ensure_value(n["issue"].is_a?(Integer) && n["issue"].positive?, "#{id}: use a positive GitHub issue number")
+  end
   evidence(n["source"])
   nodes[id] = n
 end
@@ -251,7 +254,12 @@ nodes.each do |id, n|
   end
   query = URI.encode_www_form("template" => "research.yml", "title" => "[#{id}] ")
   search = URI.encode_www_form("q" => "is:issue in:title \"[#{id}]\"")
-  body << "[Join an existing discussion](#{ROOT_URL}/issues?#{search}) · [Contribute to this question](#{ROOT_URL}/issues/new?#{query}) · [Contributor guide](../CONTRIBUTING.md)"
+  discussion = if n["issue"]
+    "[Join the discussion in issue ##{n['issue']}](#{ROOT_URL}/issues/#{n['issue']}) · [Find other discussions](#{ROOT_URL}/issues?#{search})"
+  else
+    "[Join an existing discussion](#{ROOT_URL}/issues?#{search})"
+  end
+  body << "#{discussion} · [Contribute to this question](#{ROOT_URL}/issues/new?#{query}) · [Contributor guide](../CONTRIBUTING.md)"
   pages["investigation/#{id}.md"] = body.join("\n\n") + "\n"
 end
 
@@ -261,9 +269,12 @@ outline = lambda do |id, depth|
   ([line] + Array(children[id]).flat_map { |child| outline.call(child["id"], depth+1) })
 end
 open_rows = nodes.values.select { |n| n["state"] == "open" && n["id"] != "R" }.map { |n| "- #{node_link(n)} — #{n['next'] || n['summary']}" }
+partial_rows = nodes.values.select { |n| n["state"] == "partial" && n["next"] }.map { |n| "- #{node_link(n)} — #{n['next']}" }
 index = [MARK, "# Investigation index", "Choose an open question to see its evidence, the reason for each connection, work already tried, and how to contribute.",
-         "## Open questions", open_rows.join("\n"), "## Full tree", outline.call("R", 0).join("\n"),
-         "[Diagram of the tree](DIAGRAM.md) · [Mathematical proof map](../PROOF-MAP.md) · [Direction and credit catalog](../DIRECTIONS.md)"]
+         "## Open questions", open_rows.join("\n")]
+index += ["## Partial results with open work", partial_rows.join("\n")] unless partial_rows.empty?
+index += ["## Full tree", outline.call("R", 0).join("\n"),
+          "[Diagram of the tree](DIAGRAM.md) · [Mathematical proof map](../PROOF-MAP.md) · [Direction and credit catalog](../DIRECTIONS.md)"]
 pages["investigation/README.md"] = index.join("\n\n") + "\n"
 
 diagram = nodes.map.with_index { |(id, _), i| [id, "n#{i}"] }.to_h

@@ -26,3 +26,8 @@ jobs:
         run: |
           python3 experiments/b3_fixed_load_search.py --replay active
           python3 experiments/b3_fixed_load_search.py --replay used
+      - name: Replay market examples
+        run: |
+          for check in experiments/market_checks/*.py; do
+            python3 "$check"
+          done

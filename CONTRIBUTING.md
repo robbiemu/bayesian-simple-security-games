@@ -42,6 +42,8 @@ Use one tools entry per model or program. For a model record the provider, displ
 
 ## Maintain the tree and focused views
 
+The index lists partial results that still have an open task. For a historical node, put that next step in `next`. If several nodes share a discussion, set their `issue` field to the same GitHub issue number. Each page then links directly to that conversation.
+
 The historical nodes and explained cross-references are in [the catalog](catalog/investigation.json). Each link has an origin, a target, a relation, a one-sentence reason and a source path. The renderer shows it on both node pages. Question records add new nodes automatically. Historical human direction and source credit live in [the direction catalog](catalog/directions.json). Generated pages include a Markdown tree, a Mermaid diagram, a page for each node and a chronological credit catalog. [Direction catalog for readers](DIRECTIONS.md)
 
 For an experimental check, record the command, input, relevant seed and expected result. For the existing exact witnesses, run `python3 experiments/b3_fixed_load_search.py --replay active` or replace `active` with `used`. The [Lean workspace](lean/README.md) describes the statements it checks.
