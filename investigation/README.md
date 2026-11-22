@@ -30,6 +30,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) — Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h7 · Find and contract forced price relations](A4h7.md) — Find enough forced relations in polynomial time without enumerating a large disjunction. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) — Find the boundary prices and buyer utilities efficiently for broader separator classes. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) — Find a polynomial-bit-time rule that selects useful certificates or solves the remaining core on unrestricted supplied markets. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 
 ## Full tree
 
@@ -84,6 +85,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
         - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
         - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
+        - [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) · 🟨 Partial result
       - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) · 🟦 Open
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open

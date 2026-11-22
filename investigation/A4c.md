@@ -21,7 +21,9 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 ## Contributions elsewhere that cite this work
 
+- [Use grouped clearing to compare a proposed price relation](../records/03eaaf28-5c08-4810-9236-03878f2496cd.md)
 - [Preserve all completions at fixed boundary quotes](../records/454e63b5-abcb-4b53-8486-e516938db306.md)
 - [Contract certified ties and recover the original allocation](../records/4becb293-dc4a-4f61-a4f5-af881f58eaa2.md)
+- [Solve a factorized core with branches at shared buyers and goods](../records/c21ceda9-a451-4c9f-8ad0-8902f8678e95.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4c%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4c%5D+) · [Contributor guide](../CONTRIBUTING.md)
