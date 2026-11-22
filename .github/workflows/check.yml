@@ -1,0 +1,28 @@
+name: Research map
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Preserve existing contribution records
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [[ -n "$BASE" && "$BASE" != 0000000000000000000000000000000000000000 ]]; then
+            git diff --quiet --no-renames --diff-filter=MDT "$BASE" HEAD -- ':(glob)records/*.md' || {
+              echo 'Append a correction record to preserve the version already cited.'
+              exit 1
+            }
+          fi
+      - name: Validate records and generated pages
+        run: ruby scripts/build_map.rb --check
+      - name: Replay exact witnesses
+        run: |
+          python3 experiments/b3_fixed_load_search.py --replay active
+          python3 experiments/b3_fixed_load_search.py --replay used

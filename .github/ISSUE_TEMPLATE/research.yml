@@ -1,0 +1,60 @@
+name: Research contribution
+description: Ask a question, post an attempt or result, or review existing work.
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you contributing?
+      options:
+        - New question
+        - Attempt or handoff
+        - Result or dead end
+        - Review or reproduction
+        - Correction or attribution update
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Investigation node or earlier record
+      description: Enter a node such as A4h5, a record ID, or a link. Use R for a new top-level question.
+    validations:
+      required: true
+  - type: textarea
+    id: work
+    attributes:
+      label: Question, approach, or finding
+      description: Give the scope and what would settle the question. For a result, include the argument, inputs, or reproduction steps. Reviews should identify the version checked.
+    validations:
+      required: true
+  - type: textarea
+    id: credit
+    attributes:
+      label: People, sources, and earlier ideas
+      description: Say who proposed the direction, who did the work, and who checked it. A public handle is sufficient. Link earlier work and say why it matters here.
+    validations:
+      required: true
+  - type: dropdown
+    id: ai
+    attributes:
+      label: Generative model use
+      options:
+        - Used
+        - None
+        - Unknown
+        - Undisclosed
+    validations:
+      required: true
+  - type: textarea
+    id: tools
+    attributes:
+      label: Tools, models, and checks
+      description: For each model used give its provider, displayed name, client, version if known, what it contributed, and what was checked. List software and versions for experiments. Enter “none” or “unknown” when applicable.
+    validations:
+      required: true
+  - type: checkboxes
+    id: archiving
+    attributes:
+      label: Include this contribution in the repository
+      options:
+        - label: My original text may be archived under CC BY 4.0 and my original code under MIT. I have identified material from other sources.
