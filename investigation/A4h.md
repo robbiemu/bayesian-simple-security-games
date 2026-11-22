@@ -1,0 +1,35 @@
+<!-- Generated from catalog/ and records/ by scripts/build_map.rb -->
+
+# A4h · Generate complete candidate lists before the Hall search
+
+**🟦 Open**
+
+Polynomially many adaptive queries suffice in the abstract. Selecting the queries efficiently is open.
+
+**Open task** — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
+
+[Read the evidence](../notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible) · [Investigation index](README.md)
+
+Parent question · [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md)
+
+## Subquestions
+
+- [A4h1 · Compose exact price breakpoints across one-good separators](A4h1.md) · 🟩 Result for the stated scope
+- [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) · 🟩 Result for the stated scope
+- [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) · 🟨 Partial result
+- [A4h4 · Count capacity-price intervals and boundary-load drops](A4h4.md) · 🟩 Result for the stated scope
+- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open
+- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
+- [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
+- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
+
+## Relevant work
+
+- A4h **uses** [A4g3 · Generate and search price lists from anchored paths](A4g3.md). The Hall search finishes once each supplied list contains its true price. [Evidence](../notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible)
+- [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) **limits** A4h. A fixed input-independent library can miss a required formula. [Evidence](../notes/A4h-complete-candidate-generation.md#limits-on-complete-tables-and-fixed-formulas)
+
+## Where the direction came from
+
+- Robert Thomas Collins · [Require a short list that contains a solution](../DIRECTIONS.md#direction-shortlist) · Research direction
+
+[Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4h%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4h%5D+) · [Contributor guide](../CONTRIBUTING.md)

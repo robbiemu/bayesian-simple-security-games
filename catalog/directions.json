@@ -1,0 +1,227 @@
+[
+  {
+    "id": "problem",
+    "title": "Source problem",
+    "date": "2015",
+    "person": "Vincent Conitzer",
+    "role": "Published problem",
+    "account": "The open question was posed during the Simons Institute’s 2015 Economics and Computation program and documented in arXiv:2610.08796. It asks for an exact polynomial-time equilibrium algorithm in the explicitly described model.",
+    "nodes": [
+      "R",
+      "H",
+      "H1",
+      "H2"
+    ]
+  },
+  {
+    "id": "prior",
+    "title": "Earlier working drafts",
+    "date": "2026-11-21",
+    "person": "Authors of the supplied collection",
+    "role": "Prior work",
+    "account": "The collection supplies the rank-one and fixed-type algorithms, threshold ordering, rent-division embedding, and normalized approximation argument. Collins supplied it as a lead. The L3 review identifies overlap, checks the arguments and gives an endpoint correction.",
+    "nodes": [
+      "L3",
+      "A1",
+      "A2",
+      "B2",
+      "A4"
+    ]
+  },
+  {
+    "id": "tree",
+    "title": "Branching investigation and prior-work search",
+    "date": "2026-11-22T02:40:32Z",
+    "person": "Robert Thomas Collins",
+    "role": "Research design",
+    "account": "Asked for a persistent branching tree, early searches for prior partials, model-assisted investigation of individual questions, and a record of useful next directions.",
+    "nodes": [
+      "R",
+      "L",
+      "A",
+      "B",
+      "H",
+      "L1",
+      "L3"
+    ]
+  },
+  {
+    "id": "busy",
+    "title": "Classify the longest single continuation run",
+    "date": "2026-11-22T02:40:32Z",
+    "person": "Robert Thomas Collins",
+    "role": "Independently proposed framing",
+    "account": "Asked whether a restricted Busy Beaver quantity for each class of inputs could tighten the upper bound. Collins later explicitly confirmed this as his contribution to the manuscript. Codex developed the signature counts, bounds and examples. The later shortest-path reduction has separate attribution.",
+    "nodes": [
+      "B",
+      "B1",
+      "B2",
+      "B3",
+      "L2",
+      "B3a",
+      "B3b",
+      "B3c",
+      "B3d",
+      "B3e",
+      "B3f",
+      "B3g"
+    ]
+  },
+  {
+    "id": "single",
+    "title": "Pursue the unresolved continuation case",
+    "date": "2026-11-22T03:10:32Z",
+    "person": "Robert Thomas Collins",
+    "role": "Research direction",
+    "account": "Asked why the classification left a case unresolved and requested continued investigation at 03:11 UTC. The work compared reachable states with changes forced on one run, developed a fixed-flow counterexample, and recorded a separate proof audit.",
+    "nodes": [
+      "B3",
+      "B3e",
+      "B3f",
+      "B3g"
+    ]
+  },
+  {
+    "id": "sketch",
+    "title": "Expose the scope of the counterexample",
+    "date": "2026-11-22T03:52:06Z",
+    "person": "Robert Thomas Collins",
+    "role": "Manuscript direction",
+    "account": "Commissioned a readable standalone sketch, specified his provisional human byline and motivation, and requested separate disclosure of both models. The parametric shortest-path theorem is due to Gajjar and Radhakrishnan. Sol reviewed literature and tested small instances. Astra helped develop and check the reduction and draft the text.",
+    "nodes": [
+      "B3f",
+      "B3g"
+    ]
+  },
+  {
+    "id": "lean",
+    "title": "Check the library pieces for a constructive proof",
+    "date": "2026-11-22T04:31:07Z",
+    "person": "Robert Thomas Collins",
+    "role": "Verification direction",
+    "account": "Requested a paper-shaped constructive Lean development, beginning with a working environment and small library tests. The checked deliverable is the library-check package. A full formalization remains a separate task.",
+    "nodes": [
+      "B3f",
+      "B3g"
+    ]
+  },
+  {
+    "id": "pivot",
+    "title": "Switch from tracing the path to the market oracle",
+    "date": "2026-11-22T04:43:36Z",
+    "person": "Robert Thomas Collins",
+    "role": "Selection of direction",
+    "account": "After the continuation obstruction, selected A4 for the next investigation. The market correspondence and oracle route had already been identified in earlier work. The research pass developed the structural solvers, clearing reduction and complementarity formulation.",
+    "nodes": [
+      "A4",
+      "A4a",
+      "A4b",
+      "A4c",
+      "A4d"
+    ]
+  },
+  {
+    "id": "cover",
+    "title": "Try fractional bipartite covering",
+    "date": "2026-11-22T05:20:42Z",
+    "person": "Robert Thomas Collins",
+    "role": "Stated intuition and research brief",
+    "account": "Identified the resemblance to fractional vertex cover and asked whether an exact covering LP, reweighting, or Hall feedback could recover a clearing flow. The resulting notes derive descent, special cases and counterexamples for changing demand graphs.",
+    "nodes": [
+      "A4e",
+      "A4e1",
+      "A4e2",
+      "A4e3"
+    ]
+  },
+  {
+    "id": "newton",
+    "title": "Transfer market structure and examine the Newton bound",
+    "date": "2026-11-22T12:32:47Z",
+    "person": "Robert Thomas Collins",
+    "role": "Selected linked research directions",
+    "account": "Requested a transfer from A4 back to L1/L2, supplied the sufficient-LCP preprint, and directed a parallel search for an equivalent low-handicap formulation. The reports give exact budget recovery and limitations of scaling, with conditional formulations.",
+    "nodes": [
+      "L4",
+      "L4a",
+      "L4b",
+      "A4d",
+      "A4f",
+      "A4f1",
+      "A4f2"
+    ]
+  },
+  {
+    "id": "maze",
+    "title": "Use maze search as an analogy for bounded support search",
+    "date": "2026-11-22T13:11:35Z",
+    "person": "Robert Thomas Collins",
+    "role": "Proposed analogy in the research discussion",
+    "account": "Asked whether maze solvers that relax optimality or completeness could inform A4d. The pass developed exact verification after bounded search, price lists from anchored paths, and lower bounds for particular search rules.",
+    "nodes": [
+      "A4g",
+      "A4g1",
+      "A4g2",
+      "A4g3"
+    ]
+  },
+  {
+    "id": "shortlist",
+    "title": "Require a short list that contains a solution",
+    "date": "2026-11-22T13:38:19Z",
+    "person": "Robert Thomas Collins",
+    "role": "Research direction",
+    "account": "Asked for polynomially many candidates guaranteed to include an exact answer, building on the search finisher. The resulting work separates the number of region queries from the computational cost of choosing a useful query.",
+    "nodes": [
+      "A4h",
+      "A4h1",
+      "A4h2",
+      "A4h3"
+    ]
+  },
+  {
+    "id": "capacity",
+    "title": "Audit the full-table count and exploit one supplied capacity",
+    "date": "2026-11-22T14:34:56Z",
+    "person": "Robert Thomas Collins",
+    "role": "Submitted research brief",
+    "account": "Directed an audit of the proposed all-capacity counting hardness argument and a study of capacity-specific pruning, including the toll-road analogy. The resulting work separates the hard aggregate count from positive results for one supplied instance.",
+    "nodes": [
+      "A4h4",
+      "A4h5"
+    ]
+  },
+  {
+    "id": "forest",
+    "title": "Grow an alternating forest after a failed Hall test",
+    "date": "2026-11-22T14:59:56Z",
+    "person": "Robert Thomas Collins",
+    "role": "Submitted direction and priority",
+    "account": "Submitted the Hungarian-algorithm analogy as a first route. Asked about tight partial flows, exact next events and binary-time progress. The report obtains exact safe jumps and a fixed-deficit family with many events.",
+    "nodes": [
+      "A4h6"
+    ]
+  },
+  {
+    "id": "forced",
+    "title": "Certify and contract a forced price relation",
+    "date": "2026-11-22T14:59:56Z",
+    "person": "Robert Thomas Collins",
+    "role": "Submitted direction and priority",
+    "account": "Submitted the generalized-flow analogy as the second route. Asked whether a forced tie permits eliminating a price while preserving the two capacities. The report gives certificates, recovery and limits of discovering a specific tie.",
+    "nodes": [
+      "A4h7"
+    ]
+  },
+  {
+    "id": "dominance",
+    "title": "Use dominance only when all completions survive",
+    "date": "2026-11-22T14:59:56Z",
+    "person": "Robert Thomas Collins",
+    "role": "Submitted fallback direction",
+    "account": "Requested this budgeted-shortest-path analogy after the first two routes if needed. The report obtains one representative at fixed boundary quotes and an antichain obstruction for lists of committed residual loads.",
+    "nodes": [
+      "A4h8"
+    ]
+  }
+]

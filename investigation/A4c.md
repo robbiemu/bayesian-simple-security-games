@@ -1,0 +1,22 @@
+<!-- Generated from catalog/ and records/ by scripts/build_map.rb -->
+
+# A4c · Reduce minimum-price search to any clearing equilibrium
+
+**🟩 Result for the stated scope**
+
+Any clearing equilibrium of one suitably enlarged market yields original minimum prices.
+
+[Read the evidence](../notes/A4c-any-clearing-equilibrium.md) · [Investigation index](README.md)
+
+Parent question · [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md)
+
+## Relevant work
+
+- A4c **reduces** [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md). Solving one enlarged clearing instance recovers minimum prices. [Evidence](../notes/A4c-any-clearing-equilibrium.md)
+- [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) **uses** A4c. Clearing calls at perturbed supplies bracket both threshold endpoints. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
+
+## Where the direction came from
+
+- Robert Thomas Collins · [Switch from tracing the path to the market oracle](../DIRECTIONS.md#direction-pivot) · Selection of direction
+
+[Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4c%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4c%5D+) · [Contributor guide](../CONTRIBUTING.md)

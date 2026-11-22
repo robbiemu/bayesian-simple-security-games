@@ -1,0 +1,769 @@
+{
+  "nodes": [
+    {
+      "id": "R",
+      "parent": null,
+      "title": "Exact equilibrium in polynomial time",
+      "state": "open",
+      "summary": "The unrestricted question asks for an exact polynomial-time algorithm on binary rational input.",
+      "source": "README.md",
+      "next": "Give such an algorithm for every explicitly specified instance, or establish an appropriate general complexity barrier."
+    },
+    {
+      "id": "L",
+      "parent": "R",
+      "title": "Published results and algorithm",
+      "state": "background",
+      "summary": "Sources, baseline algorithms, and comparisons with later approaches.",
+      "source": "TREE.md"
+    },
+    {
+      "id": "L1",
+      "parent": "L",
+      "title": "Locate the exact algorithm and its worst-case bottleneck",
+      "state": "scoped",
+      "summary": "Identifies the published resource-augmentation algorithm and exhibits an edge that becomes active again.",
+      "source": "notes/L1-published-algorithm.md"
+    },
+    {
+      "id": "L2",
+      "parent": "L",
+      "title": "Account for exact arithmetic along a run",
+      "state": "scoped",
+      "summary": "Accounts for rational bit lengths, flow ties and non-repetition in the improved continuation upper bound.",
+      "source": "notes/L2-exact-arithmetic-audit.md"
+    },
+    {
+      "id": "L3",
+      "parent": "L",
+      "title": "Check the prior partial results and reconcile overlap",
+      "state": "background",
+      "summary": "Audits the supplied collection, records earlier results and isolates the exact market-oracle question.",
+      "source": "notes/L3-prior-partials.md"
+    },
+    {
+      "id": "L4",
+      "parent": "L",
+      "title": "Compare the Newton bound with the continuation landscape",
+      "state": "partial",
+      "summary": "Transfers exact threshold endpoints from markets and tests the handicap-dependent Newton bound.",
+      "source": "notes/L4-newton-and-continuation.md",
+      "next": "Use a general polynomial-time clearing method to make the threshold recovery unconditional."
+    },
+    {
+      "id": "L4a",
+      "parent": "L4",
+      "title": "Apply the handicap-dependent theorem to A4d",
+      "state": "scoped",
+      "summary": "The known A4d regularization can have exponential handicap in the binary input size.",
+      "source": "notes/L4-newton-and-continuation.md#the-size-of-the-a4d-handicap"
+    },
+    {
+      "id": "L4b",
+      "parent": "L4",
+      "title": "Transfer market endpoints and exact threshold search to L1/L2",
+      "state": "scoped",
+      "summary": "An exact any-clearing oracle yields both threshold endpoints and permits budget search without tracing every flow change.",
+      "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
+    },
+    {
+      "id": "B",
+      "parent": "R",
+      "title": "Worst-case run length by instance class",
+      "state": "background",
+      "summary": "Compares the longest run on one instance with the number of states reachable across a class.",
+      "source": "notes/B1-classify-run-lengths.md"
+    },
+    {
+      "id": "B1",
+      "parent": "B",
+      "title": "Define a restricted Busy Beaver and test a state classification",
+      "state": "scoped",
+      "summary": "Bounds feasible payoff signatures and computes an exact longest-run example for independent blocks.",
+      "source": "notes/B1-classify-run-lengths.md"
+    },
+    {
+      "id": "B2",
+      "parent": "B",
+      "title": "Combine independent preference components at one threshold",
+      "state": "scoped",
+      "summary": "Combines bounded-type preference components at a common threshold and one shared budget.",
+      "source": "notes/B2-component-composition.md"
+    },
+    {
+      "id": "B3",
+      "parent": "B",
+      "title": "Bound progress with overlapping types",
+      "state": "partial",
+      "summary": "Sparse cycles and a bounded set of slope generators give progress bounds. Dense slopes force many fixed-flow segments.",
+      "source": "notes/B3-overlapping-types.md",
+      "next": "Find a tighter worst-case bound or a broader tractable class with a stated structural assumption."
+    },
+    {
+      "id": "B3a",
+      "parent": "B3",
+      "title": "Jump across steps that preserve an attack flow",
+      "state": "scoped",
+      "summary": "Extends coverage as far as possible at one attack flow and identifies a consumed cycle.",
+      "source": "notes/B3a-fixed-flow-jump.md"
+    },
+    {
+      "id": "B3b",
+      "parent": "B3",
+      "title": "Count progress in closed reachable groups",
+      "state": "scoped",
+      "summary": "Bounds local cost levels inside closed groups with restricted slope and mass structure.",
+      "source": "notes/B3b-closed-group-rank.md"
+    },
+    {
+      "id": "B3c",
+      "parent": "B3",
+      "title": "Search for long runs with exact arithmetic",
+      "state": "scoped",
+      "summary": "Exact small instances revisit old matching edges while their cost drops.",
+      "source": "notes/B3c-exact-path-search.md"
+    },
+    {
+      "id": "B3d",
+      "parent": "B3",
+      "title": "Compose groups that share targets",
+      "state": "partial",
+      "summary": "One bounded shared target set admits composition across many groups.",
+      "source": "notes/B3d-shared-target-separator.md",
+      "next": "Determine which budget and flow relations compose over a tree of small separators."
+    },
+    {
+      "id": "B3e",
+      "parent": "B3",
+      "title": "Embed a parametric path in one unchanged flow",
+      "state": "scoped",
+      "summary": "A parametric path gives many continuation changes even while one attack flow stays fixed.",
+      "source": "notes/B3e-parametric-path-lower-bound.md"
+    },
+    {
+      "id": "B3f",
+      "parent": "B3",
+      "title": "Force many flow switches at uniform margins",
+      "state": "scoped",
+      "summary": "A second construction forces many different assignments on one run. The final budget of this family still admits a direct solver.",
+      "source": "notes/B3f-forced-flow-switches.md"
+    },
+    {
+      "id": "B3g",
+      "parent": "B3",
+      "title": "Independently check the forced-switch proof",
+      "state": "scoped",
+      "summary": "A separate model-assisted audit checks the forcing argument, binary sizes and the scope of the segment count.",
+      "source": "notes/B3g-lower-bound-audit.md"
+    },
+    {
+      "id": "A",
+      "parent": "R",
+      "title": "Alternative exact algorithms",
+      "state": "background",
+      "summary": "Alternative equilibrium formulations and exact algorithms on restricted families.",
+      "source": "TREE.md"
+    },
+    {
+      "id": "A1",
+      "parent": "A",
+      "title": "Use payoff thresholds and capacitated transport",
+      "state": "scoped",
+      "summary": "Gives a threshold and transport certificate, exact face search, and weak-sign repair.",
+      "source": "notes/A1-threshold-transport.md"
+    },
+    {
+      "id": "A2",
+      "parent": "A",
+      "title": "Solve the common-intercept class by logarithmic price changes",
+      "state": "scoped",
+      "summary": "Develops a log-price algorithm for a common-intercept payoff class.",
+      "source": "notes/A2-log-price-subclass.md"
+    },
+    {
+      "id": "A3",
+      "parent": "A",
+      "title": "Extend the log-price algorithm to arbitrary common offsets",
+      "state": "scoped",
+      "summary": "Extends the log-price argument to arbitrary common affine offsets with exact recovery.",
+      "source": "notes/A3-mixed-offsets.md"
+    },
+    {
+      "id": "A4",
+      "parent": "A",
+      "title": "Solve the binary-mass minimum-price market with arbitrary slopes",
+      "state": "open",
+      "summary": "General binary-mass market search remains open. A proposed minimum price can be verified efficiently.",
+      "source": "notes/A4-minimum-price-markets.md",
+      "next": "Find a polynomial-bit-time clearing algorithm for arbitrary positive pair-specific slopes."
+    },
+    {
+      "id": "A4a",
+      "parent": "A4",
+      "title": "Test contraction near factorized slopes",
+      "state": "scoped",
+      "summary": "Uses contraction to recover exact minimum prices when slopes are sufficiently near factorized.",
+      "source": "notes/A4a-near-factorized-slopes.md"
+    },
+    {
+      "id": "A4b",
+      "parent": "A4",
+      "title": "Seek direct search through Hall inequalities",
+      "state": "scoped",
+      "summary": "Hall tests and elimination give polynomial algorithms for forests and bounded-deletion subclasses.",
+      "source": "notes/A4b-direct-hall-search.md"
+    },
+    {
+      "id": "A4c",
+      "parent": "A4",
+      "title": "Reduce minimum-price search to any clearing equilibrium",
+      "state": "scoped",
+      "summary": "Any clearing equilibrium of one suitably enlarged market yields original minimum prices.",
+      "source": "notes/A4c-any-clearing-equilibrium.md"
+    },
+    {
+      "id": "A4d",
+      "parent": "A4",
+      "title": "Reduce market and game equilibrium to P-matrix complementarity",
+      "state": "scoped",
+      "summary": "A single P-matrix LCP bounds the market and game search problems in UniqueEOPL.",
+      "source": "notes/A4d-p-matrix-complementarity.md"
+    },
+    {
+      "id": "A4e",
+      "parent": "A4",
+      "title": "Test covering LPs with reweighting and Hall cuts",
+      "state": "open",
+      "summary": "Reweighted cover LPs descend exactly. Each iteration costs polynomial work. The known general iteration bound is exponential.",
+      "source": "notes/A4e-covering-lp.md",
+      "next": "Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule."
+    },
+    {
+      "id": "A4e1",
+      "parent": "A4e",
+      "title": "Identify when one weighted cover gives an unweighted flow",
+      "state": "scoped",
+      "summary": "An optimal weighted cover can have tight edges that fail the unweighted clearance test.",
+      "source": "notes/A4e-covering-lp.md#the-weighted-dual-can-miss-clearance"
+    },
+    {
+      "id": "A4e2",
+      "parent": "A4e",
+      "title": "Test cuts across changing demand graphs",
+      "state": "scoped",
+      "summary": "A Hall obstruction can cease to apply when the price changes and the demand graph moves.",
+      "source": "notes/A4e-covering-lp.md#failed-hall-tests-and-linear-cuts"
+    },
+    {
+      "id": "A4e3",
+      "parent": "A4e",
+      "title": "Prove strict descent and solve common-offset markets",
+      "state": "scoped",
+      "summary": "A secondary optimization yields strict descent. Common-offset markets have a separate polynomial solver.",
+      "source": "notes/A4e-covering-lp.md#an-exact-descent-rule"
+    },
+    {
+      "id": "A4f",
+      "parent": "A4",
+      "title": "Seek a polynomial-handicap formulation for A4d",
+      "state": "open",
+      "summary": "The existing scaling and reformulations do not give a uniform polynomial handicap bound.",
+      "source": "notes/A4f-handicap-formulation.md",
+      "next": "Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery."
+    },
+    {
+      "id": "A4f1",
+      "parent": "A4f",
+      "title": "Test scaling, regularization and active-set conditioning",
+      "state": "scoped",
+      "summary": "A small block preserves the handicap obstruction under positive diagonal scaling.",
+      "source": "notes/A4f-handicap-formulation.md#why-rescaling-the-regularized-matrix-fails"
+    },
+    {
+      "id": "A4f2",
+      "parent": "A4f",
+      "title": "Construct equivalent buyer–good formulations",
+      "state": "partial",
+      "summary": "Node formulations and supplied sign intervals expose better-conditioned restricted cells.",
+      "source": "notes/A4f-handicap-formulation.md#eliminating-flow-variables",
+      "next": "Find the right support or a global formulation in polynomial time."
+    },
+    {
+      "id": "A4g",
+      "parent": "A4",
+      "title": "Test bounded search and shortcuts in the implicit basis graph",
+      "state": "partial",
+      "summary": "Bounded support search can verify a candidate exactly. Some natural search paths are long.",
+      "source": "notes/A4g-budgeted-support-search.md",
+      "next": "Give a complete polynomial-time choice of guesses or prove tractability for a wider class."
+    },
+    {
+      "id": "A4g1",
+      "parent": "A4g",
+      "title": "Solve selected affine regions and bracket their signs",
+      "state": "scoped",
+      "summary": "Selected affine regions can be solved and checked at exact prices.",
+      "source": "notes/A4g-budgeted-support-search.md#testing-affine-regions-of-the-regularized-market"
+    },
+    {
+      "id": "A4g2",
+      "parent": "A4g",
+      "title": "Bound breadth-first and all-ones Lemke searches",
+      "state": "scoped",
+      "summary": "Ordinary breadth-first search and a specified Lemke line can visit many states.",
+      "source": "notes/A4g-budgeted-support-search.md#a-long-all-ones-lemke-path-inside-a4d"
+    },
+    {
+      "id": "A4g3",
+      "parent": "A4g",
+      "title": "Generate and search price lists from anchored paths",
+      "state": "partial",
+      "summary": "Anchored paths supply exact price candidates and a Hall search uses complete lists.",
+      "source": "notes/A4g-budgeted-support-search.md#candidate-prices-from-tight-paths",
+      "next": "Generate complete short lists without enumerating all anchored paths in a general market."
+    },
+    {
+      "id": "A4h",
+      "parent": "A4",
+      "title": "Generate complete candidate lists before the Hall search",
+      "state": "open",
+      "summary": "Polynomially many adaptive queries suffice in the abstract. Selecting the queries efficiently is open.",
+      "source": "notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible",
+      "next": "Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market."
+    },
+    {
+      "id": "A4h1",
+      "parent": "A4h",
+      "title": "Compose exact price breakpoints across one-good separators",
+      "state": "scoped",
+      "summary": "Separating blocks at one good permits adaptive breakpoint generation in several bounded classes.",
+      "source": "notes/A4h-complete-candidate-generation.md#candidate-lists-from-one-good-separators"
+    },
+    {
+      "id": "A4h2",
+      "parent": "A4h",
+      "title": "Test fixed libraries and complete parametric tables",
+      "state": "scoped",
+      "summary": "Fixed formula libraries and explicit tables can need many entries.",
+      "source": "notes/A4h-complete-candidate-generation.md#limits-on-complete-tables-and-fixed-formulas"
+    },
+    {
+      "id": "A4h3",
+      "parent": "A4h",
+      "title": "Use contraction queries, load corrections, and price transforms",
+      "state": "partial",
+      "summary": "Slope corrections and approximate common offsets give exact candidates for structured inputs.",
+      "source": "notes/A4h-complete-candidate-generation.md#guess-aggregate-slope-corrections",
+      "next": "Remove or weaken the normalization assumptions while retaining completeness."
+    },
+    {
+      "id": "A4h4",
+      "parent": "A4h",
+      "title": "Count capacity-price intervals and boundary-load drops",
+      "state": "scoped",
+      "summary": "Counting price plateaus across all capacities is NP-hard on the stated unit-slope inputs.",
+      "source": "notes/A4h-table-count-hardness.md"
+    },
+    {
+      "id": "A4h5",
+      "parent": "A4h",
+      "title": "Generate complete candidates using the supplied capacities",
+      "state": "open",
+      "summary": "Clipping and querying branch loads give capacity-specific polynomial solvers on restricted cores.",
+      "source": "notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices",
+      "next": "Extend the supplied-capacity generator beyond the supported core structures."
+    },
+    {
+      "id": "A4h6",
+      "parent": "A4h",
+      "title": "Jump to new demand ties using alternating forests",
+      "state": "partial",
+      "summary": "Alternating forests yield exact safe price jumps. Even a deficit of one can produce many internal events.",
+      "source": "notes/A4h-alternating-tree.md",
+      "next": "Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps."
+    },
+    {
+      "id": "A4h7",
+      "parent": "A4h",
+      "title": "Find and contract forced price relations",
+      "state": "partial",
+      "summary": "A certified forced tie can be contracted while separate capacities and exact recovery are preserved.",
+      "source": "notes/A4h-forced-price-relations.md",
+      "next": "Find enough forced relations in polynomial time without enumerating a large disjunction."
+    },
+    {
+      "id": "A4h8",
+      "parent": "A4h",
+      "title": "Preserve completions when discarding partial solutions",
+      "state": "partial",
+      "summary": "At fixed boundary quotes one conditional price vector and joint flow set suffice. Committed boundary loads can form an exponential antichain.",
+      "source": "notes/A4h-boundary-dominance.md",
+      "next": "Find the boundary prices and buyer utilities efficiently for broader separator classes."
+    },
+    {
+      "id": "H",
+      "parent": "R",
+      "title": "Complexity and counterexamples",
+      "state": "background",
+      "summary": "General complexity and counterexample directions.",
+      "source": "TREE.md"
+    },
+    {
+      "id": "H1",
+      "parent": "H",
+      "title": "Pin down compact complexity and certificate bounds",
+      "state": "open",
+      "summary": "The certificate and UniqueEOPL upper bounds leave the full complexity unresolved.",
+      "source": "notes/A4d-p-matrix-complementarity.md",
+      "next": "Strengthen a general upper or lower bound under the explicit rational encoding."
+    },
+    {
+      "id": "H2",
+      "parent": "H",
+      "title": "Test a structural conjecture or a candidate hardness reduction",
+      "state": "open",
+      "summary": "Threshold-zero selection and rent-division embeddings expose narrower hardness questions.",
+      "source": "notes/A1-threshold-transport.md",
+      "next": "State a precise conjecture or reduction and show which exact equilibrium problem it addresses."
+    }
+  ],
+  "links": [
+    {
+      "origin": "B1",
+      "relation": "uses",
+      "target": "L1",
+      "reason": "Payoff signatures count states of the published continuation.",
+      "source": "notes/B1-classify-run-lengths.md"
+    },
+    {
+      "origin": "L2",
+      "relation": "uses",
+      "target": "B1",
+      "reason": "The bit-time proof needs the count of feasible signatures.",
+      "source": "notes/L2-exact-arithmetic-audit.md"
+    },
+    {
+      "origin": "B2",
+      "relation": "uses",
+      "target": "A1",
+      "reason": "The common parameter is a threshold with a feasible transport flow.",
+      "source": "notes/B2-component-composition.md"
+    },
+    {
+      "origin": "B2",
+      "relation": "uses",
+      "target": "L3",
+      "reason": "Threshold ordering was already present in Part II of the supplied collection.",
+      "source": "notes/B2-component-composition.md"
+    },
+    {
+      "origin": "B3d",
+      "relation": "extends",
+      "target": "B2",
+      "reason": "Components can share a bounded set of target coordinates.",
+      "source": "notes/B3d-shared-target-separator.md"
+    },
+    {
+      "origin": "B3a",
+      "relation": "extends",
+      "target": "L1",
+      "reason": "The jump holds one optimal attack flow fixed.",
+      "source": "notes/B3a-fixed-flow-jump.md"
+    },
+    {
+      "origin": "B3c",
+      "relation": "limits",
+      "target": "B3b",
+      "reason": "Previously used edges can reappear, so an edge count alone cannot certify progress.",
+      "source": "notes/B3c-exact-path-search.md"
+    },
+    {
+      "origin": "B3e",
+      "relation": "limits",
+      "target": "L1",
+      "reason": "Long runs can occur under a fixed-order continuation even with an unchanged flow.",
+      "source": "notes/B3e-parametric-path-lower-bound.md"
+    },
+    {
+      "origin": "B3f",
+      "relation": "limits",
+      "target": "B3a",
+      "reason": "A fixed-flow jump cannot cross two witness intervals requiring different assignments.",
+      "source": "notes/B3f-forced-flow-switches.md"
+    },
+    {
+      "origin": "B3f",
+      "relation": "extends",
+      "target": "B3e",
+      "reason": "The assignment construction forces changes of the flow itself.",
+      "source": "notes/B3f-forced-flow-switches.md"
+    },
+    {
+      "origin": "B3g",
+      "relation": "checks",
+      "target": "B3f",
+      "reason": "The audit checks assignment encoding, separation, input size and the final-budget exception.",
+      "source": "notes/B3g-lower-bound-audit.md"
+    },
+    {
+      "origin": "A1",
+      "relation": "uses",
+      "target": "L3",
+      "reason": "Fixed-type enumeration and the original market correspondence have earlier treatments.",
+      "source": "notes/A1-threshold-transport.md"
+    },
+    {
+      "origin": "A2",
+      "relation": "uses",
+      "target": "A1",
+      "reason": "Fixed-threshold obligations are expressed through support and transport.",
+      "source": "notes/A2-log-price-subclass.md"
+    },
+    {
+      "origin": "A3",
+      "relation": "extends",
+      "target": "A2",
+      "reason": "The common-offset solver resolves signs that can cross coverage endpoints.",
+      "source": "notes/A3-mixed-offsets.md"
+    },
+    {
+      "origin": "A4",
+      "relation": "uses",
+      "target": "L3",
+      "reason": "An exact minimum-price oracle suffices for the original game.",
+      "source": "notes/A4-minimum-price-markets.md"
+    },
+    {
+      "origin": "A4",
+      "relation": "uses",
+      "target": "B3f",
+      "reason": "The forced assignments also yield a lower-bound family for directional auctions.",
+      "source": "notes/A4-minimum-price-markets.md"
+    },
+    {
+      "origin": "A4a",
+      "relation": "answers part of",
+      "target": "A4",
+      "reason": "Near-factorized slopes admit direct contraction.",
+      "source": "notes/A4a-near-factorized-slopes.md"
+    },
+    {
+      "origin": "A4b",
+      "relation": "answers part of",
+      "target": "A4",
+      "reason": "A small separator or a forest supports exact price elimination.",
+      "source": "notes/A4b-direct-hall-search.md"
+    },
+    {
+      "origin": "A4c",
+      "relation": "reduces",
+      "target": "A4",
+      "reason": "Solving one enlarged clearing instance recovers minimum prices.",
+      "source": "notes/A4c-any-clearing-equilibrium.md"
+    },
+    {
+      "origin": "A4d",
+      "relation": "answers part of",
+      "target": "R",
+      "reason": "A direct game-to-P-matrix reduction gives a complexity upper bound.",
+      "source": "notes/A4d-p-matrix-complementarity.md"
+    },
+    {
+      "origin": "A4e1",
+      "relation": "limits",
+      "target": "A4e",
+      "reason": "Weighted capacity use in the LP dual differs from the physical flow requirement.",
+      "source": "notes/A4e-covering-lp.md#the-weighted-dual-can-miss-clearance"
+    },
+    {
+      "origin": "A4e2",
+      "relation": "limits",
+      "target": "A4e",
+      "reason": "Changing the tight graph can invalidate a proposed global cut.",
+      "source": "notes/A4e-covering-lp.md#failed-hall-tests-and-linear-cuts"
+    },
+    {
+      "origin": "A4e3",
+      "relation": "answers part of",
+      "target": "A4e",
+      "reason": "Strict descent establishes termination with polynomial work at each step.",
+      "source": "notes/A4e-covering-lp.md#an-exact-descent-rule"
+    },
+    {
+      "origin": "A4f1",
+      "relation": "limits",
+      "target": "A4f",
+      "reason": "Positive diagonal rescaling can leave an exponential handicap.",
+      "source": "notes/A4f-handicap-formulation.md#why-rescaling-the-regularized-matrix-fails"
+    },
+    {
+      "origin": "A4f2",
+      "relation": "uses",
+      "target": "A4d",
+      "reason": "Eliminating edge flows exposes the buyer–good node formulation.",
+      "source": "notes/A4f-handicap-formulation.md#eliminating-flow-variables"
+    },
+    {
+      "origin": "L4a",
+      "relation": "uses",
+      "target": "A4f1",
+      "reason": "The Newton comparison needs a quantitative handicap bound.",
+      "source": "notes/L4-newton-and-continuation.md#the-size-of-the-a4d-handicap"
+    },
+    {
+      "origin": "L4b",
+      "relation": "uses",
+      "target": "A4c",
+      "reason": "Clearing calls at perturbed supplies bracket both threshold endpoints.",
+      "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
+    },
+    {
+      "origin": "L4b",
+      "relation": "uses",
+      "target": "A4a",
+      "reason": "The embedded hard trajectory has near-factorized slopes at a fixed budget.",
+      "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
+    },
+    {
+      "origin": "L4b",
+      "relation": "extends",
+      "target": "L2",
+      "reason": "Endpoint searches can skip internal flow switches.",
+      "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
+    },
+    {
+      "origin": "A4g1",
+      "relation": "uses",
+      "target": "A4f2",
+      "reason": "With candidate edge signs the node equations admit a direct regional solve.",
+      "source": "notes/A4g-budgeted-support-search.md#testing-affine-regions-of-the-regularized-market"
+    },
+    {
+      "origin": "A4g2",
+      "relation": "limits",
+      "target": "A4g",
+      "reason": "A short verified route is valuable because indiscriminate searches have long examples.",
+      "source": "notes/A4g-budgeted-support-search.md#a-long-all-ones-lemke-path-inside-a4d"
+    },
+    {
+      "origin": "A4g3",
+      "relation": "uses",
+      "target": "A4",
+      "reason": "The reachability certificate supplies an anchor path for every minimum price.",
+      "source": "notes/A4g-budgeted-support-search.md#candidate-prices-from-tight-paths"
+    },
+    {
+      "origin": "A4h",
+      "relation": "uses",
+      "target": "A4g3",
+      "reason": "The Hall search finishes once each supplied list contains its true price.",
+      "source": "notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible"
+    },
+    {
+      "origin": "A4h1",
+      "relation": "extends",
+      "target": "A4b",
+      "reason": "Branch-load breakpoints connect local solves across one shared good.",
+      "source": "notes/A4h-complete-candidate-generation.md#candidate-lists-from-one-good-separators"
+    },
+    {
+      "origin": "A4h2",
+      "relation": "limits",
+      "target": "A4h",
+      "reason": "A fixed input-independent library can miss a required formula.",
+      "source": "notes/A4h-complete-candidate-generation.md#limits-on-complete-tables-and-fixed-formulas"
+    },
+    {
+      "origin": "A4h3",
+      "relation": "uses",
+      "target": "A4a",
+      "reason": "A near-factorized contraction recovers an exact candidate.",
+      "source": "notes/A4h-complete-candidate-generation.md#guess-aggregate-slope-corrections"
+    },
+    {
+      "origin": "A4h4",
+      "relation": "limits",
+      "target": "A4h2",
+      "reason": "Counting rows of an entire all-capacity table is hard already for unit slopes.",
+      "source": "notes/A4h-table-count-hardness.md"
+    },
+    {
+      "origin": "A4h5",
+      "relation": "uses",
+      "target": "A4h1",
+      "reason": "One-good branch messages support queries at selected prices.",
+      "source": "notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices"
+    },
+    {
+      "origin": "A4h5",
+      "relation": "uses",
+      "target": "A4a",
+      "reason": "Contraction solves the near-factorized core at the supplied capacity.",
+      "source": "notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices"
+    },
+    {
+      "origin": "A4h5",
+      "relation": "is limited by",
+      "target": "A4e1",
+      "reason": "The unrestricted-core potential gives slope-weighted demand instead of the unweighted Hall charge.",
+      "source": "notes/A4h-supplied-capacity.md"
+    },
+    {
+      "origin": "A4h5",
+      "relation": "qualified by",
+      "target": "A4h4",
+      "reason": "The hardness concerns all capacities. The single supplied capacity is a narrower task.",
+      "source": "notes/A4h-table-count-hardness.md"
+    },
+    {
+      "origin": "A4h6",
+      "relation": "uses",
+      "target": "A4g3",
+      "reason": "A deficient Hall set provides the starting point for an exact price jump.",
+      "source": "notes/A4h-alternating-tree.md"
+    },
+    {
+      "origin": "A4h6",
+      "relation": "tests",
+      "target": "A4h5",
+      "reason": "The forest search proposes the next price at the supplied capacities.",
+      "source": "notes/A4h-alternating-tree.md"
+    },
+    {
+      "origin": "A4h7",
+      "relation": "tests",
+      "target": "A4h5",
+      "reason": "Certified tight relations eliminate a price for the current market.",
+      "source": "notes/A4h-forced-price-relations.md"
+    },
+    {
+      "origin": "A4h8",
+      "relation": "tests",
+      "target": "A4h5",
+      "reason": "Completion-preserving pruning depends on boundary quotes and joint flow feasibility.",
+      "source": "notes/A4h-boundary-dominance.md"
+    },
+    {
+      "origin": "A4h8",
+      "relation": "extends",
+      "target": "B3d",
+      "reason": "Both approaches coordinate local solutions through shared quantities. The market note specifies the boundary quotes.",
+      "source": "notes/A4h-boundary-dominance.md"
+    },
+    {
+      "origin": "H1",
+      "relation": "uses",
+      "target": "A4d",
+      "reason": "UniqueEOPL is the current general upper bound in this investigation.",
+      "source": "notes/A4d-p-matrix-complementarity.md"
+    },
+    {
+      "origin": "H2",
+      "relation": "uses",
+      "target": "A1",
+      "reason": "Selecting a threshold-zero equilibrium gives a scoped hardness baseline.",
+      "source": "notes/A1-threshold-transport.md"
+    }
+  ],
+  "decisions": {}
+}

@@ -1,0 +1,101 @@
+# Investigation tree for Bayesian simple security games
+
+**Root question.** Given rational utilities and type probabilities in the explicitly enumerated model, is there a polynomial-time algorithm for an exact Bayes–Nash equilibrium? [Conitzer, arXiv:2610.08796](https://arxiv.org/pdf/2610.08796)
+
+[Color-coded proof map](PROOF-MAP.md)
+
+```text
+R    Exact equilibrium in polynomial time
+├── L    Published results and algorithm
+│   ├── L1   Locate the exact algorithm and its worst-case bottleneck
+│   ├── L2   Account for exact arithmetic along a run
+│   ├── L3   Check the prior partial results and reconcile overlap
+│   └── L4   Compare the Newton bound with the continuation landscape
+│       ├── L4a  Apply the handicap-dependent theorem to A4d
+│       └── L4b  Transfer market endpoints and exact threshold search to L1/L2
+├── B    Worst-case run length by instance class
+│   ├── B1   Define a restricted Busy Beaver and test a state classification
+│   ├── B2   Combine independent preference components at one threshold
+│   └── B3   Bound progress with overlapping types
+│       ├── B3a  Jump across steps that preserve an attack flow
+│       ├── B3b  Count progress in closed reachable groups
+│       ├── B3c  Search for long runs with exact arithmetic
+│       ├── B3d  Compose groups that share targets
+│       ├── B3e  Embed a parametric path in one unchanged flow
+│       ├── B3f  Force many flow switches at uniform margins
+│       └── B3g  Independently check the forced-switch proof
+├── A    Alternative exact algorithms
+│   ├── A1   Use payoff thresholds and capacitated transport
+│   ├── A2   Solve the common-intercept class by logarithmic price changes
+│   ├── A3   Extend the log-price algorithm to arbitrary common offsets
+│   └── A4   Solve the binary-mass minimum-price market with arbitrary slopes
+│       ├── A4a  Test contraction near factorized slopes
+│       ├── A4b  Seek direct search through Hall inequalities
+│       ├── A4c  Reduce minimum-price search to any clearing equilibrium
+│       ├── A4d  Reduce market and game equilibrium to P-matrix complementarity
+│       ├── A4e  Test covering LPs with reweighting and Hall cuts
+│       │   ├── A4e1  Identify when one weighted cover gives an unweighted flow
+│       │   ├── A4e2  Test cuts across changing demand graphs
+│       │   └── A4e3  Prove strict descent and solve common-offset markets
+│       ├── A4f  Seek a polynomial-handicap formulation for A4d
+│       │   ├── A4f1  Test scaling, regularization and active-set conditioning
+│       │   └── A4f2  Construct equivalent buyer–good formulations
+│       ├── A4g  Test bounded search and shortcuts in the implicit basis graph
+│       │   ├── A4g1  Solve selected affine regions and bracket their signs
+│       │   ├── A4g2  Bound breadth-first and all-ones Lemke searches
+│       │   └── A4g3  Generate and search price lists from anchored paths
+│       └── A4h  Generate complete candidate lists before the Hall search
+│           ├── A4h1  Compose exact price breakpoints across one-good separators
+│           ├── A4h2  Test fixed libraries and complete parametric tables
+│           ├── A4h3  Use contraction queries, load corrections, and price transforms
+│           ├── A4h4  Count capacity-price intervals and boundary-load drops
+│           ├── A4h5  Generate complete candidates using the supplied capacities
+│           ├── A4h6  Jump to new demand ties using alternating forests
+│           ├── A4h7  Find and contract forced price relations
+│           └── A4h8  Preserve completions when discarding partial solutions
+└── H    Complexity and counterexamples
+    ├── H1   Pin down compact complexity and certificate bounds
+    └── H2   Test a structural conjecture or a candidate hardness reduction
+```
+
+L1, A1, and B1 established the source baseline, exact certificate and classification. B2 uses the viable-choice graph from B1 and the threshold–flow formulation from A1. L2 supplies the non-repetition proof and exact arithmetic for the smaller count. L3 checks the [recovered collection of earlier drafts](sources/prior-collection.md) against those results. A2 and A3 use threshold ordering and exact log-flow comparisons to close a different payoff class.
+
+| Node | Status | Evidence or test |
+| --- | --- | --- |
+| L1 | Complete | [Published phase bound and a fixed-phase edge revisit](notes/L1-published-algorithm.md) |
+| A1 | Complete | [Exact flow test, fixed-type solver, and weak-sign repair](notes/A1-threshold-transport.md) |
+| B1 | Complete | [Smaller sign arrangements and exact run lengths on independent blocks](notes/B1-classify-run-lengths.md) |
+| B2 | Complete | [Compose component solvers at one shared threshold](notes/B2-component-composition.md) |
+| L2 | Complete | [Prove non-repetition and subexponential exact bit time](notes/L2-exact-arithmetic-audit.md) |
+| L3 | Complete | [Check prior partials and reduce the open question to a market oracle](notes/L3-prior-partials.md) |
+| L4 | Exact oracle reduction and runtime comparison | [Newton solve counts, two-sided market endpoints, and continuation seed criterion](notes/L4-newton-and-continuation.md) |
+| A2 | Complete | [Exact log-price solver for common intercepts](notes/A2-log-price-subclass.md) |
+| A3 | Complete | [Exact solver for common affine offsets with weak signs](notes/A3-mixed-offsets.md) |
+| B3 | Lower bound proved | [Superpolynomial fixed-flow continuation and tractable subclasses](notes/B3-overlapping-types.md) |
+| B3a | Complete | [Fixed-flow jumps and a count by alternating cycles](notes/B3a-fixed-flow-jump.md) |
+| B3b | Complete | [Closed reachable groups and finite cost levels](notes/B3b-closed-group-rank.md) |
+| B3c | Complete | [Exact cost drops that reuse prior edges](notes/B3c-exact-path-search.md) |
+| B3d | Complete | [Exact solver for groups with a small shared target set](notes/B3d-shared-target-separator.md) |
+| B3e | Complete | [Long path with no attack-flow switch](notes/B3e-parametric-path-lower-bound.md) |
+| B3f | Complete | [Superpolynomial number of forced flow switches](notes/B3f-forced-flow-switches.md) |
+| B3g | Complete | [Independent checks of the forced-switch proof](notes/B3g-lower-bound-audit.md) |
+| A4 | General polynomial time open | [Minimum-price certificate, subclasses, and auction lower bounds](notes/A4-minimum-price-markets.md) |
+| A4a | Polynomial subclass | [Exact search for nearly factorized slope matrices](notes/A4a-near-factorized-slopes.md) |
+| A4b | Polynomial subclasses | [Good elimination, bounded-depth graphs, and arbitrary forests](notes/A4b-direct-hall-search.md) |
+| A4c | Reduction and upper bound proved | [One enlarged clearing market suffices; market and game search are in CLS](notes/A4c-any-clearing-equilibrium.md) |
+| A4d | Upper bound proved | [One P-matrix LCP suffices; exact market and game search are in UniqueEOPL](notes/A4d-p-matrix-complementarity.md) |
+| A4e | Exact descent and polynomial subclasses | [Covering LP counterexamples, Hall disjunctions, and a common-offset solver](notes/A4e-covering-lp.md) |
+| A4f | General polynomial handicap open | [Scaling obstruction, exact reformulations, and binary recovery](notes/A4f-handicap-formulation.md) |
+| A4g | Exact bounded searches and path lower bounds | [Anchor price lists, region solves, and a long Lemke line](notes/A4g-budgeted-support-search.md) |
+| A4h | Polynomial subclasses and a query bound | [Complete candidate generation and limits on explicit lists](notes/A4h-complete-candidate-generation.md) |
+| A4h4 | NP-hard count | [Corollary 1.8 audit and price-table reduction](notes/A4h-table-count-hardness.md) |
+| A4h5 | Polynomial capacity-specific subclasses | [Hall counterexample, clipped loads, and core price queries](notes/A4h-supplied-capacity.md) |
+| A4h6 | Finite ascent, polynomial subclasses, and step lower bounds | [Safe jumps, rational directions, and restricted Hall solves](notes/A4h-alternating-tree.md) |
+| A4h7 | Exact contraction after certification | [Forced demand and trade, price groups, and disjunction limits](notes/A4h-forced-price-relations.md) |
+| A4h8 | One representative at fixed quotes | [Shared goods and buyers, joint loads, and antichains](notes/A4h-boundary-dominance.md) |
+| H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
+
+## Resume points
+
+1. **A4.** Extend [A4h's capacity-specific queries](notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices) beyond a near-factorized core, or find a polynomial-time selection rule for [general candidate regions](notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible). A global formulation from [A4f’s zero-handicap cells](notes/A4f-handicap-formulation.md#eliminating-flow-variables) or a polynomial iteration bound for [A4e’s reweighted covers](notes/A4e-covering-lp.md#an-exact-descent-rule) would also suffice. Any exact clearing oracle for the binary rational market transfers through [L4’s threshold and budget decoder](notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle).
+2. **Structural composition.** The [shared-target solver](notes/B3d-shared-target-separator.md) composes arbitrarily many small groups across one common parameter vector. Test which budget and flow relations can be retained across a tree of small separators. The construction in [B3f](notes/B3f-forced-flow-switches.md) rules out a general polynomial count of fixed-flow segments even at uniform margins and a constant threshold.
