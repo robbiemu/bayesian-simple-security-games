@@ -17,6 +17,7 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 - L4b **uses** [A4c · Reduce minimum-price search to any clearing equilibrium](A4c.md). Clearing calls at perturbed supplies bracket both threshold endpoints. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
 - L4b **uses** [A4a · Test contraction near factorized slopes](A4a.md). The embedded hard trajectory has near-factorized slopes at a fixed budget. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
 - L4b **extends** [L2 · Account for exact arithmetic along a run](L2.md). Endpoint searches can skip internal flow switches. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
+- L4b **gives an endpoint alternative to** [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md). A clearing oracle can recover the coverage at the requested budget without counting every internal step of the original path. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
 
 ## Where the direction came from
 

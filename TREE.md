@@ -8,7 +8,10 @@
 R    Exact equilibrium in polynomial time
 ├── L    Published results and algorithm
 │   ├── L1   Locate the exact algorithm and its worst-case bottleneck
+│   │   └── L1a  Count necessary Hall-witness changes within one fixed-boundary phase
 │   ├── L2   Account for exact arithmetic along a run
+│   │   ├── L2a  Tighten the worst-case outer-call count on a single run
+│   │   └── L2b  Bound intermediate rational bit lengths by the original input size
 │   ├── L3   Check the prior partial results and reconcile overlap
 │   └── L4   Compare the Newton bound with the continuation landscape
 │       ├── L4a  Apply the handicap-dependent theorem to A4d
@@ -96,6 +99,8 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points
+
+The open continuation questions concern [Hall-witness changes (L1a)](investigation/L1a.md), [tight single-run bounds (L2a)](investigation/L2a.md) and [input-only intermediate bit lengths (L2b)](investigation/L2b.md). Each node links to its discussion and the precise existing bound.
 
 1. **A4.** Extend [A4h's capacity-specific queries](notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices) beyond a near-factorized core, or find a polynomial-time selection rule for [general candidate regions](notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible). A global formulation from [A4f’s zero-handicap cells](notes/A4f-handicap-formulation.md#eliminating-flow-variables) or a polynomial iteration bound for [A4e’s reweighted covers](notes/A4e-covering-lp.md#an-exact-descent-rule) would also suffice. Any exact clearing oracle for the binary rational market transfers through [L4’s threshold and budget decoder](notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle).
 2. **Structural composition.** The [shared-target solver](notes/B3d-shared-target-separator.md) composes arbitrarily many small groups across one common parameter vector. Test which budget and flow relations can be retained across a tree of small separators. The construction in [B3f](notes/B3f-forced-flow-switches.md) rules out a general polynomial count of fixed-flow segments even at uniform margins and a constant threshold.

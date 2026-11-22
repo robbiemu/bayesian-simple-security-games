@@ -14,6 +14,18 @@ A few places to start:
 
 Open the contribution form on any node to ask a child question, post a competing approach or share a negative result. The repository records individual contributions and the tools or models used. [Investigation notes and resume points](TREE.md) · [Publication and source information](PUBLICATION.md) · [CC BY 4.0 writing and MIT code](LICENSE.md)
 
+## Open L1/L2 continuation questions
+
+L1 describes the published algorithm that increases the defender’s budget step by step. L2 gives an exact implementation and bounds its runtime. Three questions about that same algorithm remain open in this investigation.
+
+| Question | What would advance it | Join |
+| --- | --- | --- |
+| [L1a · Hall witnesses](investigation/L1a.md) | Bound how often a specified set certifying the defender threshold must change within one phase, or construct a run that forces many changes. | [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3) |
+| [L2a · Tight worst-case run length](investigation/L2a.md) | Narrow the gap between the superpolynomial number of steps forced on one run and the general upper bound. | [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4) |
+| [L2b · Intermediate bit lengths](investigation/L2b.md) | Prove that every exact intermediate numerator and denominator has polynomially many bits in the original input length, or give a family requiring more. | [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5) |
+
+Another route computes the requested budget directly. L4b proves how to do this given a market-clearing oracle. Finding a polynomial-time oracle on general inputs remains open in A4. [Endpoint reduction](investigation/L4b.md) · [Market search](investigation/A4.md)
+
 ## Results at a glance
 
 - **Superpolynomial continuation lower bound.** For certain games with $n$ targets and $n$ uniformly likely types, varying the defender budget to one forces $n^{\Omega(\log n)}$ distinct attack flows in a single fixed-threshold, fixed-total phase. The bound applies to the published continuation and to jumps that maximize coverage while holding one attack flow fixed. At budget one those same games can be solved directly by an assignment problem and a feasibility LP. [Lower bound and scope](notes/B3f-forced-flow-switches.md)

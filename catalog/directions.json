@@ -64,7 +64,20 @@
       "B3d",
       "B3e",
       "B3f",
-      "B3g"
+      "B3g",
+      "L2a"
+    ]
+  },
+  {
+    "id": "continuation-followups",
+    "title": "Track Hall certificates and the size of exact intermediate states",
+    "date": "2026-11-22",
+    "person": "OpenAI Codex",
+    "role": "Follow-up questions recorded in L1 and L2",
+    "account": "L1 proposed counting changes of maximizing Hall witnesses or related transport certificates within a fixed boundary. L2 identified the open input-only denominator bound for its exact continuation. The public issue titles and node IDs were added during the contributor handoff.",
+    "nodes": [
+      "L1a",
+      "L2b"
     ]
   },
   {

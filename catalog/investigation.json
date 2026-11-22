@@ -26,12 +26,42 @@
       "source": "notes/L1-published-algorithm.md"
     },
     {
+      "id": "L1a",
+      "parent": "L1",
+      "title": "Count necessary Hall-witness changes within one fixed-boundary phase",
+      "state": "open",
+      "summary": "At a successful increase, a maximizing weighted Hall set certifies the current threshold. Several sets can tie. Many attack-flow switches can occur while the threshold and all target totals stay fixed.",
+      "source": "notes/L1-published-algorithm.md#literature-check-and-next-lemma",
+      "next": "Specify how a witness is selected or retained across ties. Prove a bound on its changes on one run or give a family that forces many changes under that rule.",
+      "issue": 3
+    },
+    {
       "id": "L2",
       "parent": "L",
       "title": "Account for exact arithmetic along a run",
       "state": "scoped",
       "summary": "Accounts for rational bit lengths, flow ties and non-repetition in the improved continuation upper bound.",
       "source": "notes/L2-exact-arithmetic-audit.md"
+    },
+    {
+      "id": "L2a",
+      "parent": "L2",
+      "title": "Tighten the worst-case outer-call count on a single run",
+      "state": "open",
+      "summary": "The published continuation can require superpolynomially many steps. A gap remains between the forced-switch lower bound and the arrangement upper bound for its exact implementation.",
+      "source": "notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties",
+      "next": "Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis.",
+      "issue": 4
+    },
+    {
+      "id": "L2b",
+      "parent": "L2",
+      "title": "Bound intermediate rational bit lengths by the original input size",
+      "state": "open",
+      "summary": "After j outer calls, L2 bounds the bit length of stored coordinates by a polynomial in the input length times j + 1. An input-only bound for the specified exact continuation remains open.",
+      "source": "notes/L2-exact-arithmetic-audit.md#bit-length-bound-and-exact-lp-outputs",
+      "next": "Bound the bit length of every reachable reduced numerator and denominator by a polynomial in the input length, or exhibit a family exceeding every such bound.",
+      "issue": 5
     },
     {
       "id": "L3",
@@ -782,6 +812,69 @@
       "target": "A1",
       "reason": "Selecting a threshold-zero equilibrium gives a scoped hardness baseline.",
       "source": "notes/A1-threshold-transport.md"
+    },
+    {
+      "origin": "L1a",
+      "relation": "uses",
+      "target": "L2",
+      "reason": "The exact implementation gives a maximizing Hall ratio at each successful increase. Non-repetition of a full signature leaves the changes of a smaller certificate to count.",
+      "source": "notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties"
+    },
+    {
+      "origin": "L1a",
+      "relation": "is constrained by",
+      "target": "B3f",
+      "reason": "Flow switches occur even at a fixed threshold and fixed target totals. Any certificate-based shortcut must account for these internal changes.",
+      "source": "notes/B3f-forced-flow-switches.md"
+    },
+    {
+      "origin": "L2a",
+      "relation": "refines",
+      "target": "L1",
+      "reason": "The run being counted is the original resource-augmentation route. Fix its tie rules and follow one input.",
+      "source": "notes/B1-classify-run-lengths.md#computing-a-worst-case"
+    },
+    {
+      "origin": "L2a",
+      "relation": "uses",
+      "target": "B1",
+      "reason": "A fixed implementation and a realizable run give the classwise maximum its meaning. B1 also proposes summing local ranks across components.",
+      "source": "notes/B1-classify-run-lengths.md#computing-a-worst-case"
+    },
+    {
+      "origin": "L2a",
+      "relation": "uses",
+      "target": "B3f",
+      "reason": "Many distinct assignments are forced on one trajectory. This supplies the lower side of the remaining gap.",
+      "source": "notes/B3f-forced-flow-switches.md"
+    },
+    {
+      "origin": "L2a",
+      "relation": "is related to",
+      "target": "B3",
+      "reason": "B3 records restricted progress bounds for overlapping types and asks for sharper classes or worst-case bounds.",
+      "source": "notes/B3-overlapping-types.md#what-the-progress-measures-still-give"
+    },
+    {
+      "origin": "L2b",
+      "relation": "uses",
+      "target": "L1",
+      "reason": "The question concerns exact intermediate states of the published continuation. Specify its flow and optimizer choices.",
+      "source": "notes/L2-exact-arithmetic-audit.md#bit-length-bound-and-exact-lp-outputs"
+    },
+    {
+      "origin": "L2b",
+      "relation": "compares with",
+      "target": "B3a",
+      "reason": "The greatest-extension variant obtains an input-only bit bound for its LPs. Its update differs from the published continuation.",
+      "source": "notes/B3a-fixed-flow-jump.md"
+    },
+    {
+      "origin": "L4b",
+      "relation": "gives an endpoint alternative to",
+      "target": "L1",
+      "reason": "A clearing oracle can recover the coverage at the requested budget without counting every internal step of the original path.",
+      "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
     }
   ],
   "decisions": {}

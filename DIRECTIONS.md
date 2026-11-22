@@ -46,7 +46,17 @@ Robert Thomas Collins · Independently proposed framing · 2026-11-22T02:40:32Z
 
 Asked whether a restricted Busy Beaver quantity for each class of inputs could tighten the upper bound. Collins later explicitly confirmed this as his contribution to the manuscript. Codex developed the signature counts, bounds and examples. The later shortest-path reduction has separate attribution.
 
-[B](investigation/B.md) · [B1](investigation/B1.md) · [B2](investigation/B2.md) · [B3](investigation/B3.md) · [L2](investigation/L2.md) · [B3a](investigation/B3a.md) · [B3b](investigation/B3b.md) · [B3c](investigation/B3c.md) · [B3d](investigation/B3d.md) · [B3e](investigation/B3e.md) · [B3f](investigation/B3f.md) · [B3g](investigation/B3g.md)
+[B](investigation/B.md) · [B1](investigation/B1.md) · [B2](investigation/B2.md) · [B3](investigation/B3.md) · [L2](investigation/L2.md) · [B3a](investigation/B3a.md) · [B3b](investigation/B3b.md) · [B3c](investigation/B3c.md) · [B3d](investigation/B3d.md) · [B3e](investigation/B3e.md) · [B3f](investigation/B3f.md) · [B3g](investigation/B3g.md) · [L2a](investigation/L2a.md)
+
+<a name="direction-continuation-followups"></a>
+
+## Track Hall certificates and the size of exact intermediate states
+
+OpenAI Codex · Follow-up questions recorded in L1 and L2 · 2026-11-22
+
+L1 proposed counting changes of maximizing Hall witnesses or related transport certificates within a fixed boundary. L2 identified the open input-only denominator bound for its exact continuation. The public issue titles and node IDs were added during the contributor handoff.
+
+[L1a](investigation/L1a.md) · [L2b](investigation/L2b.md)
 
 <a name="direction-single"></a>
 

@@ -17,6 +17,8 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 - [B3g · Independently check the forced-switch proof](B3g.md) **checks** B3f. The audit checks assignment encoding, separation, input size and the final-budget exception. [Evidence](../notes/B3g-lower-bound-audit.md)
 - [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) **uses** B3f. The forced assignments also yield a lower-bound family for directional auctions. [Evidence](../notes/A4-minimum-price-markets.md)
 - [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) **applies to** B3f. Endpoint search can skip B3f’s forced flow switches. On that family the near-factorized solver makes the clearing calls polynomial-time. [Evidence](../notes/L4-newton-and-continuation.md#limits-on-following-the-entire-path)
+- [L1a · Count necessary Hall-witness changes within one fixed-boundary phase](L1a.md) **is constrained by** B3f. Flow switches occur even at a fixed threshold and fixed target totals. Any certificate-based shortcut must account for these internal changes. [Evidence](../notes/B3f-forced-flow-switches.md)
+- [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) **uses** B3f. Many distinct assignments are forced on one trajectory. This supplies the lower side of the remaining gap. [Evidence](../notes/B3f-forced-flow-switches.md)
 
 ## Where the direction came from
 

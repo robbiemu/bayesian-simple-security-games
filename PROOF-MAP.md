@@ -24,7 +24,9 @@ flowchart TB
 
     A --> C["L1 / L2 · Follow increasing budgets<br/>with one attack flow per step"]
     C --> CP["B3a / B3b · Sparse cycles or<br/>bounded slope and mass classes<br/>Polynomial time"]
-    C --> W["Tight continuation runtime open<br/>Subexponential upper bound"]
+    C --> HW["L1a · OPEN<br/>How often must a Hall witness change?"]
+    C --> W["L2a · OPEN<br/>Tight worst-case outer-call count"]
+    C --> BL["L2b · OPEN<br/>Polynomial input-only bit length at every step?"]
     C --> J["L4 · Least and greatest coverage at one threshold<br/>Exact jumps with a clearing oracle"]
     C --> B["B3f · Parametric paths<br/>force distinct attack assignments"]
     B --> N["Fixed-flow continuation<br/>n^Ω(log n) steps in the worst case"]
@@ -38,10 +40,12 @@ flowchart TB
     classDef settled fill:#dcf5e7,stroke:#38805c,color:#143e2a
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
-    class R,A,P,S,L,C,J,B,O,AS proof
+    class R,A,P,S,L,C,J,B,O,AS,HW,BL proof
     class F,SP,LP,CP,N,E settled
     class U,W,PL cap
 ```
+
+[L1a · Hall-witness changes](investigation/L1a.md) · [L2a · Tight trajectory length](investigation/L2a.md) · [L2b · Intermediate arithmetic](investigation/L2b.md)
 
 [Threshold and transport certificate](notes/A1-threshold-transport.md) · [Pattern count](notes/B1-classify-run-lengths.md) · [Exact continuation upper bound](notes/L2-exact-arithmetic-audit.md)
 

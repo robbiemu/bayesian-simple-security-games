@@ -6,11 +6,14 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Open questions
 
+- [L1a · Count necessary Hall-witness changes within one fixed-boundary phase](L1a.md) — Specify how a witness is selected or retained across ties. Prove a bound on its changes on one run or give a family that forces many changes under that rule. · [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3)
+- [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis. · [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4)
+- [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit length of every reachable reduced numerator and denominator by a polynomial in the input length, or exhibit a family exceeding every such bound. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
 - [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) — Find a polynomial-bit-time algorithm returning any clearing equilibrium for arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover the minimum prices.
-- [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule.
+- [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule. · [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length.
+- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
 - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
@@ -24,16 +27,19 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [A4g · Test bounded search and shortcuts in the implicit basis graph](A4g.md) — Give a complete polynomial-time choice of guesses or prove tractability for a wider class.
 - [A4g3 · Generate and search price lists from anchored paths](A4g3.md) — Generate complete short lists without enumerating all anchored paths in a general market.
 - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) — Remove or weaken the normalization assumptions while retaining completeness.
-- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) — Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps.
-- [A4h7 · Find and contract forced price relations](A4h7.md) — Find enough forced relations in polynomial time without enumerating a large disjunction.
-- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) — Find the boundary prices and buyer utilities efficiently for broader separator classes.
+- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) — Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h7 · Find and contract forced price relations](A4h7.md) — Find enough forced relations in polynomial time without enumerating a large disjunction. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) — Find the boundary prices and buyer utilities efficiently for broader separator classes. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 
 ## Full tree
 
 - [R · Exact equilibrium in polynomial time](R.md) · 🟦 Open
   - [L · Published results and algorithm](L.md) · Background
     - [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md) · 🟩 Result for the stated scope
+      - [L1a · Count necessary Hall-witness changes within one fixed-boundary phase](L1a.md) · 🟦 Open
     - [L2 · Account for exact arithmetic along a run](L2.md) · 🟩 Result for the stated scope
+      - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) · 🟦 Open
+      - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) · 🟦 Open
     - [L3 · Check the prior partial results and reconcile overlap](L3.md) · Background
     - [L4 · Compare the Newton bound with the continuation landscape](L4.md) · 🟨 Partial result
       - [L4a · Apply the handicap-dependent theorem to A4d](L4a.md) · 🟩 Result for the stated scope

@@ -58,6 +58,11 @@ def node_link(node, prefix = "")
   "[#{node['id']} · #{safe_label(node['title'])}](#{prefix}#{node['id']}.md)"
 end
 
+def discussion_link(node)
+  number = node["issue"]
+  number ? " · [Issue ##{number}](#{ROOT_URL}/issues/#{number})" : ""
+end
+
 def read_records
   Dir["records/*.md"].sort.map do |file|
     match = /\A---\r?\n(.*?)\r?\n---\r?\n(.+)\z/m.match(File.read(file))
@@ -213,7 +218,7 @@ nodes.each do |id, n|
   body << "**Open task** — #{n['next']}" if n["next"]
   body << "[Read the evidence](#{local_link(n['source'], '../')}) · [Investigation index](README.md)"
   body << "Parent question · #{node_link(nodes.fetch(n['parent']))}" if n["parent"]
-  child_rows = Array(children[id]).map { |c| "- #{node_link(c)} · #{STATES[c['state']]}" }
+  child_rows = Array(children[id]).map { |c| "- #{node_link(c)} · #{STATES[c['state']]}#{discussion_link(c)}" }
   body += ["## Subquestions", child_rows.join("\n")] unless child_rows.empty?
   linked = links.select { |e| [e["origin"], e["target"]].include?(id) }.map do |e|
     first = e["origin"] == id ? id : node_link(nodes.fetch(e["origin"]))
@@ -268,8 +273,8 @@ outline = lambda do |id, depth|
   line = "#{'  ' * depth}- #{node_link(n)} · #{STATES[n['state']]}"
   ([line] + Array(children[id]).flat_map { |child| outline.call(child["id"], depth+1) })
 end
-open_rows = nodes.values.select { |n| n["state"] == "open" && n["id"] != "R" }.map { |n| "- #{node_link(n)} — #{n['next'] || n['summary']}" }
-partial_rows = nodes.values.select { |n| n["state"] == "partial" && n["next"] }.map { |n| "- #{node_link(n)} — #{n['next']}" }
+open_rows = nodes.values.select { |n| n["state"] == "open" && n["id"] != "R" }.map { |n| "- #{node_link(n)} — #{n['next'] || n['summary']}#{discussion_link(n)}" }
+partial_rows = nodes.values.select { |n| n["state"] == "partial" && n["next"] }.map { |n| "- #{node_link(n)} — #{n['next']}#{discussion_link(n)}" }
 index = [MARK, "# Investigation index", "Choose an open question to see its evidence, the reason for each connection, work already tried, and how to contribute.",
          "## Open questions", open_rows.join("\n")]
 index += ["## Partial results with open work", partial_rows.join("\n")] unless partial_rows.empty?

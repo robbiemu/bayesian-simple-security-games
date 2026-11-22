@@ -18,10 +18,10 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) · 🟩 Result for the stated scope
 - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) · 🟨 Partial result
 - [A4h4 · Count capacity-price intervals and boundary-load drops](A4h4.md) · 🟩 Result for the stated scope
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open
-- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
-- [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
-- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
+- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 
 ## Relevant work
 

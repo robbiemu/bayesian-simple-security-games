@@ -14,6 +14,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 
 - B3a **extends** [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md). The jump holds one optimal attack flow fixed. [Evidence](../notes/B3a-fixed-flow-jump.md)
 - [B3f · Force many flow switches at uniform margins](B3f.md) **limits** B3a. A fixed-flow jump cannot cross two witness intervals requiring different assignments. [Evidence](../notes/B3f-forced-flow-switches.md)
+- [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) **compares with** B3a. The greatest-extension variant obtains an input-only bit bound for its LPs. Its update differs from the published continuation. [Evidence](../notes/B3a-fixed-flow-jump.md)
 
 ## Where the direction came from
 
