@@ -20,9 +20,9 @@ L1 describes the published algorithm that increases the defender’s budget step
 
 | Question | What would advance it | Join |
 | --- | --- | --- |
-| [L1a · Hall witnesses](investigation/L1a.md) | Bound how often a specified set certifying the defender threshold must change within one phase, or construct a run that forces many changes. | [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3) |
+| [L1a · Threshold drops](investigation/L1a.md) | Bound how often the threshold drops in one fixed-boundary phase for arbitrary binary priors and gains, or construct a run forcing many distinct thresholds. | [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3) |
 | [L2a · Tight worst-case run length](investigation/L2a.md) | Narrow the gap between the superpolynomial number of steps forced on one run and the general upper bound. | [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4) |
-| [L2b · Intermediate bit lengths](investigation/L2b.md) | Prove that every exact intermediate numerator and denominator has polynomially many bits in the original input length, or give a family requiring more. | [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5) |
+| [L2b · Intermediate bit lengths](investigation/L2b.md) | Prove an input-only polynomial bit bound for the reduced fractions representing intermediate coverages and flows, or give a family requiring more. | [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5) |
 
 Another route computes the requested budget directly. L4b proves how to do this given a market-clearing oracle. Finding a polynomial-time oracle on general inputs remains open in A4. [Endpoint reduction](investigation/L4b.md) · [Market search](investigation/A4.md)
 

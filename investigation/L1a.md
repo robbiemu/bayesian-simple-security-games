@@ -1,21 +1,23 @@
 <!-- Generated from catalog/ and records/ by scripts/build_map.rb -->
 
-# L1a · Count necessary Hall-witness changes within one fixed-boundary phase
+# L1a · Count strict threshold drops within one fixed-boundary phase
 
 **🟦 Open**
 
-At a successful increase, a maximizing weighted Hall set certifies the current threshold. Several sets can tie. Many attack-flow switches can occur while the threshold and all target totals stay fixed.
+The maximizing Hall sets can change even while the threshold stays fixed. Algorithm 4 strictly lowers the threshold. B3b bounds the number of distinct thresholds polynomially when the numbers of prior and inverse-gain classes are fixed.
 
-**Open task** — Specify how a witness is selected or retained across ties. Prove a bound on its changes on one run or give a family that forces many changes under that rule.
+**Open task** — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds.
 
-[Read the evidence](../notes/L1-published-algorithm.md#literature-check-and-next-lemma) · [Investigation index](README.md)
+[Read the evidence](../notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed) · [Investigation index](README.md)
 
 Parent question · [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md)
 
 ## Relevant work
 
-- L1a **uses** [L2 · Account for exact arithmetic along a run](L2.md). The exact implementation gives a maximizing Hall ratio at each successful increase. Non-repetition of a full signature leaves the changes of a smaller certificate to count. [Evidence](../notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties)
+- L1a **uses** [L2 · Account for exact arithmetic along a run](L2.md). At a successful increase the threshold is a weighted Hall ratio. Count strict changes of that value separately from changes of the set attaining it. [Evidence](../notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties)
 - L1a **is constrained by** [B3f · Force many flow switches at uniform margins](B3f.md). Flow switches occur even at a fixed threshold and fixed target totals. Any certificate-based shortcut must account for these internal changes. [Evidence](../notes/B3f-forced-flow-switches.md)
+- L1a **uses** [B3b · Count progress in closed reachable groups](B3b.md). Counting prior and inverse-gain multiplicities bounds the number of threshold values in that restricted class. [Evidence](../notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed)
+- L1a **compares with** [B3e · Embed a parametric path in one unchanged flow](B3e.md). The tight Hall families can change while the source’s witness spans the entire boundary and Algorithm 4 never runs. [Evidence](../notes/B3e-parametric-path-lower-bound.md#hall-witnesses-at-the-same-threshold)
 
 ## Where the direction came from
 

@@ -54,7 +54,7 @@ Asked whether a restricted Busy Beaver quantity for each class of inputs could t
 
 OpenAI Codex · Follow-up questions recorded in L1 and L2 · 2026-11-22
 
-L1 proposed counting changes of maximizing Hall witnesses or related transport certificates within a fixed boundary. L2 identified the open input-only denominator bound for its exact continuation. The public issue titles and node IDs were added during the contributor handoff.
+L1 proposed counting changes of maximizing Hall witnesses in a fixed phase. The handoff traced that suggestion through B3e, where the full family of maximizing sets changes at a fixed threshold. L1a now isolates strict threshold drops. L2 identified the input-only denominator question for its exact continuation.
 
 [L1a](investigation/L1a.md) · [L2b](investigation/L2b.md)
 

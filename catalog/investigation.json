@@ -28,11 +28,11 @@
     {
       "id": "L1a",
       "parent": "L1",
-      "title": "Count necessary Hall-witness changes within one fixed-boundary phase",
+      "title": "Count strict threshold drops within one fixed-boundary phase",
       "state": "open",
-      "summary": "At a successful increase, a maximizing weighted Hall set certifies the current threshold. Several sets can tie. Many attack-flow switches can occur while the threshold and all target totals stay fixed.",
-      "source": "notes/L1-published-algorithm.md#literature-check-and-next-lemma",
-      "next": "Specify how a witness is selected or retained across ties. Prove a bound on its changes on one run or give a family that forces many changes under that rule.",
+      "summary": "The maximizing Hall sets can change even while the threshold stays fixed. Algorithm 4 strictly lowers the threshold. B3b bounds the number of distinct thresholds polynomially when the numbers of prior and inverse-gain classes are fixed.",
+      "source": "notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed",
+      "next": "For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds.",
       "issue": 3
     },
     {
@@ -48,7 +48,7 @@
       "parent": "L2",
       "title": "Tighten the worst-case outer-call count on a single run",
       "state": "open",
-      "summary": "The published continuation can require superpolynomially many steps. A gap remains between the forced-switch lower bound and the arrangement upper bound for its exact implementation.",
+      "summary": "With $n$ targets and $n$ positive-prior types, the known lower bound on one run is $n^{\\Omega(\\log n)}$ steps. The exact implementation has an upper bound of $n^{O(n)}$ outer calls. The tight growth rate remains open.",
       "source": "notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties",
       "next": "Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis.",
       "issue": 4
@@ -60,7 +60,7 @@
       "state": "open",
       "summary": "After j outer calls, L2 bounds the bit length of stored coordinates by a polynomial in the input length times j + 1. An input-only bound for the specified exact continuation remains open.",
       "source": "notes/L2-exact-arithmetic-audit.md#bit-length-bound-and-exact-lp-outputs",
-      "next": "Bound the bit length of every reachable reduced numerator and denominator by a polynomial in the input length, or exhibit a family exceeding every such bound.",
+      "next": "Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices.",
       "issue": 5
     },
     {
@@ -817,7 +817,7 @@
       "origin": "L1a",
       "relation": "uses",
       "target": "L2",
-      "reason": "The exact implementation gives a maximizing Hall ratio at each successful increase. Non-repetition of a full signature leaves the changes of a smaller certificate to count.",
+      "reason": "At a successful increase the threshold is a weighted Hall ratio. Count strict changes of that value separately from changes of the set attaining it.",
       "source": "notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties"
     },
     {
@@ -875,6 +875,27 @@
       "target": "L1",
       "reason": "A clearing oracle can recover the coverage at the requested budget without counting every internal step of the original path.",
       "source": "notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle"
+    },
+    {
+      "origin": "L1a",
+      "relation": "uses",
+      "target": "B3b",
+      "reason": "Counting prior and inverse-gain multiplicities bounds the number of threshold values in that restricted class.",
+      "source": "notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed"
+    },
+    {
+      "origin": "L1a",
+      "relation": "compares with",
+      "target": "B3e",
+      "reason": "The tight Hall families can change while the source’s witness spans the entire boundary and Algorithm 4 never runs.",
+      "source": "notes/B3e-parametric-path-lower-bound.md#hall-witnesses-at-the-same-threshold"
+    },
+    {
+      "origin": "L2a",
+      "relation": "uses",
+      "target": "B3e",
+      "reason": "A fixed source order can force a long path even though the attack assignment never changes.",
+      "source": "notes/B3e-parametric-path-lower-bound.md#count-and-scope"
     }
   ],
   "decisions": {}

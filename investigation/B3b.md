@@ -13,6 +13,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 ## Relevant work
 
 - [B3c · Search for long runs with exact arithmetic](B3c.md) **limits** B3b. Previously used edges can reappear, so an edge count alone cannot certify progress. [Evidence](../notes/B3c-exact-path-search.md)
+- [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) **uses** B3b. Counting prior and inverse-gain multiplicities bounds the number of threshold values in that restricted class. [Evidence](../notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed)
 
 ## Where the direction came from
 

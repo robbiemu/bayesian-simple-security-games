@@ -6,7 +6,7 @@
 
 After j outer calls, L2 bounds the bit length of stored coordinates by a polynomial in the input length times j + 1. An input-only bound for the specified exact continuation remains open.
 
-**Open task** — Bound the bit length of every reachable reduced numerator and denominator by a polynomial in the input length, or exhibit a family exceeding every such bound.
+**Open task** — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices.
 
 [Read the evidence](../notes/L2-exact-arithmetic-audit.md#bit-length-bound-and-exact-lp-outputs) · [Investigation index](README.md)
 
