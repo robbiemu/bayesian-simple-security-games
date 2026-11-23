@@ -22,5 +22,6 @@ Parent question · [A4i1 · Find the exact minimum prices of one supplied unit m
 
 - [Bound deletion-matching products by the rank of cycle gains](../records/9446077a-15bc-4cea-a501-d4fe51d76d3a.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6
 - [Find endpoint matching representatives and prune them with a price box](../records/ea760303-a4d3-40c2-ae09-b14211a35fef.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
+- [Replay the fractional-assignment exclusion LP and original cover recovery](../records/e63eaf54-767d-4280-ae1f-4213f82719e6.md) · result · computation · Robert Thomas Collins, OpenAI Codex · GPT-6, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4i1d%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4i1d%5D+) · [Contributor guide](../CONTRIBUTING.md)

@@ -22,5 +22,6 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 ## Contribution log
 
 - [Discover a clearing support through separated ordinal cutoffs](../records/a3264efb-3fa1-4fa8-88dc-d37f641d1c3a.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
+- [Check asymmetric ordinal cutoffs on split and cyclic weighted supports](../records/e8c946ee-89c1-45b3-baaa-323c6cf33c91.md) · result · computation · Robert Thomas Collins, OpenAI Codex · GPT-6, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4l%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4l%5D+) · [Contributor guide](../CONTRIBUTING.md)
