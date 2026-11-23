@@ -14,7 +14,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
 - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
-- [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Give a polynomial-bit-time algorithm for the minimum prices of a supplied unit market with arbitrary affine slopes, together with exact clearing-flow recovery.
+- [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Find a polynomial-bit-time solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem.
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
 - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
@@ -74,6 +74,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
       - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) · 🟦 Open
         - [A4f1 · Test scaling, regularization and active-set conditioning](A4f1.md) · 🟩 Result for the stated scope
         - [A4f2 · Construct equivalent buyer–good formulations](A4f2.md) · 🟨 Partial result
+        - [A4f3 · Scale price precision with stable flows at physical quotas](A4f3.md) · 🟩 Result for the stated scope
       - [A4g · Test bounded search and shortcuts in the implicit basis graph](A4g.md) · 🟨 Partial result
         - [A4g1 · Solve selected affine regions and bracket their signs](A4g1.md) · 🟩 Result for the stated scope
         - [A4g2 · Bound breadth-first and all-ones Lemke searches](A4g2.md) · 🟩 Result for the stated scope
@@ -93,6 +94,11 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h12 · Use one-good block solvers for shared buyers and goods](A4h12.md) · 🟩 Result for the stated scope
       - [A4i · Reduce affine market clearing to one-resource security games](A4i.md) · 🟩 Result for the stated scope
         - [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) · 🟦 Open
+          - [A4i1a · Solve degree-two unit markets by conditional Hall tests](A4i1a.md) · 🟩 Result for the stated scope
+          - [A4i1b · Bound exact ascent by deletion-matching products](A4i1b.md) · 🟩 Result for the stated scope
+          - [A4i1c · Reduce arbitrary unit markets to degree three](A4i1c.md) · 🟩 Result for the stated scope
+          - [A4i1d · Find support through multiplier lists and price boxes](A4i1d.md) · 🟩 Result for the stated scope
+      - [A4l · Find exact clearing through ordinal stable allocation](A4l.md) · 🟩 Result for the stated scope
       - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) · 🟦 Open
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open

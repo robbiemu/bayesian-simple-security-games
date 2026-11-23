@@ -16,6 +16,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 - [A4f1 · Test scaling, regularization and active-set conditioning](A4f1.md) · 🟩 Result for the stated scope
 - [A4f2 · Construct equivalent buyer–good formulations](A4f2.md) · 🟨 Partial result
+- [A4f3 · Scale price precision with stable flows at physical quotas](A4f3.md) · 🟩 Result for the stated scope
 
 ## Relevant work
 

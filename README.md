@@ -24,6 +24,8 @@ Exact affine-market clearing and exact security-game equilibrium are polynomial-
 
 Unit-market search is also equivalent to exact equilibrium search in games with uniform priors and equal defender gains. Finding a polynomial-bit-time solver for arbitrary affine slopes at unit quantities remains open. [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets)
 
+The unit-market branch now has polynomial algorithms for degree two on either side and for several restrictions on slope ratios. Stable-flow price scaling and a cutoff-separation test give additional polynomial classes with binary masses and capacities. [Unit-market methods](investigation/A4i1.md) · [Stable-flow scaling](investigation/A4f3.md) · [Ordinal allocation](investigation/A4l.md)
+
 | Question | What would advance it | Join |
 | --- | --- | --- |
 | [A4i1 · Exact unit-market prices](investigation/A4i1.md) | Find the minimum prices of one supplied unit market with arbitrary affine slopes in polynomial bit time and recover a clearing assignment. | [A4i1 node](investigation/A4i1.md) |
