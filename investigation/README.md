@@ -18,6 +18,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
 - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
+- [3244b26a-6160-43e2-9b81-1650d78dd4cb · Reduce simple stochastic games to deterministic mean-payoff games](3244b26a-6160-43e2-9b81-1650d78dd4cb.md) — Give a single-instance polynomial-bit-time reduction preserving the weak threshold comparison from explicitly encoded fair-coin reachability games to deterministic integer-weighted mean-payoff games, including nonabsorbing plays.
 
 ## Partial results with open work
 
@@ -103,5 +104,6 @@ Choose an open question to see its evidence, the reason for each connection, wor
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open
     - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) · 🟦 Open
+    - [3244b26a-6160-43e2-9b81-1650d78dd4cb · Reduce simple stochastic games to deterministic mean-payoff games](3244b26a-6160-43e2-9b81-1650d78dd4cb.md) · 🟦 Open
 
 [Diagram of the tree](DIAGRAM.md) · [Mathematical proof map](../PROOF-MAP.md) · [Direction and credit catalog](../DIRECTIONS.md)

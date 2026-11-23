@@ -32,3 +32,34 @@ jobs:
           for check in experiments/market_checks/*.py; do
             python3 "$check"
           done
+
+  stochastic-games-lean:
+    name: Lean stochastic game build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: lean
+          build: true
+          build-args: StochasticGames
+          test: false
+          use-mathlib-cache: true
+
+  stochastic-games-replay:
+    name: Stochastic game replay with Z3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Z3
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y z3
+      - name: Check certificates and run graph-only SMT
+        run: |
+          z3 --version
+          python3 experiments/h4_ssg_to_mpg_replay.py --route direct --random 0 --systematic 2 --require-smt

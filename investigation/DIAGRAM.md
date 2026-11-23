@@ -141,6 +141,8 @@ flowchart TD
   n26 --> n66
   n67["2cda0f31-ecad-4bb0-b12e-b040dafa66cd"]:::open
   n26 --> n67
+  n68["3244b26a-6160-43e2-9b81-1650d78dd4cb"]:::open
+  n54 --> n68
   classDef open fill:#deebff,color:#142f4e,stroke:#4275ad
   classDef partial fill:#fff0cf,color:#502e07,stroke:#a86c18
   classDef scoped fill:#dcf5e7,color:#143e2a,stroke:#38805c

@@ -6,6 +6,12 @@ The research question is whether an exact Bayes–Nash equilibrium can be comput
 
 [**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Exact market clearing**](#open-a4-market-questions) · [All open questions](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
 
+## From stochastic reachability to deterministic mean payoff
+
+While looking for a hardness reduction for affine-market clearing, we found a way to turn a simple stochastic reachability game and a rational threshold into one deterministic mean-payoff game in polynomial time. The working proof preserves the threshold answer even at equality. This is the reverse reduction described as open in the October 2026 seminar. [Proof and replay](notes/H4-ssg-to-mean-payoff.md) · [October seminar](https://mimuw.edu.pl/en/seminars/talk/quasipolynomial-algorithms-for-mean-payoff-and-simple-stochastic-games/)
+
+For the Bayesian equilibrium question, this route still needs a reduction from deterministic mean-payoff games to exact affine-market clearing. [Investigation and contribution record](investigation/3244b26a-6160-43e2-9b81-1650d78dd4cb.md)
+
 ## Open L1/L2 continuation questions
 
 L1 describes the published continuation. L2 gives an exact implementation. Some games force superpolynomially many changes of attack flow, even when each step takes the largest possible jump at fixed flow. A general polynomial-time algorithm along this line would have to skip those changes. The questions below measure the cost of following the original path. [Lower bound and its scope](investigation/B3f.md) · [Exact upper bound](investigation/L2.md)

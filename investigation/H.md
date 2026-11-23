@@ -14,6 +14,7 @@ Parent question · [R · Exact equilibrium in polynomial time](R.md)
 
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) · 🟦 Open
+- [3244b26a-6160-43e2-9b81-1650d78dd4cb · Reduce simple stochastic games to deterministic mean-payoff games](3244b26a-6160-43e2-9b81-1650d78dd4cb.md) · 🟦 Open
 
 ## Where the direction came from
 
