@@ -43,7 +43,8 @@ R    Exact equilibrium in polynomial time
 │       │   └── A4e3  Prove strict descent and solve common-offset markets
 │       ├── A4f  Seek a polynomial-handicap formulation for A4d
 │       │   ├── A4f1  Test scaling, regularization and active-set conditioning
-│       │   └── A4f2  Construct equivalent buyer–good formulations
+│       │   ├── A4f2  Construct equivalent buyer–good formulations
+│       │   └── A4f3  Scale price tolerances through stable price contracts
 │       ├── A4g  Test bounded search and shortcuts in the implicit basis graph
 │       │   ├── A4g1  Solve selected affine regions and bracket their signs
 │       │   ├── A4g2  Bound breadth-first and all-ones Lemke searches
@@ -61,8 +62,13 @@ R    Exact equilibrium in polynomial time
 │       │   ├── A4h10  Search synchronized boundary quotes and test persistent ties
 │       │   ├── A4h11  Combine common-offset cores and heterogeneous conditional solvers
 │       │   └── A4h12  Use one-good block solvers for shared buyers and goods
-│       └── A4i  Reduce affine market clearing to a one-resource game
-│           └── A4i1  Find minimum prices in one supplied unit market
+│       ├── A4i  Reduce affine market clearing to a one-resource game
+│       │   └── A4i1  Find minimum prices in one supplied unit market
+│       │       ├── A4i1a  Solve degree-two unit markets by conditional Hall tests
+│       │       ├── A4i1b  Bound exact ascent by deletion-matching products
+│       │       ├── A4i1c  Reduce arbitrary unit markets to degree three
+│       │       └── A4i1d  Find support through multiplier lists and price boxes
+│       └── A4l  Find exact clearing through ordinal stable allocation
 └── H    Complexity and counterexamples
     ├── H1   Pin down compact complexity and certificate bounds
     └── H2   Test a structural conjecture or a candidate hardness reduction
@@ -97,6 +103,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4d | Upper bound proved | [One P-matrix LCP suffices; exact market and game search are in UniqueEOPL](notes/A4d-p-matrix-complementarity.md) |
 | A4e | Exact descent and polynomial subclasses | [Covering LP counterexamples, Hall disjunctions, and a common-offset solver](notes/A4e-covering-lp.md) |
 | A4f | General polynomial handicap open | [Scaling obstruction, exact reformulations, and binary recovery](notes/A4f-handicap-formulation.md) |
+| A4f3 | Polynomial for bounded products of slope ratios | [Stable-flow scaling with binary quotas](investigation/A4f3.md) |
 | A4g | Exact bounded searches and path lower bounds | [Anchor price lists, region solves, and a long Lemke line](notes/A4g-budgeted-support-search.md) |
 | A4h | Polynomial subclasses and a query bound | [Complete candidate generation and limits on explicit lists](notes/A4h-complete-candidate-generation.md) |
 | A4h4 | NP-hard count | [Corollary 1.8 audit and price-table reduction](notes/A4h-table-count-hardness.md) |
@@ -110,6 +117,10 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h12 | Polynomial on bounded incidence blocks | [Buyer proxies, mixed articulations, and margin counts](notes/A4h-buyer-proxy.md) |
 | A4i | Reverse reduction and unit-market equivalence proved | [One-resource reduction and jointly uniform games](notes/A4i-market-to-game.md) |
 | A4i1 | General unit-market polynomial time open | [Supplied unit market with arbitrary affine slopes](investigation/A4i1.md) |
+| A4i1a–b | Polynomial in degree two and additional slope classes | [Conditional Hall search](investigation/A4i1a.md) · [Deletion-matching ascent](investigation/A4i1b.md) |
+| A4i1c | General unit market reduces to degree three | [Degree-three reduction](investigation/A4i1c.md) |
+| A4i1d | Polynomial with a small multiplier-list product or fixed cycle-gain rank | [Representatives and price-box tests](investigation/A4i1d.md) |
+| A4l | Polynomial with separated cutoffs at binary quotas | [Ordinal stable allocation](investigation/A4l.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points

@@ -207,3 +207,23 @@ Robert Thomas Collins · Selected the research direction and supplied the compar
 Connected A4h9's jump and contraction loop to B3d's fixed-quote switching and L4b's fixed-threshold endpoints. Asked which existing results could solve missing steps in the other approaches.
 
 [A4h10](investigation/A4h10.md) · [A4h11](investigation/A4h11.md) · [A4h12](investigation/A4h12.md) · [L4c](investigation/L4c.md)
+
+<a name="direction-supplied-unit-market"></a>
+
+## Find prices in one supplied unit market
+
+Robert Thomas Collins · Selected the unit-market problem · 2026-11-22
+
+Identified exact unit-market search as the remaining solver question for games with uniform priors and equal defender gains. Asked how to pass from unit quantities to binary quantities.
+
+[A4i1](investigation/A4i1.md) · [A4i1a](investigation/A4i1a.md) · [A4i1b](investigation/A4i1b.md) · [A4i1c](investigation/A4i1c.md)
+
+<a name="direction-post8-exact-search"></a>
+
+## Use minimum-supported matchings and precision scaling
+
+Robert Thomas Collins · Supplied the review and directed the follow-up · 2026-11-22
+
+The [PR #8 review](https://github.com/robbiemu/bayesian-simple-security-games/pull/8#issuecomment-7089066389) proposed finding support at the supplied endpoint and improving precision off the supported auction path. The follow-up gives short support lists, stable-flow price phases, and a separate ordinal stable-allocation criterion.
+
+[A4i1d](investigation/A4i1d.md) · [A4f3](investigation/A4f3.md) · [A4l](investigation/A4l.md)

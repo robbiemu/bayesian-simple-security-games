@@ -273,5 +273,32 @@
       "A4h12",
       "L4c"
     ]
+  },
+  {
+    "id": "supplied-unit-market",
+    "title": "Find prices in one supplied unit market",
+    "date": "2026-11-22",
+    "person": "Robert Thomas Collins",
+    "role": "Selected the unit-market problem",
+    "account": "Identified exact unit-market search as the remaining solver question for games with uniform priors and equal defender gains. Asked how to pass from unit quantities to binary quantities.",
+    "nodes": [
+      "A4i1",
+      "A4i1a",
+      "A4i1b",
+      "A4i1c"
+    ]
+  },
+  {
+    "id": "post8-exact-search",
+    "title": "Use minimum-supported matchings and precision scaling",
+    "date": "2026-11-22",
+    "person": "Robert Thomas Collins",
+    "role": "Supplied the review and directed the follow-up",
+    "account": "The [PR #8 review](https://github.com/robbiemu/bayesian-simple-security-games/pull/8#issuecomment-7089066389) proposed finding support at the supplied endpoint and improving precision off the supported auction path. The follow-up gives short support lists, stable-flow price phases, and a separate ordinal stable-allocation criterion.",
+    "nodes": [
+      "A4i1d",
+      "A4f3",
+      "A4l"
+    ]
   }
 ]

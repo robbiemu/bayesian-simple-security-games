@@ -460,7 +460,7 @@
       "state": "open",
       "summary": "Each buyer has unit mass and each good has unit capacity. Every offer can have its own positive rational slope.",
       "source": "notes/A4i-market-to-game.md#open-unit-market-search",
-      "next": "Give a polynomial-bit-time algorithm for the minimum prices of a supplied unit market with arbitrary affine slopes, together with exact clearing-flow recovery."
+      "next": "Find a polynomial-bit-time solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem."
     },
     {
       "id": "H",
@@ -523,6 +523,54 @@
       "summary": "A buyer proxy preserves clearance and turns the viable incidence graph into a goods-interaction graph. The existing block algorithm then handles arbitrary mixed articulations in bounded blocks.",
       "source": "notes/A4h-buyer-proxy.md",
       "issue": 1
+    },
+    {
+      "id": "A4f3",
+      "parent": "A4f",
+      "title": "Scale price precision with stable flows at physical quotas",
+      "state": "scoped",
+      "summary": "Dyadic contract phases recover exact minimum prices in polynomial bit time under a polynomial bound on products of slope ratios. Buyer masses and good capacities are binary rationals.",
+      "source": "notes/A4f-precision-scaling.md"
+    },
+    {
+      "id": "A4i1a",
+      "parent": "A4i1",
+      "title": "Solve degree-two unit markets by conditional Hall tests",
+      "state": "scoped",
+      "summary": "Degree two on either side admits polynomial-bit-time solving. Conditional Hall cuts and reciprocal transpose identities extend the result to additional balanced-cycle classes.",
+      "source": "notes/A4j-unit-market-search.md"
+    },
+    {
+      "id": "A4i1b",
+      "parent": "A4i1",
+      "title": "Bound exact ascent by deletion-matching products",
+      "state": "scoped",
+      "summary": "Minimum-product deletion matchings give an exact rational ascent. The update count is polynomial under logarithmic cycle rank or logarithmically many slope exceptions.",
+      "source": "notes/A4j-unit-matching-ascent.md"
+    },
+    {
+      "id": "A4i1c",
+      "parent": "A4i1",
+      "title": "Reduce arbitrary unit markets to degree three",
+      "state": "scoped",
+      "summary": "One oracle call on a degree-three unit market recovers the original minimum. All heterogeneous offers can be placed on a matching between alternating paths.",
+      "source": "notes/A4j-unit-degree-three.md"
+    },
+    {
+      "id": "A4i1d",
+      "parent": "A4i1",
+      "title": "Find support through multiplier lists and price boxes",
+      "state": "scoped",
+      "summary": "One representative per normalization choice covers the equilibria. A cut selects the lists for a fixed baseline, and a supplied price box can certify a matching or exclude an edge. Fixed cycle-gain rank yields another polynomial class.",
+      "source": "notes/A4j-endpoint-support.md"
+    },
+    {
+      "id": "A4l",
+      "parent": "A4",
+      "title": "Find exact clearing through ordinal stable allocation",
+      "state": "scoped",
+      "summary": "An edgewise separation test on two cutoff rankings gives exact polynomial-time clearing with binary masses and capacities. Supply enlargement recovers the minimum prices.",
+      "source": "notes/A4l-ordinal-stable-allocations.md"
     }
   ],
   "links": [
@@ -1092,6 +1140,55 @@
       "target": "L4b",
       "reason": "Common-capacity Hall comparisons give polynomial-size unit queries for exact threshold and budget recovery.",
       "source": "notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets"
+    },
+    {
+      "origin": "A4f3",
+      "target": "A4c",
+      "relation": "uses",
+      "reason": "Comparing clearance at the original and enlarged capacities gives the exiting Hall paths and makes the repaired prices unique.",
+      "source": "notes/A4f-precision-scaling.md#exit-paths-certify-the-new-box"
+    },
+    {
+      "origin": "A4f3",
+      "target": "L4b",
+      "relation": "supplies a subclass oracle for",
+      "reason": "The bound on products of viable slope ratios is preserved by the capacity and reserve queries in exact budget recovery.",
+      "source": "notes/A4f-precision-scaling.md#exit-paths-certify-the-new-box"
+    },
+    {
+      "origin": "A4i1a",
+      "target": "A4h6",
+      "relation": "uses",
+      "reason": "An inclusion-minimal maximizing Hall deficit selects goods whose minimum prices are strictly above a certified floor.",
+      "source": "notes/A4j-unit-market-search.md#identify-positive-goods-and-solve-their-conditional-market"
+    },
+    {
+      "origin": "A4i1c",
+      "target": "A4i1a",
+      "relation": "compares with",
+      "reason": "Degree two on either side admits polynomial time, while restricting both sides to degree three preserves the arbitrary unit-market question.",
+      "source": "notes/A4j-unit-degree-three.md"
+    },
+    {
+      "origin": "A4i1d",
+      "target": "A4i1b",
+      "relation": "extends",
+      "reason": "The rank of the rational cycle gains bounds the number of distinct matching products per phase.",
+      "source": "notes/A4j-endpoint-support.md#count-matching-products-using-the-rank-of-the-cycle-gains"
+    },
+    {
+      "origin": "A4l",
+      "target": "A4c",
+      "relation": "uses",
+      "reason": "Enlarged capacities let one ordinal stable allocation and its price lift recover the original minimum.",
+      "source": "notes/A4l-ordinal-stable-allocations.md#exact-minimum-prices-and-the-unit-shortcut"
+    },
+    {
+      "origin": "A4l",
+      "target": "A4i1",
+      "relation": "solves a subclass of",
+      "reason": "On the ordinally separated unit subclass deferred acceptance determines a matching supported at the minimum.",
+      "source": "notes/A4l-ordinal-stable-allocations.md#exact-minimum-prices-and-the-unit-shortcut"
     }
   ],
   "decisions": {}

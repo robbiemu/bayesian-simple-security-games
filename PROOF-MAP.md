@@ -82,6 +82,12 @@ flowchart TB
     PL --> AL["A4g · All-ones Lemke path<br/>n^Ω(log n) affine pieces"]
     AS --> UM["A4i1 · OPEN<br/>Minimum prices of a supplied unit market"]
     UM <--> UG["A4i · Exact equilibrium search<br/>Uniform priors and equal gains"]
+    UM --> UD["A4i1a · Degree two on either side<br/>Exact polynomial-time solver"]
+    UM --> UA["A4i1b · Deletion matchings<br/>Polynomial with logarithmically many slope exceptions"]
+    UM --> U3["A4i1c · Degree three retains the general unit problem"]
+    UM --> UL["A4i1d · Multiplier lists or fixed cycle-gain rank<br/>Exact polynomial-time solvers"]
+    C --> PS["A4f3 · Stable price-contract phases<br/>Polynomial with bounded products of slope ratios"]
+    C --> OA["A4l · Separated cutoff rankings<br/>Polynomial exact clearing at binary quotas"]
     AS --> AG["A4g · Exact search on candidate price lists"]
     AG --> AC["Logarithmic incidence cycle rank<br/>Exact polynomial-time solver"]
     AG --> AH["A4h · Generate complete price lists or regions"]
@@ -127,11 +133,13 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O settled
-    class CL,PL,NH,CD,AQ,AJT,AHY cap
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA settled
+    class CL,PL,NH,CD,AQ,AJT,AHY,U3 cap
 ```
 
 [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Open unit-market search](investigation/A4i1.md)
+
+[Unit-market endpoint support](investigation/A4i1d.md) · [Price-contract scaling](investigation/A4f3.md) · [Ordinal stable allocation](investigation/A4l.md)
 
 [Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
 

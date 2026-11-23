@@ -22,6 +22,7 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 - L4b **gives an endpoint alternative to** [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md). A clearing oracle can recover the coverage at the requested budget without counting every internal step of the original path. [Evidence](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
 - [A4i · Reduce affine market clearing to one-resource security games](A4i.md) **reverses** L4b. L4b solves the supplied budget with market calls. A4i obtains minimum prices from one game. [Evidence](../notes/A4i-market-to-game.md)
 - [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) **uses** L4b. Common-capacity Hall comparisons give polynomial-size unit queries for exact threshold and budget recovery. [Evidence](../notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets)
+- [A4f3 · Scale price precision with stable flows at physical quotas](A4f3.md) **supplies a subclass oracle for** L4b. The bound on products of viable slope ratios is preserved by the capacity and reserve queries in exact budget recovery. [Evidence](../notes/A4f-precision-scaling.md#exit-paths-certify-the-new-box)
 
 ## Where the direction came from
 
@@ -32,6 +33,7 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 - [Clear a common-offset core with heterogeneous single-vertex branches](../records/050f6342-7cce-48ec-b308-036810d0c200.md)
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/05ac5a83-21c6-4859-a3a6-3e9ee5a62863.md)
 - [Reduce exact affine-market clearing to one defender resource](../records/0952bf4d-148a-4ea4-9130-b8c0ff07156e.md)
+- [Scale affine-market prices with stable contracts and exact support repair](../records/521d0fb1-878f-4e35-8f94-75eff883c296.md)
 - [Use one answer endpoint to certify the threshold search](../records/70afccbf-e6a3-451d-9dac-08ae1cf33159.md)
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/792ca289-2e48-4b18-b6c2-67c2cb68a5a2.md)
 - [Use one answer endpoint to certify the threshold search](../records/835e8a45-90e9-432d-a45c-dbf2f80f1444.md)
