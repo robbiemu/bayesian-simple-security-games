@@ -6,6 +6,10 @@ The research question is whether an exact Bayes–Nash equilibrium can be comput
 
 [**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Exact market clearing**](#open-a4-market-questions) · [All open questions](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
 
+## Stochastic games
+
+A related working proof gives a polynomial-time many-one reduction from simple stochastic reachability games to deterministic mean-payoff games. [Proof and replay](notes/H4-ssg-to-mean-payoff.md) · [Investigation and contribution record](investigation/3244b26a-6160-43e2-9b81-1650d78dd4cb.md)
+
 ## Open L1/L2 continuation questions
 
 L1 describes the published continuation. L2 gives an exact implementation. Some games force superpolynomially many changes of attack flow, even when each step takes the largest possible jump at fixed flow. A general polynomial-time algorithm along this line would have to skip those changes. The questions below measure the cost of following the original path. [Lower bound and its scope](investigation/B3f.md) · [Exact upper bound](investigation/L2.md)
