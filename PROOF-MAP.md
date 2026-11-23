@@ -38,15 +38,17 @@ flowchart TB
     N --> W
     B --> E["Final budget on the hard family<br/>Assignment + LP · Polynomial time"]
 
-    A -.-> O["L3 · A polynomial-time exact<br/>minimum-price oracle would solve R"]
+    A -.-> O["L4b · Game to exact market clearing<br/>Polynomially many polynomial-bit calls"]
     O --> AS["A4 · General minimum-price search<br/>OPEN"]
+    AS --> RV["A4i · Market to one exact game call<br/>One defender resource"]
+    RV -.-> R
 
     classDef proof fill:#e4efff,stroke:#4275ad,color:#142f4e
     classDef settled fill:#dcf5e7,stroke:#38805c,color:#143e2a
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class R,A,P,S,L,C,J,B,O,AS,HW,BL proof
-    class F,SP,LP,CP,N,E,JE,IB settled
+    class F,SP,LP,CP,N,E,JE,IB,RV settled
     class U,W,PL cap
 ```
 
@@ -64,7 +66,7 @@ flowchart TB
 
 ## A4 minimum-price market branch
 
-A4c replaces the minimum-price oracle in L3 with an oracle for any clearing equilibrium. A4d reduces either market search problem to one P-matrix LCP. [L3 oracle reduction](notes/L3-prior-partials.md#conditional-exact-reduction-to-a-minimum-price-oracle) · [A4c supply perturbation](notes/A4c-any-clearing-equilibrium.md) · [A4d complementarity reduction](notes/A4d-p-matrix-complementarity.md)
+A4c replaces the minimum-price oracle with an oracle for any clearing equilibrium. L4b gives the game-to-market reduction and A4i gives the reverse. A4d reduces either market search problem to one P-matrix LCP. [A4c supply perturbation](investigation/A4c.md) · [L4b budget recovery](investigation/L4b.md) · [A4i reverse reduction](investigation/A4i.md) · [A4d complementarity reduction](notes/A4d-p-matrix-complementarity.md)
 
 ```mermaid
 flowchart TB
@@ -78,6 +80,8 @@ flowchart TB
     PL --> NH["L4 · Newton solve-count guarantee<br/>Exponential handicap after regularization"]
     PL --> AF["A4f · Smaller node formulation<br/>Global polynomial handicap open"]
     PL --> AL["A4g · All-ones Lemke path<br/>n^Ω(log n) affine pieces"]
+    AS --> UM["A4i1 · OPEN<br/>Minimum prices of a supplied unit market"]
+    UM <--> UG["A4i · Exact equilibrium search<br/>Uniform priors and equal gains"]
     AS --> AG["A4g · Exact search on candidate price lists"]
     AG --> AC["Logarithmic incidence cycle rank<br/>Exact polynomial-time solver"]
     AG --> AH["A4h · Generate complete price lists or regions"]
@@ -122,10 +126,12 @@ flowchart TB
     classDef settled fill:#dcf5e7,stroke:#38805c,color:#143e2a
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
-    class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H proof
+    class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG proof
     class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O settled
     class CL,PL,NH,CD,AQ,AJT,AHY cap
 ```
+
+[Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Open unit-market search](investigation/A4i1.md)
 
 [Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
 

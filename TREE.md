@@ -48,19 +48,21 @@ R    Exact equilibrium in polynomial time
 │       │   ├── A4g1  Solve selected affine regions and bracket their signs
 │       │   ├── A4g2  Bound breadth-first and all-ones Lemke searches
 │       │   └── A4g3  Generate and search price lists from anchored paths
-│       └── A4h  Generate complete candidate lists before the Hall search
-│           ├── A4h1  Compose exact price breakpoints across one-good separators
-│           ├── A4h2  Test fixed libraries and complete parametric tables
-│           ├── A4h3  Use contraction queries, load corrections, and price transforms
-│           ├── A4h4  Count capacity-price intervals and boundary-load drops
-│           ├── A4h5  Generate complete candidates using the supplied capacities
-│           ├── A4h6  Jump to new demand ties using alternating forests
-│           ├── A4h7  Find and contract forced price relations
-│           ├── A4h8  Preserve completions when discarding partial solutions
-│           ├── A4h9  Combine price jumps, certified ties, and boundary load queries
-│           ├── A4h10  Search synchronized boundary quotes and test persistent ties
-│           ├── A4h11  Combine common-offset cores and heterogeneous conditional solvers
-│           └── A4h12  Use one-good block solvers for shared buyers and goods
+│       ├── A4h  Generate complete candidate lists before the Hall search
+│       │   ├── A4h1  Compose exact price breakpoints across one-good separators
+│       │   ├── A4h2  Test fixed libraries and complete parametric tables
+│       │   ├── A4h3  Use contraction queries, load corrections, and price transforms
+│       │   ├── A4h4  Count capacity-price intervals and boundary-load drops
+│       │   ├── A4h5  Generate complete candidates using the supplied capacities
+│       │   ├── A4h6  Jump to new demand ties using alternating forests
+│       │   ├── A4h7  Find and contract forced price relations
+│       │   ├── A4h8  Preserve completions when discarding partial solutions
+│       │   ├── A4h9  Combine price jumps, certified ties, and boundary load queries
+│       │   ├── A4h10  Search synchronized boundary quotes and test persistent ties
+│       │   ├── A4h11  Combine common-offset cores and heterogeneous conditional solvers
+│       │   └── A4h12  Use one-good block solvers for shared buyers and goods
+│       └── A4i  Reduce affine market clearing to a one-resource game
+│           └── A4i1  Find minimum prices in one supplied unit market
 └── H    Complexity and counterexamples
     ├── H1   Pin down compact complexity and certificate bounds
     └── H2   Test a structural conjecture or a candidate hardness reduction
@@ -106,11 +108,13 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h10 | Polynomial search with certified synchronized quotes | [Signed loads and persistent ties](notes/A4h-synchronized-ports.md) |
 | A4h11 | Polynomial subclass and weak-sign transfer | [Offset cores and heterogeneous conditional solvers](notes/A4h-core-composition-closures.md) |
 | A4h12 | Polynomial on bounded incidence blocks | [Buyer proxies, mixed articulations, and margin counts](notes/A4h-buyer-proxy.md) |
+| A4i | Reverse reduction and unit-market equivalence proved | [One-resource reduction and jointly uniform games](notes/A4i-market-to-game.md) |
+| A4i1 | General unit-market polynomial time open | [Supplied unit market with arbitrary affine slopes](investigation/A4i1.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points
 
 The open continuation questions concern [strict threshold drops (L1a)](investigation/L1a.md), [tight single-run bounds (L2a)](investigation/L2a.md) and [input-only intermediate bit lengths (L2b)](investigation/L2b.md). Each node links to its discussion and the precise existing bound.
 
-1. **A4.** Extend [A4h's capacity-specific queries](notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices) beyond a near-factorized core, or find a polynomial-time selection rule for [general candidate regions](notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible). A global formulation from [A4f’s zero-handicap cells](notes/A4f-handicap-formulation.md#eliminating-flow-variables) or a polynomial iteration bound for [A4e’s reweighted covers](notes/A4e-covering-lp.md#an-exact-descent-rule) would also suffice. Any exact clearing oracle for the binary rational market transfers through [L4’s threshold and budget decoder](notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle).
+1. **A4.** Extend [A4h's capacity-specific queries](notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices) beyond a near-factorized core, or find a polynomial-time selection rule for [general candidate regions](notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible). A global formulation from [A4f’s zero-handicap cells](notes/A4f-handicap-formulation.md#eliminating-flow-variables) or a polynomial iteration bound for [A4e’s reweighted covers](notes/A4e-covering-lp.md#an-exact-descent-rule) would also suffice. Exact clearing and game equilibrium now reduce to each other. At unit quantities, a polynomial algorithm would settle the jointly uniform game. [L4b budget decoder](notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle) · [A4i reverse reduction](investigation/A4i.md) · [Open unit-market search](investigation/A4i1.md)
 2. **Structural composition.** The [shared-target solver](notes/B3d-shared-target-separator.md) composes arbitrarily many small groups across one common parameter vector. Test which budget and flow relations can be retained across a tree of small separators. The construction in [B3f](notes/B3f-forced-flow-switches.md) rules out a general polynomial count of fixed-flow segments even at uniform margins and a constant threshold.
