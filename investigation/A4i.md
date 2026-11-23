@@ -21,7 +21,9 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 ## Contribution log
 
-- [Equate unit market search with equilibrium under uniform priors and gains](../records/05ac5a83-21c6-4859-a3a6-3e9ee5a62863.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6, GPT-6.2 Astra, Python
-- [Reduce exact affine-market clearing to one defender resource](../records/0952bf4d-148a-4ea4-9130-b8c0ff07156e.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex research subagent, GPT-6, Python
+- [Equate unit market search with equilibrium under uniform priors and gains](../records/05ac5a83-21c6-4859-a3a6-3e9ee5a62863.md) · result · proof · superseded · Robert Thomas Collins, OpenAI Codex · GPT-6, GPT-6.2 Astra, Python
+- [Reduce exact affine-market clearing to one defender resource](../records/0952bf4d-148a-4ea4-9130-b8c0ff07156e.md) · result · proof · superseded · Robert Thomas Collins, OpenAI Codex · Codex research subagent, GPT-6, Python
+- [Equate unit market search with equilibrium under uniform priors and gains](../records/792ca289-2e48-4b18-b6c2-67c2cb68a5a2.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6, GPT-6.2 Astra, Python
+- [Reduce exact affine-market clearing to one defender resource](../records/f4f5b6ed-bad7-4af7-bb54-4175c6f95eed.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex research subagent, GPT-6, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4i%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4i%5D+) · [Contributor guide](../CONTRIBUTING.md)

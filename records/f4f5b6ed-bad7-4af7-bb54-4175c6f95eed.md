@@ -1,0 +1,57 @@
+---
+schema: 1
+id: f4f5b6ed-bad7-4af7-bb54-4175c6f95eed
+kind: result
+question: A4i
+title: "Reduce exact affine-market clearing to one defender resource"
+at: "2026-11-23T01:11:28Z"
+by:
+  - id: Robert Thomas Collins
+    roles: [selected the reverse reduction for investigation]
+  - id: OpenAI Codex
+    roles: [model-assisted derivation, checking, writing]
+submitted_by: OpenAI Codex from the dated research discussion
+source: notes/A4i-market-to-game.md#one-padding-target-pins-the-relevant-score
+outcome: proof
+supersedes: 0952bf4d-148a-4ea4-9130-b8c0ff07156e
+depends_on: [A4c, L4b]
+ai_use: used
+tools:
+  - kind: model
+    provider: OpenAI
+    name: Codex research subagent
+    client: Codex
+    version: null
+    used_by: [Robert Thomas Collins]
+    roles: [derivation]
+    contribution: "Developed the padding-score construction and the separate uniform-prior and unit-gain variants. The displayed model name was unrecorded in the available session metadata."
+    check: "The coordinating session checked the decoding and lifting inequalities and the original-capacity recovery."
+  - kind: model
+    provider: OpenAI
+    name: GPT-6
+    client: Codex
+    version: null
+    used_by: [Robert Thomas Collins]
+    roles: [derivation, checking, writing]
+    contribution: "Integrated the score-pinning argument, inverse construction, and polynomial bit bounds with the existing oracle reductions."
+    check: "Checked that coverage of the outside target is zero, some padding is covered, and market sales obey the original unweighted constraints after flow recovery."
+  - kind: software
+    name: Python
+    version: 3.9.6
+    contribution: "Used exact Fraction arithmetic to check the rational certificate below and the residual-mass and dedicated-mass balances of the variants."
+artifacts:
+  - path: experiments/market_checks/a4i_reduction_replay.py
+    sha256: f38d22123ba6914bc3451a9b81a0bf96101b9c56f2b77857ddfc61c94354e640
+  - path: experiments/market_checks/clearing_replay_checks.py
+    sha256: 79928e63851742a0a086f669fd8b14f703700fb87616e165989bc80fabe0745b
+  - path: experiments/market_checks/a4h9_hybrid_examples.py
+    sha256: 1d3eff4275f4ff500a241bf1e8a75a3e3d1987db8e0ad170fd07499a4d4ff63f
+---
+
+A single enlarged affine-market clearing is encoded as a strictly signed game with one defender resource. The padding target sets the threshold, while the old target scores enforce the market capacities. A4c makes the enlarged market's prices unique and recovers the original minimum at those prices. L4b supplies the other direction, a polynomial-time oracle reduction to affine-market clearing. [Construction and separate variants](../notes/A4i-market-to-game.md) · [A4c supply perturbation](../notes/A4c-any-clearing-equilibrium.md#one-call-at-enlarged-capacities) · [L4b exact budget recovery](../notes/L4-newton-and-continuation.md#exact-threshold-and-budget-recovery-with-a-clearing-oracle)
+
+**Exact check.** One good has original capacity $1$ and offers $5-2p$ and $4-p$ to masses $3/5$ and $2/3$. A4c gives capacity $31/30$. At $p=5/2$ the first buyer sends $11/30$ to the good and $7/30$ outside, and the second sends $2/3$ to the good. With padding mass $1$, the total normalization is $34/15$. The good, outside and padding coverages are $(1/2,0,1/2)$, and their scores are $(1,7/136,1)$, respectively. At the original capacity, the first buyer sends $1/3$ to the good and the second still sends $2/3$. This checks the support, scaling and exact price recovery on the same rational input.
+
+Run `python3 experiments/market_checks/a4i_reduction_replay.py` from the repository root to reproduce both A4i certificates, the separate gadget checks, and all 1,546 Hall-capacity comparisons. [Exact replay](../experiments/market_checks/a4i_reduction_replay.py)
+
+This revision supersedes the [original proof record](./0952bf4d-148a-4ea4-9130-b8c0ff07156e.md) to attach the replay with verified artifact digests.
