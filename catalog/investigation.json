@@ -446,6 +446,23 @@
       "issue": 1
     },
     {
+      "id": "A4i",
+      "parent": "A4",
+      "title": "Reduce affine market clearing to one-resource security games",
+      "state": "scoped",
+      "summary": "One strictly signed game with one defender resource recovers exact affine-market minimum prices. Unit markets and games with uniform priors and equal gains are polynomial-time Turing equivalent.",
+      "source": "notes/A4i-market-to-game.md"
+    },
+    {
+      "id": "A4i1",
+      "parent": "A4i",
+      "title": "Find the exact minimum prices of one supplied unit market",
+      "state": "open",
+      "summary": "Each buyer has unit mass and each good has unit capacity. Every offer can have its own positive rational slope.",
+      "source": "notes/A4i-market-to-game.md#open-unit-market-search",
+      "next": "Give a polynomial-bit-time algorithm for the minimum prices of a supplied unit market with arbitrary affine slopes, together with exact clearing-flow recovery."
+    },
+    {
       "id": "H",
       "parent": "R",
       "title": "Complexity and counterexamples",
@@ -1054,6 +1071,27 @@
       "target": "B3e",
       "reason": "A fixed source order can force a long path even though the attack assignment never changes.",
       "source": "notes/B3e-parametric-path-lower-bound.md#count-and-scope"
+    },
+    {
+      "origin": "A4i",
+      "relation": "uses",
+      "target": "A4c",
+      "reason": "A supply increase makes any game certificate recover the original market minimum.",
+      "source": "notes/A4i-market-to-game.md#one-padding-target-pins-the-relevant-score"
+    },
+    {
+      "origin": "A4i",
+      "relation": "reverses",
+      "target": "L4b",
+      "reason": "L4b solves the supplied budget with market calls. A4i obtains minimum prices from one game.",
+      "source": "notes/A4i-market-to-game.md"
+    },
+    {
+      "origin": "A4i1",
+      "relation": "uses",
+      "target": "L4b",
+      "reason": "Common-capacity Hall comparisons give polynomial-size unit queries for exact threshold and budget recovery.",
+      "source": "notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets"
     }
   ],
   "decisions": {}

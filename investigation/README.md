@@ -14,6 +14,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
 - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Give a polynomial-bit-time algorithm for the minimum prices of a supplied unit market with arbitrary affine slopes, together with exact clearing-flow recovery.
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
 - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
@@ -90,6 +91,8 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h10 · Search synchronized boundary quotes and test persistent ties](A4h10.md) · 🟩 Result for the stated scope
         - [A4h11 · Combine common-offset cores and heterogeneous conditional solvers](A4h11.md) · 🟩 Result for the stated scope
         - [A4h12 · Use one-good block solvers for shared buyers and goods](A4h12.md) · 🟩 Result for the stated scope
+      - [A4i · Reduce affine market clearing to one-resource security games](A4i.md) · 🟩 Result for the stated scope
+        - [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) · 🟦 Open
       - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) · 🟦 Open
   - [H · Complexity and counterexamples](H.md) · Background
     - [H1 · Pin down compact complexity and certificate bounds](H1.md) · 🟦 Open
