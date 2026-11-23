@@ -1,6 +1,6 @@
 # Lean workspace
 
-This Lake package contains small library checks for the fixed-flow investigation. It pins Lean and mathlib to v4.36.0. The Lake manifest records the exact revision of each dependency.
+This Lake package contains library checks for the fixed-flow investigation and a partial formalization of the stochastic-game reduction. It pins Lean and mathlib to v4.36.0. The Lake manifest records the exact revision of each dependency.
 
 ## Running the checks
 
@@ -8,10 +8,11 @@ Open this directory as the project folder in your Lean editor. From the reposito
 
 ```sh
 cd lean
+lake build
 lake test
 ```
 
-On a fresh checkout with Elan on your path, run `lake exe cache get` in this directory to fetch the pinned packages and precompiled mathlib. Both `lake test` and `lake build` check every file under `LibraryChecks/`. To check one file, use `lake build LibraryChecks/Assignments.lean`.
+On a fresh checkout with Elan on your path, run `lake exe cache get` in this directory to fetch the pinned packages and precompiled mathlib. `lake build` checks both libraries. `lake test` runs the `LibraryChecks` target. To check one library example, use `lake build +LibraryChecks.Assignments`.
 
 ## What the examples check
 
@@ -22,3 +23,14 @@ On a fresh checkout with Elan on your path, run `lake exe cache get` in this dir
 - An open interval contains a point outside any finite set of endpoints. Further examples check counting by injections, the floor of the base-two logarithm, asymptotic comparison, and a logarithmic remainder estimate. [IntervalsAndGrowth.lean](LibraryChecks/IntervalsAndGrowth.lean)
 
 The current sketch also uses the Gajjar–Radhakrishnan parametric shortest-path construction, finite mixed Nash existence, and polynomial bit-time bounds for assignment and rational linear programming. A search of the pinned mathlib sources found no ready-to-import statements for those results.
+
+## Stochastic game reduction
+
+Run `lake build StochasticGames` to check the modules accompanying the [threshold proof](../notes/H4-ssg-to-mean-payoff.md).
+
+- `StochasticGames.Reachability.horizon_value_lt_iff_fixed_terminals` gives the strict dual certificate for the supremum of finite-horizon Bellman iterates, with both terminal values. [ReachabilityThreshold.lean](StochasticGames/ReachabilityThreshold.lean)
+- `StochasticGames.Reduction.exact_iff_selected_graph` handles finite rational row systems with bounded average-operand widths and bounded hard rows. The compiler derives a uniform violation gap and constructs the integer max-atom rows. The theorem proves that exact feasibility is equivalent to a row selection with nonnegative closed walks. [Reduction.lean](StochasticGames/Reduction.lean)
+- `StochasticGames.MeanPayoffGraph.max_atoms_iff_arena_certificate` connects binary integer max-atoms to graph potentials and closed walks in the fresh-start arena. [MeanPayoffGraph.lean](StochasticGames/MeanPayoffGraph.lean)
+- `StochasticGames.MeanPayoffThreshold.positional_saddle_swap` checks the equality-preserving weight change for a supplied saddle point of positional cycle payoffs. [MeanPayoffThreshold.lean](StochasticGames/MeanPayoffThreshold.lean)
+
+The written proof supplies the stochastic interpretation of the Bellman iterates, the strict real-to-rational bridge, positional determinacy, and the bit-time bounds.

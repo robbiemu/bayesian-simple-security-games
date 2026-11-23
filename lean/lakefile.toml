@@ -1,5 +1,5 @@
 name = "bayesian_security_games"
-defaultTargets = ["LibraryChecks"]
+defaultTargets = ["LibraryChecks", "StochasticGames"]
 testDriver = "LibraryChecks"
 
 [leanOptions]
@@ -13,3 +13,7 @@ rev = "v4.36.0"
 [[lean_lib]]
 name = "LibraryChecks"
 globs = ["LibraryChecks.+"]
+
+[[lean_lib]]
+name = "StochasticGames"
+globs = ["StochasticGames.+"]

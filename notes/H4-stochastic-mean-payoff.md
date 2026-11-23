@@ -1,0 +1,35 @@
+# From stochastic to deterministic mean-payoff games
+
+The exact simple stochastic game reduction also supplies a polynomial-time many-one reduction from **turn-based stochastic mean-payoff threshold decision** to deterministic mean-payoff threshold decision. The source may have binary rational rewards and transition probabilities and arbitrary recurrent classes. Given a source start $s$ and binary rational $t$, the output is one deterministic game with integer edge weights and a start whose value is nonnegative exactly when the original expected lower limiting average is at least $t$. The same deterministic mean-payoff model with optimal positional strategies as its output suffices for a single-instance search reduction.
+
+The stochastic reductions through discounting and fair-coin reachability are established. The additional deterministic endpoint comes from the arithmetic compilation. [Andersson and Miltersen](https://doi.org/10.1007/978-3-642-10631-6_13) · [Simple stochastic game threshold reduction](H4-ssg-to-mean-payoff.md)
+
+## Transfer a weak mean-payoff threshold to one discount
+
+Let $n$ be the number of states, $D$ the product of the denominators of all transition probabilities and rewards, and write $t=a/b$ with $b>0$. Suppose rewards are credited on the transition. Use the rational expectation of a transition's reward as its action reward when evaluating a fixed positional pair. It has a polynomial-bit denominator that can be included in $D$. This change preserves positional-pair expected mean and discounted values and therefore preserves both game values by positional determinacy.
+
+Fix any positional pair with stochastic matrix $P$ and reward vector $r$. Its normalized discounted value at $\gamma=1-\epsilon$ is
+
+```math
+         \epsilon(I-(1-\epsilon)P)^{-1}r.
+```
+
+For every state this is a quotient of integer polynomials in $\epsilon$, by Cramer's rule after multiplication by $D$. The denominator is $\det(D(I-(1-\epsilon)P))$. In a determinant product each factor has sum of absolute coefficients at most $3D$. A uniform bound on the absolute coefficients of the denominator is $Q=n!(3D)^n$. The polynomial is nonzero since the matrix is nonsingular at $0<\epsilon\le1$. The limit of the normalized value as $\epsilon$ decreases to zero is the positional pair's expected mean payoff. For a finite Markov chain, Cesàro means converge almost surely on its bottom recurrent classes. Bounded convergence and Abel–Cesàro convergence then give this identity even from a transient state. A nonzero limit is a ratio of leading coefficients after cancelling the common power of $\epsilon$, so its reduced denominator is at most $Q$. Zero also obeys this bound. By positional determinacy it applies to the game value. [Gurvich and Miltersen, Lemma 1](https://arxiv.org/pdf/0812.0486#page=3) · [Quantitative reasoning for positional pairs](https://arxiv.org/abs/2506.18545)
+
+Set $t'=t-1/(2bQ)$. Then $v_G(s)\ge t$ exactly when $v_G(s)>t'$, and $v_G(s)\ne t'$. Add a fresh Max state with two moves of equal immediate reward zero. One goes to $s$. The other goes to a new absorbing self-loop paying $t'$ forever. States of the original game never return to the fresh state. The strict comparison of the two branch values determines the unique optimal move at this new state for the mean-payoff criterion.
+
+Use the published polynomial-bit Blackwell discount bound for this augmented game. It supplies a rational $\gamma$ at which every optimal discounted positional strategy is mean-payoff optimal. Thus the new state's unique optimal discounted move must be the same one. A tie would permit both choices in discounted-optimal strategies because the fresh state's choice appears nowhere downstream. The two zero immediate rewards and their common continuation discount make the discounted comparison exactly the comparison of $t'$ with the normalized discounted value at $s$. Therefore one weak discounted threshold at $t'$ has the desired answer. The discount bound is computed from the augmented game, including the rational $t'$, without a value or a strategy oracle. [Andersson and Miltersen, Lemmas 1–2](https://doi.org/10.1007/978-3-642-10631-6_13) · [Gurvich and Miltersen, explicit bound](https://arxiv.org/pdf/0812.0486#page=3)
+
+## A single fair-coin game
+
+Affinely normalize all discounted action rewards to $[0,1]$, using a positive rational scale and applying the same transform to $t'$. At each original action, replace the transition by a lottery. With probabilities $(1-\gamma)\hat r$ and $(1-\gamma)(1-\hat r)$ it goes to Win and Lose respectively, where $\hat r$ is the normalized action reward. With probability $\gamma P_j$ it goes to successor $j$. The reachability Bellman operator on the old states is the normalized discounted Bellman operator. Each completed action reaches a sink with probability $1-\gamma>0$.
+
+For a lottery with $m$ rational probabilities, take a common denominator $d$. Use $k=\lceil\log_2 d\rceil$ fair bits to sample an integer in $[0,2^k)$. Reject numbers at least $d$, and label the other integers by consecutive intervals of lengths equal to the probability numerators. A dyadic prefix interval contained in a single label needs no further bits. At every depth at most $m$ intervals have an interior label change, including the rejection boundary. The explicitly constructed tree has $O(mk)$ nodes, and a rejection returns to its root. Acceptance has probability greater than $1/2$, so the lottery terminates almost surely and has the exact distribution. A deterministic singleton lottery can be replaced by its edge. The graph with all such replacements is a polynomial-size stopping fair-coin game at the transformed rational threshold. [Andersson and Miltersen, Lemma 3](https://doi.org/10.1007/978-3-642-10631-6_13) · [Zwick and Paterson, Section 6](https://richmodels.epfl.ch/_media/mean-payoff.pdf)
+
+Apply the arbitrary-threshold simple stochastic game construction. The result is a single deterministic mean-payoff game. The reverse decision reduction is inclusion of the deterministic special case.
+
+## Exact strategy search
+
+For strategy search, apply the Blackwell discount bound directly to the original stochastic mean-payoff game. Recover an optimal discounted pair via the single deterministic mean-payoff strategy-search reduction. The pair is optimal for the original mean-payoff objective by the bound. Evaluate its mean values by solving the stationary distribution systems on its recurrent classes and the absorption systems on transient states. All these finite rational linear computations take polynomial time. [Discounted search and strategy recovery](H4-deterministic-game-reductions.md#a-reduction-to-mean-payoff-strategy-search)
+
+The decision proof uses the value guarantee of the simple stochastic game compiler, and the search proof uses an optimal positional strategy of the deterministic target. Both reductions depend on the same exact elimination of averages. The cited discounted and fair-coin constructions already give the stochastic intermediate problems.
