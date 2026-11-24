@@ -1,11 +1,15 @@
 # H4 manuscript correspondence
 
-The starting versions are the November 24 manuscript and PR #11 at
-`224d0bed03458b5a03ae7043728b80b86083bc55`. The Lean development adds the
-real-witness statements of Proposition 4, the arena representation bridges,
-and the cost proof for the executable binary encoder. A separate
-model-assisted review extracted the manuscript statements first, then
-checked them against the Lean signatures. [Original proof and Python replay (PR #10)](../notes/H4-ssg-to-mean-payoff.md) · [Pinned Lean baseline](https://github.com/robbiemu/bayesian-simple-security-games/tree/224d0bed03458b5a03ae7043728b80b86083bc55/lean/StochasticGames)
+The manuscript edition is the November 24, 2026 working draft of
+*Reducing simple stochastic reachability games to deterministic mean-payoff games*.
+The review used a separately supplied TeX copy with SHA-256
+`49b62015c805a746d543a579148d47a74d2eb810491e275853fcf73fa48a376c`.
+The theorem numbers and page references below follow that edition.
+
+The Lean comparison starts at PR #11 revision `224d0be`. The follow-up
+review checked the real-witness statements of Proposition 4, the arena
+representation bridges, and the executable bit-time theorem at
+`9d7499e`. [Lean baseline](https://github.com/robbiemu/bayesian-simple-security-games/tree/224d0bed03458b5a03ae7043728b80b86083bc55/lean/StochasticGames) · [Reviewed Lean revision](https://github.com/robbiemu/bayesian-simple-security-games/tree/9d7499ea6904da11b6c89f20b5c442832d26dd51/lean/StochasticGames) · [Original proof and Python replay (PR #10)](../notes/H4-ssg-to-mean-payoff.md)
 
 | Manuscript | Quantifiers and conclusion | Lean and representation |
 | --- | --- | --- |
