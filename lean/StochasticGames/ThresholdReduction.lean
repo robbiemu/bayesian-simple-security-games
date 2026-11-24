@@ -3,6 +3,7 @@ module
 public import StochasticGames.ReachabilitySemantics
 public import StochasticGames.ThresholdCompiler
 public import StochasticGames.TrivialThreshold
+import StochasticGames.RealCompilation
 import all StochasticGames.ThresholdCompiler
 import all StochasticGames.ThresholdInput
 import all StochasticGames.ArenaEncoding
@@ -45,11 +46,15 @@ private theorem intermediate_tests_strict_failure (s : Fin n) (positive : 0 < in
   calc
     _ ↔ ∃ y, Source.DualFeasible input.rows.get y ∧ 1 - (input.threshold : ℝ) < y s :=
       Source.value_lt_iff_dualFeasible _ _ _
-    _ ↔ ∃ y, (system input s).Exact y :=
-      SourcePrecision.strict_witness_iff input.rows.get s input.threshold input.denominator
-        input.denominator_pos input.clears_threshold
+    _ ↔ ∃ y : Fin n → ℝ, SourceRows.Exact (system input s) y :=
+      (SourcePrecision.strict_witness_iff input.rows.get s input.threshold input.denominator
+        input.denominator_pos input.clears_threshold).trans
+        (SourcePrecision.tightened_real_iff_rational input.rows.get s input.threshold input.denominator
+          input.denominator_pos input.clears_threshold).symm
+    _ ↔ ∃ v : Variables input s → ℝ, AtomEncoding.RowsHold (weightedRows input s) v :=
+      RealCompilation.real_exact_iff_compiled input s
     _ ↔ ∃ h, IntegerAtoms.RowsHold (integerRows input s) h :=
-      exact_iff_integer_rows input s positive atMostOne
+      RealCompilation.real_compiled_iff_integer input s positive atMostOne
     _ ↔ (intermediate input s).Certificate none :=
       integer_rows_iff_certificate input s
     _ ↔ (intermediate input s).Nonnegative none :=

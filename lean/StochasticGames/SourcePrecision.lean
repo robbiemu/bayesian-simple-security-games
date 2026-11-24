@@ -51,14 +51,15 @@ theorem cutoff_clears (n b : ℕ) (t : ℚ) (bpos : 0 < b) (cleared : Clears b t
 
 variable {n : ℕ}
 
-private theorem strengthen
+/-- Tighten a positive strict margin while retaining the original selected rows. -/
+theorem strengthen_selected
     (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (t : ℚ) (b : ℕ)
     (bpos : 0 < b) (cleared : Clears b t) {v : Fin n → ℝ}
-    (valid : SourceRows.Exact (base rows) v) (strict : 1 - (t : ℝ) < v s) :
-    ∃ q : Fin n → ℚ, SourceRows.Exact (tightened rows s (cutoff n b t)) q := by
+    (branch : (base rows).Branch) (selected : Selected (base rows) branch v)
+    (strict : 1 - (t : ℝ) < v s) :
+    ∃ q : Fin n → ℚ, Selected (base rows) branch q ∧ cutoff n b t ≤ q s := by
   let p : ℚ := 1 - t
   have realP : (p : ℝ) = 1 - (t : ℝ) := by simp [p]
-  obtain ⟨branch, selected⟩ := (exact_iff_selected (base rows) v).1 valid
   let A := marginMatrix (base rows) branch s p
   let rhs := marginRhs (base rows) branch s p
   obtain ⟨c, rationalRhsEq, realRhsEq⟩ := cleared_rhs rhs b bpos
@@ -94,8 +95,7 @@ private theorem strengthen
     (show Feasible (rationalMatrix A) (fun i => (rhs i : ℚ)) z from feasibleZ)
   obtain ⟨sel, _, _, threshold⟩ := rationalConstraints
   have margin : 1 / (D n b : ℚ) ≤ z none := by simpa [D] using uniform
-  refine ⟨fun i => z (some i), (exact_tightened_iff rows s _ _).2
-    ⟨(exact_iff_selected _ _).2 ⟨branch, sel⟩, ?_⟩⟩
+  refine ⟨fun i => z (some i), sel, ?_⟩
   change p + 1 / (D n b : ℚ) ≤ z (some s)
   exact (add_le_add_right margin p).trans threshold
 
@@ -108,8 +108,12 @@ theorem strict_witness_iff
       ∃ q, (tightened rows s (cutoff n b t)).Exact q := by
   constructor
   · rintro ⟨v, valid, strict⟩
-    obtain ⟨q, hq⟩ := strengthen rows s t b bpos cleared ((exact_base_real_iff rows v).2 valid) strict
-    exact ⟨q, (exact_rat_iff _ q).2 hq⟩
+    obtain ⟨branch, selected⟩ :=
+      (exact_iff_selected (base rows) v).1 ((exact_base_real_iff rows v).2 valid)
+    obtain ⟨q, repaired, threshold⟩ :=
+      strengthen_selected rows s t b bpos cleared branch selected strict
+    exact ⟨q, (exact_rat_iff _ q).2 ((exact_tightened_iff rows s _ _).2
+      ⟨(exact_iff_selected _ _).2 ⟨branch, repaired⟩, threshold⟩)⟩
   · rintro ⟨q, hq⟩
     obtain ⟨baseQ, threshold⟩ := (exact_tightened_iff rows s _ q).1 ((exact_rat_iff _ q).1 hq)
     refine ⟨fun i => (q i : ℝ), (exact_base_real_iff rows _).1 ((exact_cast_real _ q).2 baseQ), ?_⟩
@@ -134,33 +138,49 @@ theorem tightened_real_iff_rational
   · rintro ⟨q, hq⟩
     exact ⟨fun i => (q i : ℝ), (exact_cast_real _ q).2 ((exact_rat_iff _ q).1 hq)⟩
 
-private theorem gap_le_one (n b : ℕ) (bpos : 0 < b) : gap n b ≤ 1 := by
+theorem gap_le_one (n b : ℕ) (bpos : 0 < b) : gap n b ≤ 1 := by
   have d : (1 : ℚ) ≤ (D n b : ℚ) := by exact_mod_cast D_pos n b bpos
   have denom : (1 : ℚ) ≤ (D n b : ℚ) * 4 ^ (n + 1) :=
     one_le_mul_of_one_le_of_one_le d (one_le_pow₀ (by decide))
   exact (div_le_iff₀ (zero_lt_one.trans_le denom)).2 (by simpa using denom)
 
-/-- Removing a common chance-row slack below the second denominator bound
-preserves a solution in the same branch. -/
-theorem tightened_gap
+private theorem relaxed_cast_real {ι : Type*} (system : System ι) (branch : system.Branch)
+    (q : ι → ℚ) (slack : ℚ) :
+    system.RelaxedOver branch (fun i => (q i : ℝ)) (slack : ℝ) ↔
+      system.Relaxed branch q slack := by
+  simp only [System.RelaxedOver, System.Relaxed, System.HardRows, System.AverageRows,
+    Term.valueOver_ratCast]
+  norm_cast
+
+/-- H4, §3.2. Every original branch admitting a real relaxation with slack in
+`[0,1]` has a rational minimizer among all such real relaxations. Its common
+slack is zero or at least `1 / (D * 4^(n+1))`. -/
+theorem tightened_minimum_slack
     (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (t : ℚ) (b : ℕ)
-    (bpos : 0 < b) (cleared : Clears b t) :
-    (tightened rows s (cutoff n b t)).HasGap (gap n b) := by
-  let system := tightened rows s (cutoff n b t)
+    (bpos : 0 < b) (cleared : Clears b t)
+    (branch : (tightened rows s (cutoff n b t)).Branch)
+    {x : Fin n → ℝ} {slack : ℝ} (lo : 0 ≤ slack) (hi : slack ≤ 1)
+    (relaxed : (tightened rows s (cutoff n b t)).RelaxedOver branch x slack) :
+    let sys := tightened rows s (cutoff n b t)
+    ∃ (q : Fin n → ℚ) (ρ : ℚ), sys.Relaxed branch q ρ ∧ 0 ≤ ρ ∧ ρ ≤ 1 ∧
+      (∀ (v : Fin n → ℝ) (e : ℝ), 0 ≤ e → e ≤ 1 → sys.RelaxedOver branch v e → (ρ : ℝ) ≤ e) ∧
+      (ρ = 0 ∨ gap n b ≤ ρ) := by
+  let sys := tightened rows s (cutoff n b t)
+  let A := BranchLinearization.matrix sys branch
+  let rhs := fun i => (BranchLinearization.rhs sys branch i : ℝ)
   have dpos : 0 < D n b := D_pos n b bpos
-  have offsets : ClearedOffsets (D n b) system :=
-    tightened_cleared rows s _ _ (cutoff_clears n b t bpos cleared)
-  intro branch slack lo small possible
-  obtain ⟨x, relaxed⟩ := possible
-  let A := BranchLinearization.matrix system branch
-  obtain ⟨c, rhsEq, _⟩ := cleared_rhs (BranchLinearization.rhs system branch) (D n b) dpos
-    (rhs_cleared system branch offsets)
-  have constraints (y : Option (Fin n) → ℚ) :
-      Feasible (rationalMatrix A) (rationalRhs c (D n b : ℚ)) y ↔
-        system.Relaxed branch (fun i => y (some i)) (y none) ∧ 0 ≤ y none ∧ y none ≤ 1 := by
-    rw [rhsEq]
-    exact BranchLinearization.feasible_iff system branch y
-  have bounded : Bounded (rationalMatrix A) (rationalRhs c (D n b : ℚ)) := by
+  have offsets := tightened_cleared rows s _ _ (cutoff_clears n b t bpos cleared)
+  have denominator (r) : ∃ z : ℤ, (D n b : ℝ) * rhs r = z := by
+    obtain ⟨z, hz⟩ := rhs_cleared sys branch offsets r
+    exact ⟨z, by dsimp only [rhs]; exact_mod_cast hz⟩
+  have norms (r) : Real.sqrt (∑ j, (A r j : ℝ)^2) ≤ 4 := by
+    apply Real.sqrt_le_iff.mpr
+    exact ⟨by norm_num, by exact_mod_cast slack_row_squares sys branch r⟩
+  have constraints (y : Option (Fin n) → ℝ) :
+      Feasible (RealStrictWitness.realMatrix A) rhs y ↔
+        sys.RelaxedOver branch (fun i => y (some i)) (y none) ∧
+          0 ≤ y none ∧ y none ≤ 1 := BranchLinearization.feasible_over_iff sys branch y
+  have bounded : Bounded (RealStrictWitness.realMatrix A) rhs := by
     refine ⟨1, fun y hy i => ?_⟩
     obtain ⟨sel, low, high⟩ := (constraints y).1 hy
     cases i with
@@ -168,15 +188,52 @@ theorem tightened_gap
     | some j =>
       have hard : Hard (base rows) (fun k => y (some k)) :=
         fun r hr => sel.1 r (List.mem_cons_of_mem _ hr)
-      obtain ⟨low, high⟩ := box_of_hard hard j
-      simpa [abs_of_nonneg low] using high
-  let y (i : Option (Fin n)) := i.elim slack x
-  have feasible : Feasible (rationalMatrix A) (rationalRhs c (D n b : ℚ)) y :=
-    (constraints y).2 ⟨relaxed, lo, small.le.trans (gap_le_one n b bpos)⟩
-  obtain ⟨z, feasibleZ, exactSlack⟩ := RealStrictWitness.exists_zero_slack_of_row_squares
-    A c (D n b : ℚ) 4 (by exact_mod_cast dpos) (by decide) (slack_row_squares system branch)
-    bounded none (fun w hw => ((constraints w).1 hw).2.1) feasible (by simpa [gap, y] using small)
-  exact ⟨fun i => z (some i), exactSlack ▸ ((constraints z).1 feasibleZ).1⟩
+      obtain ⟨lower, upper⟩ := box_of_hard hard j
+      simpa [abs_of_nonneg lower] using upper
+  let initial (i : Option (Fin n)) := i.elim slack x
+  obtain ⟨m, hm, minimum⟩ := RealStrictWitness.exists_coordinate_minimum _ _ bounded none
+    ((constraints initial).2 ⟨relaxed, lo, hi⟩)
+  obtain ⟨q, feasibleQ, atMinimum, separation⟩ :=
+    RealStrictWitness.exists_rational_extremal_coordinate A rhs (D n b) dpos 4 norms
+      denominator bounded none m hm (Or.inl minimum)
+  obtain ⟨holds, low, high⟩ := (constraints _).1 feasibleQ
+  refine ⟨fun i => q (some i), q none, (relaxed_cast_real sys branch _ _).1 holds,
+    by exact_mod_cast low, by exact_mod_cast high, ?_, ?_⟩
+  · intro v e el eu admissible
+    let y (i : Option (Fin n)) := i.elim e v
+    exact atMinimum.le.trans (minimum y ((constraints y).2 ⟨admissible, el, eu⟩))
+  · rcases low.eq_or_lt with zero | positive
+    · left
+      exact_mod_cast zero.symm
+    · right
+      have lower := separation (positive.trans_eq atMinimum)
+      rw [← atMinimum] at lower
+      have bound : (gap n b : ℝ) ≤ (q none : ℝ) := by simpa [gap] using lower
+      exact_mod_cast bound
+
+/-- A real slack smaller than the gap forces the attained minimum on that branch to be zero. -/
+theorem tightened_real_gap
+    (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (t : ℚ) (b : ℕ)
+    (bpos : 0 < b) (cleared : Clears b t)
+    (branch : (tightened rows s (cutoff n b t)).Branch) {x : Fin n → ℝ} {slack : ℝ}
+    (low : 0 ≤ slack) (small : slack < (gap n b : ℝ))
+    (relaxed : (tightened rows s (cutoff n b t)).RelaxedOver branch x slack) :
+    ∃ q : Fin n → ℚ, (tightened rows s (cutoff n b t)).Relaxed branch q 0 := by
+  have hi : slack ≤ 1 := small.le.trans (by exact_mod_cast gap_le_one n b bpos)
+  obtain ⟨q, ρ, holds, _, _, minimum, zero | large⟩ :=
+    tightened_minimum_slack rows s t b bpos cleared branch low hi relaxed
+  · exact ⟨q, zero ▸ holds⟩
+  · have lower : (gap n b : ℝ) ≤ (ρ : ℝ) := by exact_mod_cast large
+    exact False.elim ((not_lt_of_ge lower) ((minimum x slack low hi relaxed).trans_lt small))
+
+/-- Rational relaxations are a special case of the real branch repair. -/
+theorem tightened_gap
+    (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (t : ℚ) (b : ℕ)
+    (bpos : 0 < b) (cleared : Clears b t) :
+    (tightened rows s (cutoff n b t)).HasGap (gap n b) := by
+  rintro branch slack low small ⟨x, relaxed⟩
+  exact tightened_real_gap rows s t b bpos cleared branch (by exact_mod_cast low)
+    (by exact_mod_cast small) ((relaxed_cast_real _ branch x slack).2 relaxed)
 
 theorem error_lt_gap (n b : ℕ) (bpos : 0 < b) :
     ShiftedComparisons.gapBound 1 (depth n b) / 2 < gap n b := by

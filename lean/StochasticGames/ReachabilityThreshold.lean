@@ -56,6 +56,12 @@ theorem lfp_lt_iff_dual_subsolution (F : Cube State →o Cube State) (s : State)
     change (F.lfp s : ℝ) ≤ 1 - (y s : ℝ) at h
     linarith
 
+/-! ## Two-successor reference model
+
+The general source model in `SourceGame` and `SourceBellman` supports arbitrary
+nonempty player move lists and uses the cube results above.
+-/
+
 /-- A state has two available successors or two equiprobable successors. -/
 inductive Row (State : Type*) where
   | lose

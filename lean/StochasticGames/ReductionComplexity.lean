@@ -6,11 +6,11 @@ import all StochasticGames.ThresholdReduction
 import all StochasticGames.ThresholdInput
 import Mathlib.Tactic.GCongr
 
-/-! # The reduction in the binary cost model
+/-! # Output length and the reference work estimate
 
-The nonterminal case uses the cost of the explicit construction. The other
-cases read the input and write the single-loop table. Dispatch charges two
-signed comparisons, a terminal tag inspection, and the branch choice.
+`compileBits_le` bounds the serialized table. The size-based work estimate
+also records the single-loop cases and four dispatch operations.
+`CompilerExecution` gives the bounds for the measured execution.
 -/
 
 @[expose] public section
@@ -21,18 +21,6 @@ open CompilationCost TrivialThreshold
 variable {n : ℕ} (input : ThresholdInput n)
 
 def compileBits : List Bool := tableBits (compile input)
-
-def compileBitWork : ℕ :=
-  4 * slotBitCost (inputLength input) +
-    if input.numerator ≤ 0 then (inputBits input).length + (tableBits (loop true)).length
-    else if (input.denominator : ℤ) < input.numerator then
-      (inputBits input).length + (tableBits (loop false)).length
-    else match input.start with
-      | .inr terminal => (inputBits input).length + (tableBits (loop terminal)).length
-      | .inl s => bitWork input s
-
-def reductionPolynomial (L : ℕ) : ℕ :=
-  4 * slotBitCost L + (polynomial L + L + 64)
 
 private theorem loop_bits_le (b : Bool) : (tableBits (loop b)).length ≤ 64 := by
   cases b <;> decide
@@ -70,6 +58,20 @@ theorem compileBits_le :
         gcongr
         exact inputLength_le_bits input
 
+/-! ## Size-based estimates used by the earlier replay -/
+
+def compileBitWork : ℕ :=
+  4 * slotBitCost (inputLength input) +
+    if input.numerator ≤ 0 then (inputBits input).length + (tableBits (loop true)).length
+    else if (input.denominator : ℤ) < input.numerator then
+      (inputBits input).length + (tableBits (loop false)).length
+    else match input.start with
+      | .inr terminal => (inputBits input).length + (tableBits (loop terminal)).length
+      | .inl s => bitWork input s
+
+def reductionPolynomial (L : ℕ) : ℕ :=
+  4 * slotBitCost L + (polynomial L + L + 64)
+
 theorem compileBitWork_le :
     compileBitWork input ≤ reductionPolynomial (inputBits input).length := by
   unfold compileBitWork reductionPolynomial
@@ -96,13 +98,26 @@ theorem compileBitWork_le :
             (dispatched_weight_bound input s (lt_of_not_ge positive) notTooHigh)
           omega
 
-/-- The same executable compiler satisfies the semantic decision theorem
-and the bit-work bound in the specified binary cost model. -/
+/-- The numeric table satisfies the decision theorem along with the separate
+size-based work estimate. `CompilerExecution` bounds the measured run. -/
 theorem checked_reduction :
     (compile input).Valid ∧
     ((input.threshold : ℝ) ≤ (Source.value input.rows.get input.start : ℝ) ↔
       (compile input).Nonnegative) ∧
     compileBitWork input ≤ reductionPolynomial (inputBits input).length :=
   ⟨compile_valid input, compile_correct input, compileBitWork_le input⟩
+
+/-- The parsing allowance in the size-based ledger used by the earlier replay. -/
+def parsingCharge (length : ℕ) : ℕ := 16 * length * slotBitCost length
+
+def binaryBitWork {n : ℕ} (input : ThresholdInput n) : ℕ :=
+  parsingCharge (inputBits input).length + compileBitWork input
+
+def binaryReductionPolynomial (length : ℕ) : ℕ :=
+  parsingCharge length + reductionPolynomial length
+
+theorem binaryBitWork_le {n : ℕ} (input : ThresholdInput n) :
+    binaryBitWork input ≤ binaryReductionPolynomial (inputBits input).length :=
+  Nat.add_le_add_left (compileBitWork_le input) _
 
 end StochasticGames.ThresholdReduction

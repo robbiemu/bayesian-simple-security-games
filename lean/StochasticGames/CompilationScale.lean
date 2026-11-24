@@ -45,8 +45,8 @@ theorem clears_shift (d : ℕ) (j : Fin r) :
   · exact ⟨1, by simp⟩
 
 private theorem shift_unit (j : Fin r) :
-    0 ≤ ShiftedComparisons.gapBound 1 j.val / 4 ∧
-      ShiftedComparisons.gapBound 1 j.val / 4 ≤ 1 := by
+    0 ≤ ShiftedComparisons.gapBound (1 : ℚ) j.val / 4 ∧
+      ShiftedComparisons.gapBound (1 : ℚ) j.val / 4 ≤ 1 := by
   rw [ShiftedComparisons.gapBound_eq, div_div]
   have p : (1 : ℚ) ≤ 2 ^ j.val := one_le_pow₀ (by norm_num)
   have b : (1 : ℚ) ≤ 2 ^ j.val * 4 := by linarith
@@ -116,7 +116,7 @@ private theorem average_offsets {n r d : ℕ} (i : Fin n) (row : AverageRow ι)
   · obtain ⟨j, _, hround⟩ := List.mem_flatMap.mp round
     have clear := clears_shift d j
     have hshift := shift_unit j
-    have size : |ShiftedComparisons.gapBound 1 j.val / 4| ≤ 1 := by
+    have size : |ShiftedComparisons.gapBound (1 : ℚ) j.val / 4| ≤ 1 := by
       rw [abs_of_nonneg hshift.1]
       exact hshift.2
     apply comparison_offsets _ _ _ _ _ _ a hround

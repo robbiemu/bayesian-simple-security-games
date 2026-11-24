@@ -97,6 +97,7 @@ theorem weighted_offsets (positive : 0 < input.numerator)
   · rw [eq]
     exact cutoff_in_unit input positive atMostOne
 
+/-- The rational form of row feasibility, for the rational source-system API. -/
 theorem exact_iff_integer_rows (positive : 0 < input.numerator)
     (atMostOne : input.threshold ≤ 1) :
     (∃ y, (system input s).Exact y) ↔ ∃ h, RowsHold (integerRows input s) h := by

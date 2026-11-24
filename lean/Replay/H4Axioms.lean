@@ -1,5 +1,5 @@
 import StochasticGames.BinaryReduction
-import StochasticGames.PositionalMeanPayoff
+import StochasticGames.RealCompilation
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -21,7 +21,12 @@ run_cmd do
     ``StochasticGames.BinaryEncoding.decodeInput_inputBits,
     ``StochasticGames.BinaryEncoding.decodeTable_tableBits,
     ``StochasticGames.ThresholdReduction.compileBinary_correct,
-    ``StochasticGames.ThresholdReduction.binaryBitWork_le]
+    ``StochasticGames.ThresholdReduction.binaryBitWork_le,
+    ``StochasticGames.SourcePrecision.tightened_minimum_slack,
+    ``StochasticGames.RealCompilation.exact_extends_by_evaluation,
+    ``StochasticGames.RealCompilation.compiled_selects_attaining_branch,
+    ``StochasticGames.PaperArena.table_correct,
+    ``StochasticGames.ThresholdReduction.compileBinary_polynomial_time]
   for theoremName in theorems do
     let axioms ← collectAxioms theoremName
     let unexpected := axioms.filter fun name => !allowed.contains name

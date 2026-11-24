@@ -82,7 +82,7 @@ private theorem sum_indicator (a : Term ι) (x : ι → K) :
 private theorem holds_difference (a b : Term ι) (y : Option ι → K) :
     Holds (difference a b) y ↔ eval (fun j => y (some j)) a ≤ eval (fun j => y (some j)) b := by
   simp only [Holds, difference, Int.cast_zero, zero_mul, zero_add, Int.cast_sub, sub_mul,
-    Finset.sum_sub_distrib, sum_indicator, eval, Rat.cast_sub]
+    Finset.sum_sub_distrib, sum_indicator, eval, Term.valueOver, Rat.cast_sub]
   constructor <;> intro hy <;> linarith
 
 private theorem holds_exact_average (r : AverageRow ι) (y : Option ι → K) :
@@ -91,7 +91,7 @@ private theorem holds_exact_average (r : AverageRow ι) (y : Option ι → K) :
         (eval (fun j => y (some j)) r.first + eval (fun j => y (some j)) r.second) / 2 := by
   simp only [Holds, average, Int.cast_zero, zero_mul, zero_add, Int.cast_ofNat, Int.cast_sub,
     Int.cast_mul, sub_mul, Finset.sum_sub_distrib, mul_assoc, ← Finset.mul_sum, sum_indicator,
-    eval, Rat.cast_sub, Rat.cast_add, Rat.cast_mul, Rat.cast_ofNat]
+    eval, Term.valueOver, Rat.cast_sub, Rat.cast_add, Rat.cast_mul, Rat.cast_ofNat]
   constructor <;> intro hy <;> linarith
 
 private theorem holds_threshold (s : ι) (p : ℚ) (y : Option ι → K) :

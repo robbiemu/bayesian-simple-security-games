@@ -26,18 +26,25 @@ The current sketch also uses the Gajjar–Radhakrishnan parametric shortest-path
 
 ## Stochastic game reduction
 
-The top-level decision theorem `StochasticGames.ThresholdReduction.compile_correct` says that the source reachability value meets a rational threshold if and only if the emitted graph has nonnegative mean-payoff value at its designated start. It covers equality, nonterminating plays, terminal starts, and thresholds outside the unit interval. [Top-level proof](StochasticGames/ThresholdReduction.lean) · [Written proof](../notes/H4-ssg-to-mean-payoff.md)
+Start with `ThresholdReduction.compileBinary_polynomial_time`. Its proof puts together the emitted bit string, the decoded valid table, the exact threshold equivalence, and the work bound. [BinaryReduction.lean](StochasticGames/BinaryReduction.lean)
 
-- The source value is the probability of eventually reaching Win under optimal play with history-dependent randomized strategies. The least Bellman fixed point counts Win at time zero and yields a strict dual certificate. Each player row can have any nonempty list of moves. [Reachability semantics](StochasticGames/ReachabilitySemantics.lean)
-- A strict real witness yields a rational certificate. The compiler uses a uniform violation gap to eliminate averages exactly and build integer max-atom rows. [Strict witness and precision](StochasticGames/SourcePrecision.lean) · [Compiler](StochasticGames/ThresholdCompiler.lean)
-- The intermediate graph encodes the strict failure of the source threshold. The owner and weight reversal makes nonnegative lower limiting mean payoff accept the weak source threshold. A separate theorem establishes positional optimal strategies for both players. The graph uses contiguous vertex indices and preserves parallel arcs. [Arena encoding](StochasticGames/ArenaEncoding.lean) · [Threshold reversal](StochasticGames/MeanPayoffSemantics.lean) · [Positional saddle](StochasticGames/PositionalMeanPayoff.lean)
-- The binary entry point `ThresholdReduction.compileBinary` maps source bits to target bits. Lean checks both decoding round trips, the graph's threshold answer, a cubic bound on output length, and a polynomial work bound in the stated list-scan and schoolbook-arithmetic model. [Binary entry point](StochasticGames/BinaryReduction.lean) · [Size and reduction bounds](StochasticGames/ReductionComplexity.lean) · [Cost model](StochasticGames/CompilationCost.lean)
+Follow `ThresholdReduction.compile_correct` for the mathematical argument. In the nonterminal case its calculation follows the manuscript from the strict reachability certificate through tightening, elimination of averages, integer rows, the intermediate arena, and sign reversal. Each step calls a theorem in the corresponding layer. The correspondence table identifies those declarations and points to the proof of the explicitly pinned arena. [ThresholdReduction.lean](StochasticGames/ThresholdReduction.lean) · [Manuscript correspondence](H4-correspondence.md)
 
-To check the theorems' axiom dependencies and check the Lean compiler against exact source answers, run from the repository root with Z3 on your path.
+Follow `CompilerExecution.run` and `.bitWork_le` for the executable argument. The decoder and serializer live in `CostedBinary`, the precision and row construction in `CostedRows`, and the numeric graph emitter in `CostedArena`. The shared word and address bounds live with the counted primitives in `CompilerRun`. [CompilerExecution.lean](StochasticGames/CompilerExecution.lean) · [CompilerRun.lean](StochasticGames/CompilerRun.lean)
+
+`compileBits_le` bounds the serialized output length. The older size-based estimates are grouped below it as a separate reference for the earlier replay. [ReductionComplexity.lean](StochasticGames/ReductionComplexity.lean)
+
+Run `lake build StochasticGames.BinaryReduction` for the main theorem and `lake build StochasticGames` for the full development.
+
+The correctness theorem applies to the Lean compiler. The separate Python compiler is checked against exact source answers by replay. The original proof note records the state of the verification at the PR #10 checkpoint. [Original proof and Python replay (PR #10)](../notes/H4-ssg-to-mean-payoff.md)
+
+To inspect the theorems' axiom dependencies and replay the Lean compiler against exact source answers, run from the repository root with Z3 on your path.
 
 ```sh
 (cd lean && lake build StochasticGames && lake env lean Replay/H4Axioms.lean)
 python3 -B experiments/h4_lean_replay.py --systematic 2
 ```
 
-The replay encodes each source instance, calls `compileBinary`, and decodes the resulting graph. Z3 gets only the graph and its start vertex. The harness compares its answer with a rational computation on the source. The corpus includes 3,634 game and threshold pairs. With no flag, the harness runs just the named fixtures. The closed-loop equality fixture emits 185 vertices and 330 arcs through the Lean compiler. The separate Python compiler uses explicit terminal vertices with pinning rows and emits a different table for that fixture. [Lean replay](../experiments/h4_lean_replay.py) · [Python compiler replay](../experiments/h4_ssg_to_mpg_replay.py)
+The replay encodes each source instance, calls `compileBinary`, and decodes the resulting graph. Z3 gets only the graph and its start vertex. The harness compares its answer with a rational computation on the source. The full corpus covers 3,635 game and threshold pairs. With no flag, the harness runs the named fixtures, including one that starts at state 1 and needs Max's third listed move to meet threshold 1.
+
+On the closed-loop equality fixture, the Lean compiler emits 185 vertices and 330 arcs. The original Python compiler uses explicit terminal vertices with pinning rows and emits 193 vertices. [Lean replay](../experiments/h4_lean_replay.py) · [Python compiler replay](../experiments/h4_ssg_to_mpg_replay.py)

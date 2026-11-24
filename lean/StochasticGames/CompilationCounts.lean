@@ -5,6 +5,7 @@ public import StochasticGames.AtomArena
 import all StochasticGames.AtomEncoding
 import all StochasticGames.IntegerAtoms
 import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Algebra.Order.BigOperators.Group.List
 import Mathlib.Data.Fintype.Prod
 import Mathlib.Tactic.Ring
 
@@ -33,29 +34,20 @@ def rationalTerms (rows : List (Atom ν)) : ℕ := (rows.map fun row => row.term
 
 def integerTerms (rows : List (IntAtom ν)) : ℕ := (rows.map fun row => row.terms.length).sum
 
-private theorem sum_map_mono {α : Type*} (l : List α) {f g : α → ℕ} (h : ∀ a, f a ≤ g a) :
-    (l.map f).sum ≤ (l.map g).sum := by
-  induction l with
-  | nil => exact le_rfl
-  | cons a l ih => exact Nat.add_le_add (h a) ih
-
 private theorem sum_map_flatMap {α β : Type*} (l : List α) (f : α → List β) (g : β → ℕ) :
     ((l.flatMap f).map g).sum = (l.map fun a => ((f a).map g).sum).sum := by
-  induction l with
-  | nil => rfl
-  | cons a l ih => simp [ih]
+  rw [List.map_flatMap, List.flatMap_def, List.sum_flatten, List.map_map]
+  rfl
 
 private theorem sum_map_const_add {α : Type*} (l : List α) (c : ℕ) (f : α → ℕ) :
     (l.map (fun a => c + f a)).sum = c * l.length + (l.map f).sum := by
-  induction l with
-  | nil => simp
-  | cons a l ih => simp [ih, Nat.mul_succ]; omega
+  rw [List.sum_map_add, List.map_const', List.sum_replicate_nat, Nat.mul_comm]
 
 theorem difference_count_le (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
     (SourceRows.tightened rows s cutoff).differences.length ≤ 2*n + 1 + moveCount rows := by
   have hlocal (i : Fin n) : (SourceRows.choices i (rows i)).length ≤ listedSuccessors (rows i) := by
     cases rows i <;> simp [SourceRows.choices, listedSuccessors, Nat.add_comm]
-  have hsum := sum_map_mono (List.finRange n) hlocal
+  have hsum := List.sum_le_sum (l := List.finRange n) (fun i _ => hlocal i)
   simp only [SourceRows.tightened, SourceRows.base, List.length_cons, List.length_flatMap,
     List.length_append, SourceRows.box, List.length_nil, sum_map_const_add,
     List.length_finRange, moveCount] at *
@@ -66,14 +58,14 @@ theorem maxima_count_le (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutof
   have hlocal (i : Fin n) : (SourceRows.maxima i (rows i)).length ≤ 1 := by
     cases rows i <;> simp [SourceRows.maxima]
   simpa [SourceRows.tightened, SourceRows.base, List.length_flatMap, List.map_const'] using
-    sum_map_mono (List.finRange n) hlocal
+    List.sum_le_sum (l := List.finRange n) (fun i _ => hlocal i)
 
 theorem average_count_le (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
     (SourceRows.tightened rows s cutoff).averages.length ≤ n := by
   have hlocal (i : Fin n) : (SourceRows.averages i (rows i)).length ≤ 1 := by
     cases rows i <;> simp [SourceRows.averages]
   simpa [SourceRows.tightened, SourceRows.base, List.length_flatMap, List.map_const'] using
-    sum_map_mono (List.finRange n) hlocal
+    List.sum_le_sum (l := List.finRange n) (fun i _ => hlocal i)
 
 theorem maxTerms_le (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
     maxTerms (SourceRows.tightened rows s cutoff) ≤ moveCount rows := by
@@ -81,7 +73,7 @@ theorem maxTerms_le (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutoff : 
       ((SourceRows.maxima i (rows i)).map fun a => a.terms.length).sum ≤ listedSuccessors (rows i) := by
     cases rows i <;> simp [SourceRows.maxima, listedSuccessors, Nat.add_comm]
   simpa [SourceRows.tightened, SourceRows.base, maxTerms, moveCount, sum_map_flatMap] using
-    sum_map_mono (List.finRange n) hlocal
+    List.sum_le_sum (l := List.finRange n) (fun i _ => hlocal i)
 
 theorem tightened_max_terms_pos (rows : Fin n → Source.Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
     ∀ a ∈ (SourceRows.tightened rows s cutoff).maxima, 0 < a.terms.length := by

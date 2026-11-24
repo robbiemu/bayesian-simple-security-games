@@ -7,6 +7,7 @@ public import StochasticGames.CompilationScale
 public import StochasticGames.SourcePrecision
 public import StochasticGames.ThresholdInput
 import all StochasticGames.Precision
+import Mathlib.Algebra.Order.BigOperators.Group.List
 import Mathlib.Tactic.GCongr
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -182,7 +183,7 @@ def arcBits (e : ArenaEncoding.ArcRecord) : List Bool :=
 def tableBits (t : ArenaEncoding.Table) : List Bool :=
   natBits t.start ++ natBits t.owners.length ++ t.owners ++ natBits t.arcs.length ++ t.arcs.flatMap arcBits
 
-private theorem table_indices (input : ThresholdInput n) (s : Fin n) :
+theorem table_indices (input : ThresholdInput n) (s : Fin n) :
     (mainTable input s).start < vertexCount input s ∧
     ∀ e ∈ (mainTable input s).arcs, e.src < vertexCount input s ∧ e.dst < vertexCount input s := by
   let vs := ArenaEncoding.vertices (variableList input s) (atomList input s)
@@ -291,10 +292,37 @@ theorem input_bits_le (input : ThresholdInput n) : (inputBits input).length ≤ 
       gcongr
     _ ≤ 30*inputLength input^2 := by nlinarith [Nat.mul_le_mul_right (inputLength input) hl]
 
-/-!
-## Charged traversals
+/-! ## Term counts used by the measured arena -/
 
-The trace below accounts for generating and scanning explicit lists. A lookup of the
+theorem member_terms_le {ν : Type*} (rows : List (IntegerAtoms.IntAtom ν)) :
+    ∀ a ∈ rows, a.terms.length ≤ integerTerms rows := by
+  intro a ha
+  exact List.le_sum_of_mem (List.mem_map_of_mem ha)
+
+theorem integerTerms_le (input : ThresholdInput n) (s : Fin n) :
+    integerTerms (atomList input s) ≤ 128*inputLength input^2 := by
+  let L := inputLength input
+  have hd := difference_count_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
+  have hm := maxTerms_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
+  have hc := average_count_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
+  have hn : n ≤ L := by dsimp [L, inputLength]; omega
+  have hmove : moveCount input.rows.get ≤ L := by dsimp [L, inputLength]; omega
+  have hpos : 1 ≤ L := by dsimp [L, inputLength]; omega
+  have hr : rounds input ≤ 4*L := depth_le input
+  rw [atomList, encoded_termCount]
+  calc
+    _ ≤ 2*L+1+L + L + L*(4*(4*L)+5) := by
+      gcongr
+      · exact hd.trans (by omega)
+      · exact hm.trans hmove
+      · exact hc.trans hn
+    _ ≤ _ := by change 2*L+1+L + L + L*(4*(4*L)+5) ≤ 128*L^2
+                nlinarith [Nat.mul_le_mul_right L hpos]
+
+/-!
+## Reference traversal counts
+
+The earlier size-based estimate accounts for generating and scanning explicit lists. A lookup of the
 `k`-th cell charges `k+1` visits. Looking up a vertex identifier uses `List.idxOf`
 on the unique complete vertex listing, hence exactly its identifier plus one comparisons.
 The row and term lookup charges below apply separately to the destination and the weight.
@@ -304,13 +332,8 @@ lookup for every tested row. It makes no assumption of constant-time list indexi
 
 private theorem sum_map_le_length_mul {α : Type*} (xs : List α) (f : α → ℕ) (K : ℕ)
     (h : ∀ x ∈ xs, f x ≤ K) : (xs.map f).sum ≤ xs.length * K := by
-  induction xs with
-  | nil => simp
-  | cons x xs ih =>
-    have hh := h x (List.mem_cons_self ..)
-    have ht := ih fun y hy => h y (List.mem_cons_of_mem _ hy)
-    simp only [List.map_cons, List.sum_cons, List.length_cons, Nat.add_mul, one_mul]
-    omega
+  simpa only [List.length_map, nsmul_eq_mul, Nat.cast_id] using
+    List.sum_le_length_nsmul (xs.map f) K (by simpa using h)
 
 /-- Each of the two shifted arguments may recompute all `j` halvings of `gapBound`.
 Eight additional visits cover constructing the three comparison rows and four terms. -/
@@ -321,18 +344,6 @@ theorem roundVisits_le (r : ℕ) : roundVisits r ≤ r * (2*r+12) := by
   have h := sum_map_le_length_mul (List.finRange r) (fun j => 2*(j.val+2)+8) (2*r+12)
     (fun j _ => by have := j.isLt; omega)
   simpa [roundVisits] using h
-
-private theorem member_terms_le {ν : Type*} (rows : List (IntegerAtoms.IntAtom ν)) :
-    ∀ a ∈ rows, a.terms.length ≤ integerTerms rows := by
-  induction rows with
-  | nil => simp
-  | cons b rows ih =>
-    intro a ha
-    rcases List.mem_cons.mp ha with rfl | ha
-    · simp [integerTerms]
-    · have := ih a ha
-      simp only [integerTerms, List.map_cons, List.sum_cons] at *
-      omega
 
 /-- The two identifier scans, the cardinality used in reversal and the row/term lookups
 for an actual edge. The final fixed charge covers the signed multiply, subtraction and
@@ -413,26 +424,6 @@ def stageVisits (input : ThresholdInput n) (s : Fin n) : ℕ :=
   let precision := 16 * (n + r + input.denominator.size + input.numerator.natAbs.size + 4)
   let circuit := c * (roundVisits r + 2*(c+1) + 12) + 16*(rs.length + integerTerms rs + 1)
   source + precision + circuit + arenaVisits (variableList input s) rs
-
-private theorem integerTerms_le (input : ThresholdInput n) (s : Fin n) :
-    integerTerms (atomList input s) ≤ 128*inputLength input^2 := by
-  let L := inputLength input
-  have hd := difference_count_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
-  have hm := maxTerms_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
-  have hc := average_count_le input.rows.get s (SourcePrecision.cutoff n input.denominator input.threshold)
-  have hn : n ≤ L := by dsimp [L, inputLength]; omega
-  have hmove : moveCount input.rows.get ≤ L := by dsimp [L, inputLength]; omega
-  have hpos : 1 ≤ L := by dsimp [L, inputLength]; omega
-  have hr : rounds input ≤ 4*L := depth_le input
-  rw [atomList, encoded_termCount]
-  calc
-    _ ≤ 2*L+1+L + L + L*(4*(4*L)+5) := by
-      gcongr
-      · exact hd.trans (by omega)
-      · exact hm.trans hmove
-      · exact hc.trans hn
-    _ ≤ _ := by change 2*L+1+L + L + L*(4*(4*L)+5) ≤ 128*L^2
-                nlinarith [Nat.mul_le_mul_right L hpos]
 
 theorem stageVisits_le (input : ThresholdInput n) (s : Fin n) :
     stageVisits input s ≤ 500 * (128 * inputLength input^2 + 1)^3 := by

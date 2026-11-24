@@ -19,13 +19,8 @@ theorem size_succ_le (a : ℕ) : (a + 1).size ≤ a.size + 1 := by
   have below := Nat.lt_size_self a
   omega
 
-theorem size_le_self (a : ℕ) : a.size ≤ a := by
-  apply Nat.size_le.mpr
-  induction a with
-  | zero => decide
-  | succ a ih =>
-    rw [pow_succ]
-    omega
+theorem size_le_self (a : ℕ) : a.size ≤ a :=
+  Nat.size_le.mpr Nat.lt_two_pow_self
 
 theorem size_mul_pow_two_le (d k : ℕ) : (d * 2 ^ k).size ≤ d.size + k := by
   rw [Nat.size_le, pow_add]

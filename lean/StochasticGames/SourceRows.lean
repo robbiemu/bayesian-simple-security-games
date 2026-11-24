@@ -58,13 +58,13 @@ section Scalar
 
 variable {K : Type*} [Field K]
 
-def eval (x : ι → K) (t : Term ι) : K := t.index.elim 0 x + (t.offset : K)
+def eval (x : ι → K) (t : Term ι) : K := t.valueOver x
 
 @[simp] theorem eval_var (x : ι → K) (i : ι) : eval x (var i) = x i := by
-  simp [eval, var]
+  simp [eval, Term.valueOver, var]
 
 @[simp] theorem eval_literal (x : ι → K) (q : ℚ) : eval x (literal q) = (q : K) := by
-  simp [eval, literal]
+  simp [eval, Term.valueOver, literal]
 
 variable [LinearOrder K]
 
@@ -125,14 +125,8 @@ private theorem real_maxima_iff (i : ι) (head : Position ι) (tail : List (Posi
     (y : ι → ℝ) :
     (∀ r ∈ maxima i (.min head tail), ∃ a ∈ r.terms, eval y r.lhs ≤ eval y a) ↔
       (Row.min head tail).DualConstraint y i := by
-  simp only [maxima, List.forall_mem_singleton, eval_var, Row.DualConstraint]
-  constructor
-  · rintro ⟨a, mem, le⟩
-    obtain ⟨j, hj, rfl⟩ := List.mem_map.mp mem
-    exact ⟨j, hj, by simpa only [eval_successor_real] using le⟩
-  · rintro ⟨j, mem, le⟩
-    exact ⟨successor j, List.mem_map.mpr ⟨j, mem, rfl⟩,
-      by simpa only [eval_successor_real] using le⟩
+  simp only [maxima, List.forall_mem_singleton, eval_var, Row.DualConstraint, List.mem_map,
+    exists_exists_and_eq_and, eval_successor_real]
 
 theorem exact_base_real_iff {n : ℕ} (rows : Fin n → Row (Fin n)) (y : Fin n → ℝ) :
     Exact (base rows) y ↔ DualFeasible rows y := by
@@ -183,10 +177,8 @@ theorem exact_base_real_iff {n : ℕ} (rows : Fin n → Row (Fin n)) (y : Fin n 
 theorem exact_cast_real (system : System ι) (x : ι → ℚ) :
     Exact system (fun i => (x i : ℝ)) ↔ Exact system x := by
   have cast_eval (t : Term ι) :
-      eval (fun i => (x i : ℝ)) t = ((eval (K := ℚ) x t : ℚ) : ℝ) := by
-    cases t with
-    | mk idx q =>
-      cases idx <;> simp [eval]
+      eval (fun i => (x i : ℝ)) t = ((eval (K := ℚ) x t : ℚ) : ℝ) :=
+    t.valueOver_ratCast x
   have cast_average (a b : ℚ) :
       (((a + b) / 2 : ℚ) : ℝ) = ((a : ℝ) + (b : ℝ)) / 2 := by
     simp
@@ -201,9 +193,11 @@ theorem tightened_bounded {n : ℕ} (rows : Fin n → Row (Fin n)) (s : Fin n) (
   obtain ⟨lo, hi⟩ := box_of_hard h i
   simpa [abs_of_nonneg lo] using hi
 
-theorem tightened_input_width {n : ℕ} (rows : Fin n → Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
-    (tightened rows s cutoff).InputsBounded 1 := by
-  intro x hx r hr
+theorem tightened_input_width_over {K : Type*} [Field K] [LinearOrder K]
+    [IsStrictOrderedRing K] {n : ℕ} (rows : Fin n → Row (Fin n)) (s : Fin n)
+    (cutoff : ℚ) (x : Fin n → K) (hx : Hard (tightened rows s cutoff) x)
+    (r : AverageRow (Fin n)) (hr : r ∈ (tightened rows s cutoff).averages) :
+    |eval x r.first - eval x r.second| ≤ 1 := by
   have hard : Hard (base rows) x := fun r hr => hx r (List.mem_cons_of_mem _ hr)
   have cube := box_of_hard hard
   obtain ⟨i, _, hi⟩ := List.mem_flatMap.mp hr
@@ -217,5 +211,9 @@ theorem tightened_input_width {n : ℕ} (rows : Fin n → Row (Fin n)) (s : Fin 
     change |eval x (successor left) - eval x (successor right)| ≤ 1
     rw [abs_le]
     constructor <;> linarith
+
+theorem tightened_input_width {n : ℕ} (rows : Fin n → Row (Fin n)) (s : Fin n) (cutoff : ℚ) :
+    (tightened rows s cutoff).InputsBounded 1 :=
+  tightened_input_width_over rows s cutoff
 
 end StochasticGames.SourceRows

@@ -66,51 +66,59 @@ def matrix [DecidableEq ι] (system : System ι) (branch : system.Branch) :
 def rhs [DecidableEq ι] (system : System ι) (branch : system.Branch) (i : Rows system) : ℚ :=
   (row system branch i).bound
 
-private def Holds [Fintype ι] (r : LinearRow ι) (y : Option ι → ℚ) : Prop :=
-  (r.slack : ℚ) * y none + ∑ j, (r.coeff j : ℚ) * y (some j) ≤ r.bound
+section OrderedField
 
-private theorem sum_indicator [Fintype ι] [DecidableEq ι] (a : Term ι) (x : ι → ℚ) :
-    ∑ j, (indicator a j : ℚ) * x j = a.index.elim 0 x := by
+variable {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+
+private def Holds [Fintype ι] (r : LinearRow ι) (y : Option ι → K) : Prop :=
+  (r.slack : K) * y none + ∑ j, (r.coeff j : K) * y (some j) ≤ (r.bound : K)
+
+omit [LinearOrder K] [IsStrictOrderedRing K] in
+private theorem sum_indicator [Fintype ι] [DecidableEq ι] (a : Term ι) (x : ι → K) :
+    ∑ j, (indicator a j : K) * x j = a.index.elim 0 x := by
   obtain ⟨idx, offset⟩ := a
   cases idx with
   | none => simp [indicator]
   | some i => simp [indicator, ite_mul]
 
-private theorem holds_difference [Fintype ι] [DecidableEq ι] (a b : Term ι) (y : Option ι → ℚ) :
-    Holds (difference a b) y ↔ a.value (fun j => y (some j)) ≤ b.value (fun j => y (some j)) := by
+private theorem holds_difference [Fintype ι] [DecidableEq ι] (a b : Term ι) (y : Option ι → K) :
+    Holds (difference a b) y ↔ a.valueOver (fun j => y (some j)) ≤ b.valueOver (fun j => y (some j)) := by
   simp only [Holds, difference, Int.cast_zero, zero_mul, zero_add, Int.cast_sub, sub_mul,
-    Finset.sum_sub_distrib, sum_indicator, Term.value]
+    Finset.sum_sub_distrib, sum_indicator, Term.valueOver, Rat.cast_sub]
   constructor <;> intro h <;> linarith
 
-private theorem holds_average [Fintype ι] [DecidableEq ι] (r : AverageRow ι) (y : Option ι → ℚ) :
-    Holds (average r) y ↔ r.lhs.value (fun j => y (some j)) ≤
-      (r.first.value (fun j => y (some j)) + r.second.value (fun j => y (some j))) / 2 + y none := by
+private theorem holds_average [Fintype ι] [DecidableEq ι] (r : AverageRow ι) (y : Option ι → K) :
+    Holds (average r) y ↔ r.lhs.valueOver (fun j => y (some j)) ≤
+      (r.first.valueOver (fun j => y (some j)) + r.second.valueOver (fun j => y (some j))) / 2 + y none := by
   simp only [Holds, average, Int.cast_neg, Int.cast_ofNat, Int.cast_sub, Int.cast_mul, sub_mul,
-    Finset.sum_sub_distrib, mul_assoc, ← Finset.mul_sum, sum_indicator, Term.value]
+    Finset.sum_sub_distrib, mul_assoc, ← Finset.mul_sum, sum_indicator, Term.valueOver, Rat.cast_sub, Rat.cast_add,
+    Rat.cast_mul, Rat.cast_ofNat]
   constructor <;> intro h <;> linarith
 
-private theorem holds_lower [Fintype ι] (y : Option ι → ℚ) :
+private theorem holds_lower [Fintype ι] (y : Option ι → K) :
     Holds (slackBound false) y ↔ 0 ≤ y none := by
   simp [Holds, slackBound]
 
-private theorem holds_upper [Fintype ι] (y : Option ι → ℚ) :
+omit [IsStrictOrderedRing K] in
+private theorem holds_upper [Fintype ι] (y : Option ι → K) :
     Holds (slackBound true) y ↔ y none ≤ 1 := by
   simp [Holds, slackBound]
 
+omit [IsStrictOrderedRing K] in
 private theorem feasible_rows [Fintype ι] [DecidableEq ι]
-    (system : System ι) (branch : system.Branch) (y : Option ι → ℚ) :
-    BoundedLinearProgram.Feasible ((matrix system branch).map (fun z => (z : ℚ)))
-      (rhs system branch) y ↔ ∀ i, Holds (row system branch i) y := by
+    (system : System ι) (branch : system.Branch) (y : Option ι → K) :
+    BoundedLinearProgram.Feasible ((matrix system branch).map (fun z => (z : K)))
+      (fun r => (rhs system branch r : K)) y ↔ ∀ i, Holds (row system branch i) y := by
   apply forall_congr'
   intro i
   simp [Matrix.mulVec, dotProduct, Fintype.sum_option, matrix, rhs, Holds]
 
 /-- Each matrix inequality is exactly its selected branch constraint, including both slack bounds. -/
-theorem feasible_iff [Fintype ι] [DecidableEq ι]
-    (system : System ι) (branch : system.Branch) (y : Option ι → ℚ) :
-    BoundedLinearProgram.Feasible ((matrix system branch).map (fun z => (z : ℚ)))
-      (rhs system branch) y ↔
-    system.Relaxed branch (fun i => y (some i)) (y none) ∧ 0 ≤ y none ∧ y none ≤ 1 := by
+theorem feasible_over_iff [Fintype ι] [DecidableEq ι]
+    (system : System ι) (branch : system.Branch) (y : Option ι → K) :
+    BoundedLinearProgram.Feasible ((matrix system branch).map (fun z => (z : K)))
+      (fun r => (rhs system branch r : K)) y ↔
+    system.RelaxedOver branch (fun i => y (some i)) (y none) ∧ 0 ≤ y none ∧ y none ≤ 1 := by
   rw [feasible_rows]
   constructor
   · intro allRows
@@ -133,6 +141,15 @@ theorem feasible_iff [Fintype ι] [DecidableEq ι]
     · cases b with
       | false => exact (holds_lower y).2 lower
       | true => exact (holds_upper y).2 upper
+
+end OrderedField
+
+theorem feasible_iff [Fintype ι] [DecidableEq ι]
+    (system : System ι) (branch : system.Branch) (y : Option ι → ℚ) :
+    BoundedLinearProgram.Feasible ((matrix system branch).map (fun z => (z : ℚ)))
+      (rhs system branch) y ↔
+    system.Relaxed branch (fun i => y (some i)) (y none) ∧ 0 ≤ y none ∧ y none ≤ 1 :=
+  feasible_over_iff system branch y
 
 private theorem indicator_bounds [DecidableEq ι] (a : Term ι) (j : ι) :
     0 ≤ indicator a j ∧ indicator a j ≤ 1 := by

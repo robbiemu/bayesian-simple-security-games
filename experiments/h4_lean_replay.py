@@ -2,12 +2,13 @@
 """Compare Lean's binary compiler output with exact source answers using graph-only Z3."""
 
 import argparse
+from fractions import Fraction
 import json
 from pathlib import Path
 import shutil
 import subprocess
 
-from h4_ssg_to_mpg_replay import MPG, cases, read_state, smt_label, source_solution
+from h4_ssg_to_mpg_replay import LOSE, MPG, SSG, WIN, cases, read_state, smt_label, source_solution
 
 
 def decoded_game(record):
@@ -26,7 +27,12 @@ def decoded_game(record):
 
 
 def replay(systematic):
-    fixtures = list(cases(random_count=0, systematic=systematic))
+    fixtures = [
+        (name, game, threshold)
+        for name, game, threshold, _ in cases(random_count=0, systematic=systematic)
+    ]
+    third_move = SSG((("max", (0,)), ("max", (0, LOSE, WIN))), start=1)
+    fixtures.append(("nonzero-start-third-move", third_move, Fraction(1)))
     requests = [
         {
             "name": name,
@@ -35,7 +41,7 @@ def replay(systematic):
             "numerator": threshold.numerator,
             "denominator": threshold.denominator,
         }
-        for name, game, threshold, _ in fixtures
+        for name, game, threshold in fixtures
     ]
     lean_dir = Path(__file__).resolve().parents[1] / "lean"
     result = subprocess.run(
@@ -51,7 +57,7 @@ def replay(systematic):
         raise RuntimeError(f"expected {len(fixtures)} Lean tables, got {len(tables)}")
 
     yes = 0
-    for (name, source, threshold, _), line in zip(fixtures, tables):
+    for (name, source, threshold), line in zip(fixtures, tables):
         record = json.loads(line)
         if record["name"] != name:
             raise RuntimeError(f"expected {name}, got {record['name']}")
