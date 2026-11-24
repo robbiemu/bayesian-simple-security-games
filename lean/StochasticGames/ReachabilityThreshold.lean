@@ -56,6 +56,12 @@ theorem lfp_lt_iff_dual_subsolution (F : Cube State →o Cube State) (s : State)
     change (F.lfp s : ℝ) ≤ 1 - (y s : ℝ) at h
     linarith
 
+/-! ## Two-successor reference model
+
+The general source model in `SourceGame` and `SourceBellman` supports arbitrary
+nonempty player move lists and uses the cube results above.
+-/
+
 /-- A state has two available successors or two equiprobable successors. -/
 inductive Row (State : Type*) where
   | lose
@@ -136,11 +142,9 @@ theorem Row.eval_continuous (row : Row State) : Continuous row.eval := by
 theorem bellman_continuous (rows : State → Row State) : Continuous (bellman rows) :=
   continuous_pi fun s => (rows s).eval_continuous
 
-/-- Starting with the zero vector, one applies the terminal, choice and chance rows once
-per iteration. Their supremum is the least Bellman fixed point. -/
-theorem bellman_lfp_eq_iSup_iterate (rows : State → Row State) :
-    (bellman rows).lfp = ⨆ n : ℕ, (bellman rows)^[n] ⊥ := by
-  let F := bellman rows
+/-- On a unit cube, continuity identifies the least fixed point with the bottom iterates. -/
+theorem lfp_eq_iSup_iterate_of_continuous (F : Cube State →o Cube State) (hc : Continuous F) :
+    F.lfp = ⨆ n : ℕ, F^[n] ⊥ := by
   let u : Cube State := ⨆ n : ℕ, F^[n] ⊥
   have hlim : Tendsto (fun n : ℕ => F^[n] ⊥) atTop (𝓝 u) :=
     tendsto_atTop_iSup (F.monotone.monotone_iterate_of_le_map bot_le)
@@ -148,13 +152,19 @@ theorem bellman_lfp_eq_iSup_iterate (rows : State → Row State) :
     simpa only [Function.comp_def, Function.iterate_succ_apply'] using
       hlim.comp (tendsto_add_atTop_nat 1)
   have hfixed : F u = u :=
-    tendsto_nhds_unique ((bellman_continuous rows).continuousAt.tendsto.comp hlim) hstep
+    tendsto_nhds_unique (hc.continuousAt.tendsto.comp hlim) hstep
   refine le_antisymm (F.lfp_le hfixed.le) (iSup_le fun n => ?_)
   induction n with
   | zero => exact bot_le
   | succ n ih =>
     rw [Function.iterate_succ_apply']
     exact (F.monotone ih).trans F.map_lfp.le
+
+/-- Starting with the zero vector, one applies the terminal, choice and chance rows once
+per iteration. Their supremum is the least Bellman fixed point. -/
+theorem bellman_lfp_eq_iSup_iterate (rows : State → Row State) :
+    (bellman rows).lfp = ⨆ n : ℕ, (bellman rows)^[n] ⊥ :=
+  lfp_eq_iSup_iterate_of_continuous _ (bellman_continuous rows)
 
 /-- The order-theoretic value from the finite-horizon iterates satisfies the strict NO
 certificate with the actual swapped terminal and Bellman rows. -/

@@ -24,8 +24,15 @@ structure Term (ι : Type*) where
   index : Option ι
   offset : ℚ
 
+def Term.valueOver {K : Type*} [Field K] (a : Term ι) (x : ι → K) : K :=
+  (a.index.elim 0 x) + (a.offset : K)
+
 def Term.value (a : Term ι) (x : ι → ℚ) : ℚ :=
-  (a.index.elim 0 x) + a.offset
+  a.valueOver x
+
+theorem Term.valueOver_ratCast {K : Type*} [Field K] [CharZero K] (a : Term ι) (x : ι → ℚ) :
+    a.valueOver (fun i => (x i : K)) = (a.value x : K) := by
+  obtain ⟨_ | i, c⟩ := a <;> simp [Term.valueOver, Term.value]
 
 structure DifferenceRow (ι : Type*) where
   lhs : Term ι
@@ -69,6 +76,15 @@ def Relaxed (branch : system.Branch) (x : ι → ℚ) (slack : ℚ) : Prop :=
   system.HardRows x ∧
     (∀ row : {r // r ∈ system.maxima}, row.val.lhs.value x ≤ (branch row).val.value x) ∧
     system.AverageRows x slack
+
+/-- The same branch inequalities interpreted in an ordered field. -/
+def RelaxedOver {K : Type*} [Field K] [LinearOrder K] (branch : system.Branch)
+    (x : ι → K) (slack : K) : Prop :=
+  (∀ row ∈ system.differences, row.lhs.valueOver x ≤ row.rhs.valueOver x) ∧
+    (∀ row : {row // row ∈ system.maxima},
+      row.val.lhs.valueOver x ≤ (branch row).val.valueOver x) ∧
+    ∀ row ∈ system.averages,
+      row.lhs.valueOver x ≤ (row.first.valueOver x + row.second.valueOver x) / 2 + slack
 
 def InputsBounded (width : ℚ) : Prop :=
   ∀ x, system.HardRows x → ∀ row ∈ system.averages,

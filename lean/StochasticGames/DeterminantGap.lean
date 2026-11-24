@@ -20,58 +20,65 @@ namespace DeterminantGap
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-private theorem cramer_mulVec (A : Matrix ι ι ℚ) (x : ι → ℚ) :
+section CramerRule
+
+variable {R : Type*} [CommRing R]
+
+private theorem cramer_mulVec (A : Matrix ι ι R) (x : ι → R) :
     A.cramer (A.mulVec x) = A.det • x := by
   rw [Matrix.cramer_eq_adjugate_mulVec, Matrix.mulVec_mulVec,
     Matrix.adjugate_mul, Matrix.smul_mulVec, Matrix.one_mulVec]
 
 private theorem cast_cramer (A : Matrix ι ι ℤ) (b : ι → ℤ) (i : ι) :
-    (A.cramer b i : ℚ) =
-      ((Int.castRingHom ℚ).mapMatrix A).cramer (fun j => (b j : ℚ)) i := by
+    (A.cramer b i : R) =
+      ((Int.castRingHom R).mapMatrix A).cramer (fun j => (b j : R)) i := by
   simp only [Matrix.cramer_apply]
-  change Int.castRingHom ℚ (A.updateCol i b).det = _
-  rw [(Int.castRingHom ℚ).map_det]
+  change Int.castRingHom R (A.updateCol i b).det = _
+  rw [(Int.castRingHom R).map_det]
   congr 1
-  exact Matrix.map_updateCol (Int.castRingHom ℚ)
+  exact Matrix.map_updateCol (Int.castRingHom R)
 
 /-- A cleared integer right-hand side makes the scaled coordinate integral. -/
-theorem cramer_scaled_coordinate (A : Matrix ι ι ℤ) (b : ι → ℤ) (D : ℚ)
-    (x : ι → ℚ)
-    (tight : ((Int.castRingHom ℚ).mapMatrix A).mulVec (fun i => D * x i) =
-      (fun i => (b i : ℚ))) (i : ι) :
-    (A.det : ℚ) * (D * x i) = (A.cramer b i : ℚ) := by
-  have identity := cramer_mulVec ((Int.castRingHom ℚ).mapMatrix A) (fun j => D * x j)
+theorem cramer_scaled_coordinate (A : Matrix ι ι ℤ) (b : ι → ℤ) (D : R)
+    (x : ι → R)
+    (tight : ((Int.castRingHom R).mapMatrix A).mulVec (fun i => D * x i) =
+      (fun i => (b i : R))) (i : ι) :
+    (A.det : R) * (D * x i) = (A.cramer b i : R) := by
+  have identity := cramer_mulVec ((Int.castRingHom R).mapMatrix A) (fun j => D * x j)
   rw [tight] at identity
   have coordinate := congrFun identity i
   rw [← cast_cramer A b i] at coordinate
-  change (A.cramer b i : ℚ) =
-    ((Int.castRingHom ℚ).mapMatrix A).det * (D * x i) at coordinate
-  rw [← (Int.castRingHom ℚ).map_det] at coordinate
+  change (A.cramer b i : R) =
+    ((Int.castRingHom R).mapMatrix A).det * (D * x i) at coordinate
+  rw [← (Int.castRingHom R).map_det] at coordinate
   exact coordinate.symm
+
+end CramerRule
 
 /-- Any positive coordinate is at least the reciprocal of the determinant bound
 times the common denominator. -/
-theorem positive_coordinate_gap (A : Matrix ι ι ℤ) (b : ι → ℤ) (D B : ℚ)
-    (x : ι → ℚ)
-    (tight : ((Int.castRingHom ℚ).mapMatrix A).mulVec (fun i => D * x i) =
-      (fun i => (b i : ℚ)))
+theorem positive_coordinate_gap {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    (A : Matrix ι ι ℤ) (b : ι → ℤ) (D B : K)
+    (x : ι → K)
+    (tight : ((Int.castRingHom K).mapMatrix A).mulVec (fun i => D * x i) =
+      (fun i => (b i : K)))
     (detNonzero : A.det ≠ 0) (Dpos : 0 < D) (Bpos : 0 < B)
-    (detBound : |(A.det : ℚ)| ≤ B) (i : ι) (xpos : 0 < x i) :
+    (detBound : |(A.det : K)| ≤ B) (i : ι) (xpos : 0 < x i) :
     1 / (D * B) ≤ x i := by
-  have determinantNonzero : (A.det : ℚ) ≠ 0 := Int.cast_ne_zero.mpr detNonzero
+  have determinantNonzero : (A.det : K) ≠ 0 := Int.cast_ne_zero.mpr detNonzero
   have identity := cramer_scaled_coordinate A b D x tight i
   have numeratorNonzero : A.cramer b i ≠ 0 := by
     intro zeroNumerator
     rw [zeroNumerator, Int.cast_zero, mul_eq_zero] at identity
     exact identity.elim determinantNonzero (mul_ne_zero Dpos.ne' xpos.ne')
-  have numeratorAbs : 1 ≤ |(A.cramer b i : ℚ)| := by
+  have numeratorAbs : 1 ≤ |(A.cramer b i : K)| := by
     rw [← Int.cast_abs]
     exact_mod_cast Int.one_le_abs numeratorNonzero
-  have absIdentity := congrArg (fun q : ℚ => |q|) identity
+  have absIdentity := congrArg (fun q : K => |q|) identity
   rw [abs_mul, abs_mul, abs_of_pos Dpos, abs_of_pos xpos] at absIdentity
   apply (div_le_iff₀ (mul_pos Dpos Bpos)).2
   calc
-    1 ≤ |(A.det : ℚ)| * (D * x i) := absIdentity.symm ▸ numeratorAbs
+    1 ≤ |(A.det : K)| * (D * x i) := absIdentity.symm ▸ numeratorAbs
     _ ≤ B * (D * x i) := mul_le_mul_of_nonneg_right detBound (mul_nonneg Dpos.le xpos.le)
     _ = x i * (D * B) := by ring
 

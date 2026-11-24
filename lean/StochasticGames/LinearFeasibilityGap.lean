@@ -30,22 +30,23 @@ def determinantBound (ι : Type*) [Fintype ι] (h : ℤ) : ℚ :=
   ((Fintype.card ι).factorial : ℚ) * (h : ℚ) ^ Fintype.card ι
 
 omit [DecidableEq ι] in
-private theorem determinantBound_pos {h : ℤ} (hpos : 0 < h) :
+theorem determinantBound_pos {h : ℤ} (hpos : 0 < h) :
     0 < determinantBound ι h := by
   have factorialPos : (0 : ℚ) < (Fintype.card ι).factorial := by
     exact_mod_cast Nat.factorial_pos (Fintype.card ι)
   have boundPos : (0 : ℚ) < (h : ℚ) := by exact_mod_cast hpos
   exact mul_pos factorialPos (pow_pos boundPos _)
 
-/-- A bounded feasible system admits a point no worse for the given objective
-whose positive coordinates satisfy the same determinant bound. -/
-theorem exists_point_with_gap (A : Matrix κ ι ℤ) (b : κ → ℤ) (D : ℚ) (h : ℤ)
-    (Dpos : 0 < D) (hpos : 0 < h) (entryBound : ∀ i j, |A i j| ≤ h)
+/-- Any common upper bound for the determinants of square row selections
+gives a common lower bound for the positive coordinates of a tight point. -/
+theorem exists_point_with_gap_of_det_bound (A : Matrix κ ι ℤ) (b : κ → ℤ) (D B : ℚ)
+    (Dpos : 0 < D) (Bpos : 0 < B)
+    (bound : ∀ rows : ι → κ, |((A.submatrix rows id).det : ℚ)| ≤ B)
     (bounded : Bounded (rationalMatrix A) (rationalRhs b D))
     (objective : (ι → ℚ) →ₗ[ℚ] ℚ) {x : ι → ℚ}
     (feasible : Feasible (rationalMatrix A) (rationalRhs b D) x) :
     ∃ y, Feasible (rationalMatrix A) (rationalRhs b D) y ∧ objective y ≤ objective x ∧
-      ∀ i, 0 < y i → 1 / (D * determinantBound ι h) ≤ y i := by
+      ∀ i, 0 < y i → 1 / (D * B) ≤ y i := by
   obtain ⟨y, feasibleY, objectiveLe, kernelZero⟩ :=
     exists_tight_point _ _ bounded objective feasible
   obtain ⟨rows, active, detNonzero⟩ :=
@@ -63,12 +64,25 @@ theorem exists_point_with_gap (A : Matrix κ ι ℤ) (b : κ → ℤ) (D : ℚ) 
     rw [Matrix.mulVec_smul, Pi.smul_apply, smul_eq_mul,
       (mem_tightRows _ _ _ _).1 (active i)]
     exact mul_div_cancel₀ _ Dpos.ne'
-  have boundM : |(M.det : ℚ)| ≤ determinantBound ι h := by
-    have bound := DeterminantGap.det_abs_le_of_entries M h (fun i j => entryBound (rows i) j)
-    unfold determinantBound
-    exact_mod_cast bound
   exact ⟨y, feasibleY, objectiveLe, fun i => DeterminantGap.positive_coordinate_gap
-    M _ D _ y tight detM Dpos (determinantBound_pos hpos) boundM i⟩
+    M _ D B y tight detM Dpos Bpos (bound rows) i⟩
+
+/-- A bounded feasible system admits a point no worse for the given objective
+whose positive coordinates satisfy the same determinant bound. -/
+theorem exists_point_with_gap (A : Matrix κ ι ℤ) (b : κ → ℤ) (D : ℚ) (h : ℤ)
+    (Dpos : 0 < D) (hpos : 0 < h) (entryBound : ∀ i j, |A i j| ≤ h)
+    (bounded : Bounded (rationalMatrix A) (rationalRhs b D))
+    (objective : (ι → ℚ) →ₗ[ℚ] ℚ) {x : ι → ℚ}
+    (feasible : Feasible (rationalMatrix A) (rationalRhs b D) x) :
+    ∃ y, Feasible (rationalMatrix A) (rationalRhs b D) y ∧ objective y ≤ objective x ∧
+      ∀ i, 0 < y i → 1 / (D * determinantBound ι h) ≤ y i := by
+  apply exists_point_with_gap_of_det_bound A b D _ Dpos (determinantBound_pos hpos) _
+    bounded objective feasible
+  intro rows
+  have bound := DeterminantGap.det_abs_le_of_entries (A.submatrix rows id) h
+    (fun i j => entryBound (rows i) j)
+  unfold determinantBound
+  exact_mod_cast bound
 
 /-- A feasible slack strictly smaller than the uniform gap can be replaced by
 an exact zero slack. -/
