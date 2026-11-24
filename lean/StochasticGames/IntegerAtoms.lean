@@ -38,22 +38,26 @@ def atomOffsets (rows : List (Atom ν)) : List ℚ :=
 def integerAtom (D : ℕ) (atom : Atom ν) : IntAtom ν :=
   ⟨atom.lhs, atom.terms.map fun term => (term.1, ⌊(D : ℚ) * term.2⌋)⟩
 
-def encode (rows : List (Atom ν)) : List (IntAtom ν) :=
-  rows.map (integerAtom (denominator (atomOffsets rows)))
+def encodeAt (D : ℕ) (rows : List (Atom ν)) : List (IntAtom ν) :=
+  rows.map (integerAtom D)
 
-private theorem exact_offset {rows : List (Atom ν)} {atom : Atom ν} {term : Signal ν}
+def encode (rows : List (Atom ν)) : List (IntAtom ν) :=
+  encodeAt (denominator (atomOffsets rows)) rows
+
+private theorem exact_offset {D : ℕ} {rows : List (Atom ν)} {atom : Atom ν} {term : Signal ν}
+    (clears : ∀ c ∈ atomOffsets rows, Clears D c)
     (rowMem : atom ∈ rows) (termMem : term ∈ atom.terms) :
-    (⌊(denominator (atomOffsets rows) : ℚ) * term.2⌋ : ℚ) =
-      (denominator (atomOffsets rows) : ℚ) * term.2 := by
+    (⌊(D : ℚ) * term.2⌋ : ℚ) = (D : ℚ) * term.2 := by
   have offsetMem : term.2 ∈ atomOffsets rows :=
     List.mem_flatMap.mpr ⟨atom, rowMem, List.mem_map.mpr ⟨term, termMem, rfl⟩⟩
-  obtain ⟨k, hk⟩ := denominator_clears offsetMem
+  obtain ⟨k, hk⟩ := clears _ offsetMem
   simp only [hk, Int.floor_intCast]
 
-theorem feasible_iff_integer (rows : List (Atom ν)) :
-    (∃ v : ν → ℚ, AtomEncoding.RowsHold rows v) ↔ ∃ v : ν → ℤ, RowsHold (encode rows) v := by
-  let D := denominator (atomOffsets rows)
-  have Dpos : 0 < (D : ℚ) := by exact_mod_cast denominator_pos (atomOffsets rows)
+theorem feasible_iff_integer_at (rows : List (Atom ν)) (D : ℕ) (positive : 0 < D)
+    (clears : ∀ c ∈ atomOffsets rows, Clears D c) :
+    (∃ v : ν → ℚ, AtomEncoding.RowsHold rows v) ↔
+      ∃ v : ν → ℤ, RowsHold (encodeAt D rows) v := by
+  have Dpos : 0 < (D : ℚ) := by exact_mod_cast positive
   constructor
   · rintro ⟨v, holds⟩
     refine ⟨fun i => ⌊(D : ℚ) * v i⌋, ?_⟩
@@ -65,12 +69,12 @@ theorem feasible_iff_integer (rows : List (Atom ν)) :
     change ⌊(D : ℚ) * v atom.lhs⌋ ≤ ⌊(D : ℚ) * v term.1⌋ + ⌊(D : ℚ) * term.2⌋
     have rounded := Int.floor_mono scaled
     change _ ≤ ⌊(D : ℚ) * (v term.1 + term.2)⌋ at rounded
-    rw [mul_add, ← exact_offset atomMem termMem, Int.floor_add_intCast] at rounded
+    rw [mul_add, ← exact_offset clears atomMem termMem, Int.floor_add_intCast] at rounded
     exact rounded
   · rintro ⟨v, holds⟩
     refine ⟨fun i => (v i : ℚ) / (D : ℚ), ?_⟩
     intro atom atomMem
-    have encodedMem : integerAtom D atom ∈ encode rows :=
+    have encodedMem : integerAtom D atom ∈ encodeAt D rows :=
       List.mem_map.mpr ⟨atom, atomMem, rfl⟩
     obtain ⟨_, mem, inequality⟩ := holds _ encodedMem
     obtain ⟨term, termMem, rfl⟩ := List.mem_map.mp mem
@@ -79,8 +83,12 @@ theorem feasible_iff_integer (rows : List (Atom ν)) :
     apply (mul_le_mul_iff_of_pos_left Dpos).1
     have cancel (z : ℤ) : (D : ℚ) * ((z : ℚ) / (D : ℚ)) = (z : ℚ) := by
       rw [mul_comm, div_mul_cancel₀ _ Dpos.ne']
-    rw [mul_add, cancel, cancel, ← exact_offset atomMem termMem]
+    rw [mul_add, cancel, cancel, ← exact_offset clears atomMem termMem]
     exact_mod_cast inequality
+
+theorem feasible_iff_integer (rows : List (Atom ν)) :
+    (∃ v : ν → ℚ, AtomEncoding.RowsHold rows v) ↔ ∃ v : ν → ℤ, RowsHold (encode rows) v :=
+  feasible_iff_integer_at rows _ (denominator_pos _) (fun _ => denominator_clears)
 
 /-- The bounded compiler yields explicit integer rows with the same feasibility answer. -/
 theorem exact_iff_integer [Fintype ν] [DecidableEq ν] (system : AverageFeasibility.System ν)

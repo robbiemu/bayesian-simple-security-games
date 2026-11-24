@@ -47,6 +47,14 @@ jobs:
           build-args: StochasticGames
           test: false
           use-mathlib-cache: true
+      - name: Install Z3
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y z3
+      - name: Check proof axioms and replay the Lean binary compiler
+        run: |
+          (cd lean && lake env lean Replay/H4Axioms.lean)
+          python3 -B experiments/h4_lean_replay.py --systematic 1
 
   stochastic-games-replay:
     name: Stochastic game replay with Z3

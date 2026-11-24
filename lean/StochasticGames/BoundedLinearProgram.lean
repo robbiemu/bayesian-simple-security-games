@@ -20,29 +20,31 @@ public section
 namespace StochasticGames
 namespace BoundedLinearProgram
 
-variable {κ ι : Type*} [Fintype κ] [Fintype ι]
+variable {κ ι K : Type*} [Fintype κ] [Fintype ι]
+variable [Field K] [LinearOrder K] [IsStrictOrderedRing K]
 
-def Feasible (A : Matrix κ ι ℚ) (b : κ → ℚ) (x : ι → ℚ) : Prop :=
+def Feasible (A : Matrix κ ι K) (b : κ → K) (x : ι → K) : Prop :=
   ∀ i, A.mulVec x i ≤ b i
 
-def tightRows (A : Matrix κ ι ℚ) (b : κ → ℚ) (x : ι → ℚ) : Finset κ :=
+def tightRows (A : Matrix κ ι K) (b : κ → K) (x : ι → K) : Finset κ :=
   Finset.univ.filter (fun i => A.mulVec x i = b i)
 
-def Bounded (A : Matrix κ ι ℚ) (b : κ → ℚ) : Prop :=
-  ∃ B : ℚ, ∀ x, Feasible A b x → ∀ j, |x j| ≤ B
+def Bounded (A : Matrix κ ι K) (b : κ → K) : Prop :=
+  ∃ B : K, ∀ x, Feasible A b x → ∀ j, |x j| ≤ B
 
-@[simp] theorem mem_tightRows (A : Matrix κ ι ℚ) (b : κ → ℚ) (x : ι → ℚ) (i : κ) :
+omit [IsStrictOrderedRing K] in
+@[simp] theorem mem_tightRows (A : Matrix κ ι K) (b : κ → K) (x : ι → K) (i : κ) :
     i ∈ tightRows A b x ↔ A.mulVec x i = b i := by
   simp [tightRows]
 
-omit [Fintype κ] in
-private theorem row_along (A : Matrix κ ι ℚ) (x d : ι → ℚ) (t : ℚ) (i : κ) :
+omit [Fintype κ] [LinearOrder K] [IsStrictOrderedRing K] in
+private theorem row_along (A : Matrix κ ι K) (x d : ι → K) (t : K) (i : κ) :
     A.mulVec (x + t • d) i = A.mulVec x i + t * A.mulVec d i := by
   rw [Matrix.mulVec_add, Matrix.mulVec_smul]
   rfl
 
-private theorem exists_positive_row (A : Matrix κ ι ℚ) (b : κ → ℚ)
-    (bounded : Bounded A b) {x d : ι → ℚ} (feasible : Feasible A b x) (nonzero : d ≠ 0) :
+private theorem exists_positive_row (A : Matrix κ ι K) (b : κ → K)
+    (bounded : Bounded A b) {x d : ι → K} (feasible : Feasible A b x) (nonzero : d ≠ 0) :
     ∃ i, 0 < A.mulVec d i := by
   by_contra! noPositive
   obtain ⟨B, bound⟩ := bounded
@@ -73,10 +75,10 @@ private theorem exists_positive_row (A : Matrix κ ι ℚ) (b : κ → ℚ)
   rw [movement] at limited
   linarith [bound (x + t • d) feasibleRay j, bound x feasible j]
 
-private theorem step_to_new_row (A : Matrix κ ι ℚ) (b : κ → ℚ)
-    (bounded : Bounded A b) {x d : ι → ℚ} (feasible : Feasible A b x) (nonzero : d ≠ 0)
+private theorem step_to_new_row (A : Matrix κ ι K) (b : κ → K)
+    (bounded : Bounded A b) {x d : ι → K} (feasible : Feasible A b x) (nonzero : d ≠ 0)
     (vanishing : ∀ i ∈ tightRows A b x, A.mulVec d i = 0) :
-    ∃ t : ℚ, 0 < t ∧ Feasible A b (x + t • d) ∧
+    ∃ t : K, 0 < t ∧ Feasible A b (x + t • d) ∧
       tightRows A b x ⊂ tightRows A b (x + t • d) := by
   classical
   let rising := Finset.univ.filter (fun i => 0 < A.mulVec d i)
@@ -115,16 +117,16 @@ private theorem step_to_new_row (A : Matrix κ ι ℚ) (b : κ → ℚ)
 
 /-- There is a feasible point, with no larger objective, whose tight rows
 annihilate only the zero direction. -/
-theorem exists_tight_point (A : Matrix κ ι ℚ) (b : κ → ℚ)
-    (bounded : Bounded A b) (objective : (ι → ℚ) →ₗ[ℚ] ℚ) {x : ι → ℚ}
+theorem exists_tight_point (A : Matrix κ ι K) (b : κ → K)
+    (bounded : Bounded A b) (objective : (ι → K) →ₗ[K] K) {x : ι → K}
     (feasible : Feasible A b x) :
     ∃ y, Feasible A b y ∧ objective y ≤ objective x ∧
-      ∀ d : ι → ℚ, (∀ i ∈ tightRows A b y, A.mulVec d i = 0) → d = 0 := by
+      ∀ d : ι → K, (∀ i ∈ tightRows A b y, A.mulVec d i = 0) → d = 0 := by
   classical
   let attainable :=
     (Finset.range (Fintype.card κ + 1)).filter fun k =>
       ∃ y, Feasible A b y ∧ objective y ≤ objective x ∧ (tightRows A b y).card = k
-  have mem_attainable {y : ι → ℚ} (ok : Feasible A b y)
+  have mem_attainable {y : ι → K} (ok : Feasible A b y)
       (cost : objective y ≤ objective x) : (tightRows A b y).card ∈ attainable := by
     apply Finset.mem_filter.mpr
     exact ⟨Finset.mem_range.mpr (Nat.lt_succ_of_le (Finset.card_le_univ _)),
@@ -134,7 +136,7 @@ theorem exists_tight_point (A : Matrix κ ι ℚ) (b : κ → ℚ)
   obtain ⟨y, opt, cost, cardinality⟩ :=
     (Finset.mem_filter.mp (Finset.max'_mem attainable attainable_nonempty)).2
   refine ⟨y, opt, cost, ?_⟩
-  have impossibleDirection (d : ι → ℚ) (vanishing : ∀ i ∈ tightRows A b y, A.mulVec d i = 0)
+  have impossibleDirection (d : ι → K) (vanishing : ∀ i ∈ tightRows A b y, A.mulVec d i = 0)
       (nonzero : d ≠ 0) (slopeNonpos : objective d ≤ 0) : False := by
     obtain ⟨t, positive, next, enlarged⟩ :=
       step_to_new_row A b bounded opt nonzero vanishing

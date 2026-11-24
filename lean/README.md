@@ -1,6 +1,6 @@
 # Lean workspace
 
-This Lake package contains library checks for the fixed-flow investigation and a partial formalization of the stochastic-game reduction. It pins Lean and mathlib to v4.36.0. The Lake manifest records the exact revision of each dependency.
+This Lake package contains library checks for the fixed-flow investigation and an end-to-end proof and executable binary compiler for the stochastic-game reduction. It pins Lean and mathlib to v4.36.0. The Lake manifest records the exact revision of each dependency.
 
 ## Running the checks
 
@@ -26,13 +26,18 @@ The current sketch also uses the Gajjar–Radhakrishnan parametric shortest-path
 
 ## Stochastic game reduction
 
-Run `lake build StochasticGames` to check the modules accompanying the [threshold proof](../notes/H4-ssg-to-mean-payoff.md).
+The top-level decision theorem `StochasticGames.ThresholdReduction.compile_correct` says that the source reachability value meets a rational threshold if and only if the emitted graph has nonnegative mean-payoff value at its designated start. It covers equality, nonterminating plays, terminal starts, and thresholds outside the unit interval. [Top-level proof](StochasticGames/ThresholdReduction.lean) · [Written proof](../notes/H4-ssg-to-mean-payoff.md)
 
-- `StochasticGames.Reachability.horizon_value_lt_iff_fixed_terminals` gives the strict dual certificate for the supremum of finite-horizon Bellman iterates, with both terminal values. [ReachabilityThreshold.lean](StochasticGames/ReachabilityThreshold.lean)
-- `StochasticGames.Reduction.exact_iff_selected_graph` handles finite rational row systems with bounded average-operand widths and bounded hard rows. The compiler derives a uniform violation gap and constructs the integer max-atom rows. The theorem proves that exact feasibility is equivalent to a row selection with nonnegative closed walks. [Reduction.lean](StochasticGames/Reduction.lean)
-- `StochasticGames.MeanPayoffGraph.max_atoms_iff_arena_certificate` connects binary integer max-atoms to graph potentials and closed walks in the fresh-start arena. [MeanPayoffGraph.lean](StochasticGames/MeanPayoffGraph.lean)
-- `StochasticGames.MeanPayoffThreshold.cycleMean_swap_nonneg_iff` gives the equality-preserving sign comparison for nonempty integer cycles of length at most $N$. `positional_saddle_swap` maps a supplied positional saddle to a saddle after swapping the players and transforming the weights. [MeanPayoffThreshold.lean](StochasticGames/MeanPayoffThreshold.lean)
+- The source value is the probability of eventually reaching Win under optimal play with history-dependent randomized strategies. The least Bellman fixed point counts Win at time zero and yields a strict dual certificate. Each player row can have any nonempty list of moves. [Reachability semantics](StochasticGames/ReachabilitySemantics.lean)
+- A strict real witness yields a rational certificate. The compiler uses a uniform violation gap to eliminate averages exactly and build integer max-atom rows. [Strict witness and precision](StochasticGames/SourcePrecision.lean) · [Compiler](StochasticGames/ThresholdCompiler.lean)
+- The intermediate graph encodes the strict failure of the source threshold. The owner and weight reversal makes nonnegative lower limiting mean payoff accept the weak source threshold. A separate theorem establishes positional optimal strategies for both players. The graph uses contiguous vertex indices and preserves parallel arcs. [Arena encoding](StochasticGames/ArenaEncoding.lean) · [Threshold reversal](StochasticGames/MeanPayoffSemantics.lean) · [Positional saddle](StochasticGames/PositionalMeanPayoff.lean)
+- The binary entry point `ThresholdReduction.compileBinary` maps source bits to target bits. Lean checks both decoding round trips, the graph's threshold answer, a cubic bound on output length, and a polynomial work bound in the stated list-scan and schoolbook-arithmetic model. [Binary entry point](StochasticGames/BinaryReduction.lean) · [Size and reduction bounds](StochasticGames/ReductionComplexity.lean) · [Cost model](StochasticGames/CompilationCost.lean)
 
-The Lean compiler uses a general determinant-based precision bound for bounded systems. The Python replay implements the specialized simple stochastic game construction with the sharper bounds in the written proof. A formal correspondence between the two implementations remains open. [Python replay](../experiments/h4_ssg_to_mpg_replay.py)
+To check the theorems' axiom dependencies and check the Lean compiler against exact source answers, run from the repository root with Z3 on your path.
 
-The written proof supplies the stochastic interpretation of the Bellman iterates, the strict real-to-rational bridge, positional determinacy, and the bit-time bounds.
+```sh
+(cd lean && lake build StochasticGames && lake env lean Replay/H4Axioms.lean)
+python3 -B experiments/h4_lean_replay.py --systematic 2
+```
+
+The replay encodes each source instance, calls `compileBinary`, and decodes the resulting graph. Z3 gets only the graph and its start vertex. The harness compares its answer with a rational computation on the source. The corpus includes 3,634 game and threshold pairs. With no flag, the harness runs just the named fixtures. The closed-loop equality fixture emits 185 vertices and 330 arcs through the Lean compiler. The separate Python compiler uses explicit terminal vertices with pinning rows and emits a different table for that fixture. [Lean replay](../experiments/h4_lean_replay.py) · [Python compiler replay](../experiments/h4_ssg_to_mpg_replay.py)
