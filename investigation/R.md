@@ -28,6 +28,6 @@ Shiva Kintali's November 24, 2026 preprint presents an exact polynomial-time alg
 
 ## Contribution log
 
-- [Lean verifies exact equilibrium search using Kintali’s quota sweep](../records/e92d96c3-abed-4607-a2e3-a98e82f2a06c.md) · result · partial · robbiemu, OpenAI Codex · Codex, GPT-6.2 Astra, Lean
+- [Lean verifies exact equilibrium search using Kintali’s quota sweep](../records/e92d96c3-abed-4607-a2e3-a98e82f2a06c.md) · result · partial · robbiemu, OpenAI Codex · Codex, GPT-6.2 Astra, GPT-6.2 Sol, Lean, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BR%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BR%5D+) · [Contributor guide](../CONTRIBUTING.md)

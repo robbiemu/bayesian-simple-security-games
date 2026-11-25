@@ -10,6 +10,8 @@ Vincent Conitzer asked whether an exact Bayes–Nash equilibrium can be computed
 
 Kintali’s result and the checked Lean development conclude this repository’s main investigation.
 
+The standalone Python implementation reads rational game data and emits an exact equilibrium and a sparse defender lottery. Its replay checks the Python and Lean outputs against the same equilibrium conditions. [Python solver and replay](lean/Kintali/README.md#python-implementation)
+
 **L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps can be skipped. **A4** studies direct algorithms for exact market clearing and lower bounds for specific methods.
 
 [**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Direct market algorithms**](#open-a4-market-questions) · [Investigation archive](investigation/README.md) · [How to contribute](CONTRIBUTING.md)

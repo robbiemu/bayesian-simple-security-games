@@ -6,11 +6,11 @@ security games problem. The paper uses Baïou and Balinski’s ordinal
 transportation framework. [Short preprint](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [PDF at the author’s Git revision](https://github.com/shivakintali/shivakintali.github.io/blob/b28db0428e4cdcef7e9048a386b05d942d1eb57e/papers/SecurityGames-short.pdf)
 
 **Lean checks an executable exact solver for every valid rational input.**
-The solver uses the paper’s grouped sweep and weighted quote search. It
-augments the witness and rounds a relaxed contact by integer linear
-algebra. The correctness proof covers the exact public bit encoding,
-zero priors and nonnegative slopes and defender gains. The complete
-machine-level polynomial-time theorem remains a separate obligation.
+The solver is a verified variant of the paper’s grouped sweep and weighted
+quote search. It augments the witness and rounds a relaxed contact by
+integer linear algebra. The correctness proof covers the exact public
+bit encoding, zero priors and nonnegative slopes and defender gains.
+The complete machine-level polynomial-time theorem remains a separate obligation.
 [Solver](Solver.lean) · [Public bitstring theorem](InputOutput/Solver.lean)
 
 ## Proof in paper order
@@ -32,12 +32,19 @@ exact recovery on valid inputs.
 
 ## Constructive recovery
 
+Kintali’s LP trial asks whether the pattern admits an exact point. The
+executable trial tests the specific allocation returned by the sweep
+against the relaxed rows. A trial can therefore return blockers when
+its pattern admits an exact equilibrium. The crossed-holdings replay
+checks such a rejection and a reassignment that satisfies the exact
+rows. [Trial rule](MarketTrial.lean) · [Crossed-holdings replay](../Replay/KintaliSearch.lean)
+
 Kintali’s witness includes the real bids that have positive flow at the
 full-grid contact. The formalization adds the first eligible quote above
 the contact coverage for each buyer and active target, when that quote
 exists below the permanent cap. The witness therefore has size at most
-`k + m₊ + k * m₊`. If its added bids do not block the restricted contact,
-the restricted allocation itself satisfies the relaxed pattern rows.
+`k + m₊ + k * m₊`. If no bid in the enlarged witness blocks the
+restricted contact, its allocation satisfies the relaxed pattern rows.
 [Witness](ExactRecovery/Witness.lean) · [Relaxed restricted contact](TrialCorrectness.lean)
 
 The recovery routine appends the inequality requiring zero residual.
@@ -46,10 +53,13 @@ empty one. A maximal independent set of rows below that window determines
 a small projection via a nonsingular integer minor. The projection makes
 the nearby rows exact, and the slack above the window absorbs the
 movement. The program computes the minor by bordered tests and uses
-integer determinants to recover all coordinates. This implements a
-variant of the preprint’s LP recovery. Kintali’s original
-full-contact pattern-feasibility result is also checked.
+integer determinants to recover all coordinates. This gives the
+executable a recovery routine built from checked arithmetic and
+elimination, with binary work accounting from H4. Kintali’s original
+full-contact pattern-feasibility result is also checked, using the
+determinant-gap lemma developed for H4.
 [Slack windows](LinearProgramming/SlackWindow.lean) · [Projection proof](LinearProgramming/Recovery.lean) · [Stored determinant](LinearProgramming/BirdRun.lean)
+[Feasibility-gap reuse](ExactRecovery/Determinant.lean) · [H4 binary work](../README.md#stochastic-game-reduction)
 
 ## Binary work and public statement
 
@@ -90,6 +100,47 @@ lake env lean Replay/KintaliSearch.lean
 The upstream compatibility check replays the public compact predicate
 and the binary encoders against the pinned Formal Conjectures source.
 [Compatibility replay](InputOutput/check_upstream.py)
+
+## Python implementation
+
+Build the Lean library as above before the cross-language replay.
+Run the solver and replay from the repository root.
+
+```sh
+python3 -B experiments/kintali_solver.py game.json
+python3 -B experiments/kintali_replay.py --systematic
+```
+
+The solver uses Python’s standard library. It accepts a JSON file or
+standard input and represents rational values exactly. Attacker type
+`i` minimizes `intercept[i][j] + slope[i][j] * coverage[j]` over the
+targets. The defender gains `gain[j]` for covering an attacked target.
+For example, the review’s two-target game is
+
+```json
+{
+  "resources": 1,
+  "prior": ["1/2", "1/2"],
+  "intercept": [[0, "3/2"], ["3/2", 0]],
+  "slope": [[2, 0], [0, 2]],
+  "gain": [1, 1]
+}
+```
+
+The output gives coverage and conditional attack probabilities as
+rational strings. Its defender lottery lists zero-based target
+indices and exact probabilities. The independent implementation
+uses grouped private bids, compressed quote weights and the same
+slack-window repair rule. It computes the selected minor’s correction
+by exact rational elimination. [Python solver](../../experiments/kintali_solver.py) · [Python repair](../../experiments/kintali_repair.py)
+
+The replay checks both programs’ outputs against exact best-response
+conditions and compares their strategies on six shared fixtures.
+It checks the Python lottery marginals and exercises a default trial
+that clears after one blocker-interval doubling. The systematic option
+adds Python-only cases. Use `--python-only` to run the replay without Lean.
+The correctness and binary work theorems apply to the Lean implementation.
+[Replay harness](../../experiments/kintali_replay.py) · [Lean binary adapter](../Replay/KintaliBinary.lean)
 
 The algorithm and original quota comparison come from Kintali’s
 preprint. The witness extension, constructive recovery, and Lean
