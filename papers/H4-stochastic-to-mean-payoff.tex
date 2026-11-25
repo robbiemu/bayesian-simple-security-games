@@ -1,0 +1,632 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1.04in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\definecolor{linkblue}{RGB}{30,69,101}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\newcommand*{\manuscriptauthor}{Robert Thomas Collins}
+\hypersetup{pdftitle={Reducing simple stochastic reachability games to deterministic mean-payoff games},
+  pdfauthor={\manuscriptauthor}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\Win}{\mathsf{Win}}
+\newcommand{\Lose}{\mathsf{Lose}}
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\bits}{\operatorname{bits}}
+\newcommand{\sys}{\mathcal S}
+\newcommand{\compiled}{\mathcal C}
+\setlength{\emergencystretch}{1.5em}
+
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries Reducing simple stochastic reachability games\\[.10em]
+    to deterministic mean-payoff games\par}
+  \medskip{\large\manuscriptauthor\par}
+  \medskip{\small Working draft \enspace\textperiodcentered\enspace 24 November 2026\par}
+\end{center}
+
+\begin{abstract}
+Given a finite simple stochastic reachability game, a start state, and a binary
+rational threshold \(t\), we construct one deterministic mean-payoff game with
+integer edge weights in polynomial bit time. Its value at the designated start is
+nonnegative exactly when the original winning probability under optimal play is at
+least \(t\), even when play can continue forever. An explicit error bound lets us
+replace fair-coin averages by min/max circuits, including averages that depend on
+one another around a cycle.
+\end{abstract}
+
+\section{The games and the threshold question}
+
+Max and Min move a token on a finite directed graph. At a state owned by one of
+the players, that player chooses the next state from a nonempty list. At a chance
+state, a fair coin chooses between two listed successors, which may coincide.
+Both players see the moves so far and may use the whole history. The graph
+has two terminal states, \(\Win\) and \(\Lose\). The token stays at a terminal
+once it gets there. Max earns one if the token ever reaches \(\Win\).
+All other plays earn zero, including those that go on forever. This is Condon's simple stochastic reachability game~\cite{condon}.
+Given a start \(s\) and a rational threshold \(t\), can Max guarantee a
+winning probability of at least \(t\), however Min plays? Equality counts as yes.
+
+In the game we construct, Max or Min chooses the next edge at every vertex.
+Every vertex has an outgoing edge. Each move pays Max the integer weight of the
+edge traversed. Max wants a high average reward per move and Min wants a low
+one. For an infinite play with edges \(e_1,e_2,\ldots\) of weights \(w(e_i)\),
+the payoff is the lower limiting average
+\[
+       \liminf_{k\to\infty}\frac{1}{k}\sum_{i=1}^{k} w(e_i).
+\]
+The lower limit gives a payoff even when the running averages do not converge.
+
+In either game the value \(\val\) at a given start is the best payoff Max can
+secure against Min. In the target game we ask whether Max can secure a
+nonnegative payoff. To construct this one game we use a number of bit operations
+polynomial in the number of bits it takes to list the source game, its start,
+and the numerator and denominator of \(t\).
+
+\begin{theorem}\label{thm:main}
+There is a polynomial-bit-time many-one reduction that takes an explicitly given
+simple stochastic reachability game \(G\), a state \(s\), and a rational \(t=a/b\)
+in binary, with \(b>0\), to a finite deterministic mean-payoff game \(H\) with
+binary integer edge weights and a state \(s_0\), such that
+\[
+                 \val_G(s)\ge t \quad\Longleftrightarrow\quad \val_H(s_0)\ge 0 .
+\]
+\end{theorem}
+
+Write \(P(\sigma,\tau)\) for the payoff at a given start when Max uses strategy
+\(\sigma\) and Min uses \(\tau\), taking the win probability in the stochastic game.
+The lower value is \(\sup_\sigma\inf_\tau P(\sigma,\tau)\) and the upper value is
+\(\inf_\tau\sup_\sigma P(\sigma,\tau)\). Their common value is \(\val\).
+Finite deterministic mean-payoff games admit optimal \emph{positional} strategies,
+which fix one outgoing edge at each vertex a player owns~\cite{em,gkk}.
+
+Together with the reduction from deterministic mean-payoff games to simple
+stochastic games by Zwick and Paterson~\cite[\S\S5--6]{zp}, Theorem~\ref{thm:main}
+makes the two threshold decision problems polynomial-time equivalent. The abstract
+of Parys's Warsaw seminar of 28 October 2026 records the direction from simple
+stochastic games to mean-payoff games as open at that date~\cite{parys}.
+
+We begin by asking how Min could certify that \(\val_G(s)<t\). Fix the
+terminal labels at one for \(\Win\) and zero for \(\Lose\). Give each other
+state a label \(x_i\) between zero and one. Take the largest successor label
+at a Max state, the smallest at a Min state, and the average at a chance
+state. If every result is at most the current label, Lemma~\ref{lem:reach}
+shows that each \(x_i\) bounds its state's winning probability from above. Then \(x_s<t\) certifies
+a no answer.
+Now replace each label by its complement \(1-x_i\). At a chance state, the
+average of the two complementary successor labels is an upper bound on the
+current label. Replacing the average by a larger number loosens the bound.
+If two chance states are successors of each other, raising either label can
+loosen the bound on the other. The example after Proposition~\ref{prop:compile}
+shows how a margin that is too small lets a false certificate pass at a
+threshold of \(1/3\).
+
+The construction uses two bounds computed from the input. First we fix a
+positive margin that a certificate can meet whenever the value is strictly
+below \(t\). Next, fix a supporting move at each Min state. If those choices
+can pass only by overestimating some average, how small could the largest
+overestimate be? We give a positive lower bound that works for every such
+choice. We keep each circuit's error below it, so a certificate can pass
+only if exact labels exist for the chosen moves. An intermediate game \(K\)
+tests for such a certificate. Changing its owners and weights then reverses
+its answer.
+
+Bodirsky, Loho, and Skomra describe inequalities using maxima and averages for
+the \(1/2\)-threshold in a stopping stochastic game, one in which absorption
+occurs almost surely under every pair of strategies~\cite[Prop.~5]{bls}.
+Atserias and Maneva relate inequalities using maxima and integer offsets to
+mean-payoff games~\cite{am}. To pass between these two kinds of inequalities
+we use the circuit layers of Bezem, Nieuwenhuis, and Rodr\'iguez-Carbonell and
+their one-sided inequality formulation by Allamigeon, Benchimol, Gaubert, and
+Joswig~\cite[\S3]{bnr}\cite[Prop.~20]{abgj}. Our precision bound determines how
+many layers suffice for all the averages at once.
+
+\section{Certifying a reachability value below the threshold}
+\label{sec:reach}
+
+Write \(n\) for the number of nonterminal states. If \(t\le 0\), the answer is yes.
+If \(t>1\), the answer is no. For a terminal start, compare its known value with \(t\).
+In each case, output a single vertex with a loop of weight zero for yes or \(-1\) for
+no. Henceforth \(s\) is nonterminal and \(0<t\le 1\).
+
+For \(x\in[0,1]^n\), extend \(x\) to the terminals by \(x_{\Win}=1\) and \(x_{\Lose}=0\).
+The Bellman operator \(F\) takes the maximum of the successor labels at a Max state,
+the minimum at a Min state, and the arithmetic mean at a chance state. All vector
+inequalities below are coordinatewise. If a nonterminal state's only move
+leads back to itself, every label satisfies its Bellman equation. Its actual
+winning probability is zero. The least fixed point singles out the reachability
+value.
+
+\begin{lemma}\label{lem:reach}
+The reachability value vector \(v\) is the least fixed point of \(F\) on the unit cube.
+In particular,
+\[
+ v_s<t
+ \quad\Longleftrightarrow\quad
+ \exists\,x\in[0,1]^n\quad F(x)\le x,\quad x_s<t .
+\]
+\end{lemma}
+
+\begin{proof}
+Let \(u_0=0\) on nonterminals and \(u_{k+1}=F(u_k)\), always supplying the fixed
+terminal labels. Backward induction identifies \(u_k(i)\) with the value for reaching
+\(\Win\) within \(k\) moves from \(i\). A finite-horizon Max strategy guarantees
+this much probability of eventual reachability as well. The vectors \(u_k\) increase
+to a limit \(u\) in the cube. Finite maxima, minima, and means are continuous, so
+\(F(u)=u\).
+
+Fix one vector \(x\) with \(F(x)\le x\). All finite-horizon values stay below it,
+since \(u_0\le x\) and monotonicity gives
+\[
+                     u_{k+1}=F(u_k)\le F(x)\le x .
+\]
+There is also a single Min strategy giving the upper bound \(x_i\) against every
+Max strategy for eventual reachability. At each Min state choose a successor of
+minimum \(x\)-label. Then the conditional expected next label is at most the present
+label at every state. For the state \(I_k\) after \(k\) moves from \(i\), absorption at
+\(\Win\) and nonnegativity elsewhere give
+\[
+    \Pr_i(\Win\text{ reached by time }k)
+    \ \le\ \mathbb E_i[x_{I_k}]
+    \ \le\ x_i .
+\]
+The events on the left increase to eventual reachability. Taking \(x=u\) bounds the
+upper value by \(u_i\), while the finite-horizon Max guarantees give a lower
+value of at least \(u_k(i)\) for every \(k\). Thus \(v=u\), and every \(x\) with \(F(x)\le x\)
+dominates \(v\). When \(v_s<t\), \(x=v\) supplies the required witness.
+\end{proof}
+
+Set \(y_i=1-x_i\), with terminal literals \(y_{\Win}=0\) and \(y_{\Lose}=1\).
+The \(x_i\) certify upper bounds on winning probabilities. The corresponding \(y_i\)
+give lower bounds on their complements, which include the possibility of never
+absorbing. In these coordinates the certificate consists of \(0\le y_i\le1\),
+\(y_s>1-t\), and the following rows. A row is one inequality in a simultaneous
+system.
+\[
+\begin{array}{@{}ll@{}}
+\toprule
+\text{State \(i\) in \(G\)} & \text{Constraint on the labels}\\
+\midrule
+\text{Max, with successors \(J_i\)} & y_i\le y_j\quad\text{for every }j\in J_i\\[2pt]
+\text{Min, with successors \(J_i\)} & y_i\le\max_{j\in J_i} y_j\\[2pt]
+\text{Chance, with successors \(j,k\)} & y_i\le(y_j+y_k)/2\\
+\bottomrule
+\end{array}
+\]
+At a source Max state an upper bound must cover every choice Max might make. At a
+Min state one successor supporting the bound suffices, because Min can choose it.
+
+\section{How much precision do the inequalities need?}
+\label{sec:precision}
+
+A \emph{branch} chooses one term \(y_j\) in every right-hand maximum and imposes
+\(y_i\le y_j\) in its place. Every solution satisfies a branch, by choosing terms
+attaining the maxima. Every solution of any branch satisfies the original rows.
+Thus we can reason about linear inequalities branch by branch. The following
+estimate will bound both the margin at the start state and the error in the
+chance rows. The input bounds the row norms and denominators for all branches
+at once.
+
+\begin{lemma}\label{lem:vertex}
+Let a nonempty bounded polyhedron in \(\mathbb R^d\) be given by weak inequalities
+whose coefficient rows are integral with Euclidean norm at most \(A\). Suppose a
+positive integer \(B\) clears all right-hand sides. If the minimum or maximum of a
+coordinate is positive, it is at least \(1/(B A^{d})\).
+\end{lemma}
+
+\begin{proof}
+The optimal face contains a vertex. Its tight rows span \(\mathbb R^d\), since
+otherwise a small segment in a common null direction would stay feasible on both
+sides of the vertex. Choose \(d\) independent tight rows and write their equalities
+as \(Mz=q\). The \emph{coefficients} of \(M\) are integers, while \(q\) and the
+coordinates of the vertex may be fractional. Hadamard's inequality gives
+\(0<|\det M|\le A^d\). Since \(Bq\) is integral, Cramer's rule gives
+\(B\det(M)z_j\in\mathbb Z\) for each \(j\). Apply this to the positive optimal
+coordinate. The argument also applies to a polyhedron of smaller affine dimension.
+\end{proof}
+
+\subsection{A margin for the strict threshold}
+
+A strict witness puts the start label above \(1-t\). We can replace the strict
+test by a weak inequality if we know how far above \(1-t\) at least one
+witness can reach. Put
+\[
+              D=b\,3^{\,n+1},\qquad \delta=\frac1D,
+              \qquad \theta=1-t+\delta .
+\]
+Let \(\sys_\delta\) be the system in Section~\ref{sec:reach} with the single strict
+row replaced by \(y_s\ge\theta\). We claim that
+\begin{equation}\label{eq:tighten}
+ v_s<t \quad\Longleftrightarrow\quad \sys_\delta\text{ has a real solution}
+       \quad\Longleftrightarrow\quad \sys_\delta\text{ has a rational solution}.
+\end{equation}
+A strict real witness supplies a branch. On this branch retain the box and state
+rows, adjoin \(0\le\lambda\le1\), and maximize \(\lambda\) under
+\(y_s\ge1-t+\lambda\). The witness gives a feasible \(\lambda>0\).
+This polytope is bounded in the \(n+1\)
+coordinates \((y,\lambda)\). Clear each average row by multiplying by two, moving
+the terminal literals to the right. Its coefficient row has norm at most
+\(\sqrt8\), since the left coefficient is \(2\) and a repeated successor can have
+coefficient \(-2\). Combining an occurrence of the left variable on the right
+only decreases this bound. All other rows have norm at most \(\sqrt2\), and
+all right-hand denominators divide \(b\). Lemma~\ref{lem:vertex} with \(A=3\)
+shows that the maximum is at least \(1/D\). At the optimal vertex used in that
+lemma, Cramer's rule makes \emph{every} coordinate rational. Its source labels
+therefore give a rational witness on this branch that survives the tightening.
+Every rational witness is real, and every real solution of \(\sys_\delta\) has
+\(y_s>1-t\) because \(\delta>0\). This proves~\eqref{eq:tighten}.
+
+\subsection{The error needed for an infeasible branch to pass}
+
+Fix any branch of \(\sys_\delta\). Keep the threshold, box, and all player rows
+exact. Give every chance row the same slack \(\rho\) and minimize \(0\le\rho\le1\)
+subject to the resulting inequalities
+\[
+                        y_i\le (y_j+y_k)/2+\rho .
+\]
+If the relaxed branch is feasible, its minimum \(\rho_{\min}\) is attained on a
+compact polytope. The right-hand denominators now divide \(D\), since \(b\)
+divides \(D\). In the \(n+1\) coordinates \((y,\rho)\), the doubled average row
+can have coefficients \(2,-2,-2\) on the left variable, a repeated successor, and
+\(\rho\). Its norm is at most \(\sqrt{12}<4\), including when some of the variables
+coincide or an operand is a terminal. Lemma~\ref{lem:vertex} gives the uniform
+alternative
+\begin{equation}\label{eq:gap}
+       \rho_{\min}=0\qquad\text{or}\qquad
+       \rho_{\min}\ge\gamma,\qquad
+       \gamma=\frac{1}{D\,4^{\,n+1}} .
+\end{equation}
+With \(\bits(D)=1+\lfloor\log_2D\rfloor\), choose
+\begin{equation}\label{eq:depth}
+       r=\bits(D)+2(n+1),\qquad \varepsilon=2^{-r-1}<\gamma .
+\end{equation}
+The margin \(\delta\) stays fixed while we allow an error of at most
+\(\varepsilon\) in each average. Since \(\varepsilon<\gamma\), any branch that
+passes these relaxed tests attains zero slack.
+
+\section{Eliminating the averages}
+
+We can now replace the average in each chance row by a circuit of depth
+determined by~\eqref{eq:depth}. The circuit keeps the average between two
+outputs whose separation we can bound after each round. We use the upper
+output in the inequality.
+
+The layers below are a recentered form of a min/max construction of Bezem,
+Nieuwenhuis, and Rodr\'iguez-Carbonell~\cite[\S3]{bnr}. In the formulation of
+Allamigeon, Benchimol, Gaubert, and Joswig, subtracting the common stage translation
+\(1-2^{-j-1}\) from the two outputs gives the shifts below. Those authors also
+use upper inequalities and monotonicity to recover the greatest gate values at fixed
+inputs~\cite[Prop.~20 and eq.~(30)]{abgj}.
+
+For \(u,v\in[0,1]\), put \(U_0=\max(u,v)\), \(L_0=\min(u,v)\). At round
+\(j=1,\ldots,r\), set
+\[
+ \begin{aligned}
+  U_j&=\max\{U_{j-1}-2^{-j-1},\,L_{j-1}+2^{-j-1}\},\\
+  L_j&=\min\{U_{j-1}-2^{-j-1},\,L_{j-1}+2^{-j-1}\}.
+ \end{aligned}
+\]
+The sum of the two outputs stays \(u+v\). Their gap \(d_j=U_j-L_j\) obeys
+\(d_j=|d_{j-1}-2^{-j}|\). Starting with \(d_0\le1\), the bound
+\(0\le d_{j-1}\le2\cdot 2^{-j}\) implies \(d_j\le2^{-j}\). The upper bound
+halves at every round even when the actual gap increases, as it does in the
+first round for two equal inputs. Writing \(m=(u+v)/2\) yields
+\begin{equation}\label{eq:circuit}
+                 m\le U_r(u,v)=m+d_r/2\le m+\varepsilon .
+\end{equation}
+Both gates at a round read the same two earlier outputs. With shared wires the
+circuit has \(2+2r\) gates.
+
+Replace each average row \(y_i\le(y_j+y_k)/2\) of \(\sys_\delta\) by a fresh
+copy of this circuit on \(y_j,y_k\). For each gate make a variable \(z\).
+If its two translated input terms are \(p,q\), encode an upper gate with the
+single row \(z\le\max(p,q)\), and a lower gate with the two rows \(z\le p\)
+and \(z\le q\). Impose \(y_i\le z_{U_r}\), where \(z_{U_r}\) is the final upper
+gate variable in this copy. Denote the resulting system by \(\compiled_r\).
+
+The compiled rows allow a source label to exceed the exact average at its state.
+To recover an exact witness, we may have to change the source labels together.
+The common error bound lets us choose new labels on the same branch.
+
+\begin{proposition}\label{prop:compile}
+The tightened exact system \(\sys_\delta\) and the compiled system
+\(\compiled_r\) are feasible in exactly the same instances.
+\end{proposition}
+
+\begin{proof}
+\emph{Every exact witness extends with its source labels unchanged.}
+Let \(y\) satisfy \(\sys_\delta\). Evaluate every gate exactly at the inputs
+given by \(y\), and assign the result to its gate variable. This satisfies all
+upper and lower gate rows. For each replaced row, exact feasibility and
+the left side of~\eqref{eq:circuit} give
+\[
+                y_i\ \le\ \frac{y_j+y_k}{2}\ \le\ U_r(y_j,y_k)=z_{U_r}.
+\]
+Thus this same \(y\), together with its evaluated gates, satisfies \(\compiled_r\).
+
+\emph{Every compiled witness selects a branch with an exact witness.}
+Let \((\hat y,\hat z)\) satisfy \(\compiled_r\), and fix its source labels \(\hat y\).
+In each circuit the gate rows bound every assigned gate value above by its exact
+evaluation on these inputs. Indeed, this holds for the first gates, and each translated
+maximum or minimum is monotone on all real operands. Induction in circuit order
+therefore gives \(\hat z_{U_r}\le U_r(\hat y_j,\hat y_k)\), even if some auxiliary
+labels lie outside \([0,1]\). Dependencies between source states may be cyclic,
+since the induction evaluates only the gates within a single copy at fixed \(\hat y\).
+It follows from~\eqref{eq:circuit} that every original average row holds at
+\(\hat y\) with slack \(\varepsilon\).
+
+At \(\hat y\), choose an attaining term in each \emph{original} right-hand maximum.
+All selected player rows, box bounds, and the tightened threshold hold exactly.
+The resulting branch thus admits \((\hat y,\varepsilon)\), so
+\(0\le\rho_{\min}\le\varepsilon<\gamma\). By~\eqref{eq:gap} its minimum is
+zero, and it is attained. An optimal vertex \((y^*,0)\) supplies exact rational
+source labels on this branch. Its coordinates \(y^*\) may differ from \(\hat y\).
+\end{proof}
+
+\subsection{Equality on a nonterminating example}
+
+Let \(S\) be a fair coin with successors \(T,Z\), and \(T\) a fair coin with
+successors \(S,\Win\). Let \(Z\) have only a move to itself. A two-step excursion
+from \(S\) reaches \(\Win\) with probability \(1/4\) and returns to \(S\) with
+probability \(1/4\). Thus \(v_S=1/4+v_S/4\), and
+\((v_S,v_T,v_Z)=(1/3,2/3,0)\). The vector \((1,1,1)\) is also a Bellman
+fixed point, since the equality at \(Z\) allows any label there.
+
+At \(s=S,\ t=1/3\), we have \(D=243\) and require
+\(y_S\ge 2/3+1/243=163/243\). The relaxed chance rows interact through the
+return edge. Using \(y_Z\le1\) and \(y_{\Win}=0\) gives
+\[
+ y_T\le y_S/2+\rho,\qquad
+ y_S\le (y_T+1)/2+\rho
+      \le y_S/4+1/2+3\rho/2 .
+\]
+Consequently \(y_S\le2/3+2\rho\). Reaching the imposed threshold requires
+\(\rho\ge1/486\), and \((y_S,y_T,y_Z)=(163/243,82/243,1)\) attains it.
+The input bound gives \(\gamma=1/62{,}208\). The chosen \(r=16\) gives
+\(\varepsilon=1/131{,}072\), too small for the two approximate rows together
+to create a witness. The strict certificate fails, as equality in the source
+requires.
+
+At the same depth, inputs \(1,1/3\) give \(d_j=2^{-j}/3\) for \(j\ge1\) by the
+gap recurrence, so \(U_{16}(1,1/3)=2/3+1/393{,}216\). If the margin is reduced
+to \(\delta'=1/786{,}432\), the labels \((2/3+\delta',1/3,1)\) meet the weakened
+threshold and pass both approximate rows. The upper output for \(S\) exceeds
+\(y_S\), and the upper output for \(T\) is at least \(y_S/2>1/3\). This would
+give a false certificate of \(v_S<1/3\) with the circuit depth unchanged.
+
+\section{One deterministic game for all the inequalities}
+\label{sec:arena}
+
+The offsets in the compiled rows will become edge weights. First we give
+every label a common reference. Introduce an origin variable \(o\) and express
+each value as a difference from \(h_o\). Before scaling, write \(y_i=h_i-h_o\).
+The source box gives the rows
+\(h_o\le h_i\) and \(h_i\le h_o+1\). Pin separate terminal variables to
+\(h_{\Win}=h_o\) and \(h_{\Lose}=h_o+1\), expressing each equality by both
+opposite difference inequalities. The tightened threshold becomes
+\(h_o\le h_s-\theta\). Represent each gate label in the same way, as \(h_z-h_o\).
+Adding the same real number to every \(h\) preserves the rows, so we can normalize
+\(h_o=0\).
+
+Multiply all variables and offsets by \(Q=D\,2^{r+1}\). It clears the threshold
+and every gate offset. In the example \(Q=31{,}850{,}496\). The result is a finite
+system of weighted maximum inequalities
+\begin{equation}\label{eq:rows}
+           h_i\le \max_{p\in J_a}\bigl(h_{j(a,p)}+c_{a,p}\bigr)
+           \qquad\text{for every row \(a\) with left side \(i\)},
+\end{equation}
+where \(J_a\) is the nonempty list of terms and \(c_{a,p}\) is an integer.
+Here \(h\) denotes the scaled coordinates. A one-term maximum gives a difference
+inequality. These are weighted versions of max-atoms. Feasibility over the reals
+and the integers now agree. Flooring a real solution coordinatewise preserves
+every row, because flooring commutes with a finite maximum and with integer
+translation. From an integer solution, subtract \(h_o\) from all coordinates and
+divide by \(Q\) to recover a real solution of \(\compiled_r\).
+
+Every row of~\eqref{eq:rows} must hold, and a single term can justify the
+inequality in any one row. At a variable, Min picks a row with that left side.
+Max sees the row and picks a term.
+We use the max-atom game construction of Atserias and Maneva with an additional
+start vertex~\cite[\S\S2--4]{am}. In the resulting game \(K\), Min owns a vertex
+for every variable. For each row \(a\) with left side \(i\), add a zero-weight
+edge from \(i\) to a new vertex \(a\) owned by Max. For each term \(p\in J_a\),
+add an edge from \(a\) to \(j(a,p)\) of weight \(c_{a,p}\). Terms with the same
+destination may be kept as parallel edges or merged by keeping the largest
+offset in that row. Give a variable with no row the tautological row \(h_i\le h_i\).
+A fresh Min vertex \(s_0\) has a zero-weight edge to every variable, including the
+origin. All vertices have outgoing moves.
+
+For example, consider the two rows at \(A\) in the following table.
+\[
+\begin{array}{@{}lll@{}}
+\toprule
+\text{Min's row at \(A\)} & \text{Required inequality} & \text{Max's moves and weights}\\
+\midrule
+a_1 & h_A\le\max(h_B-1,h_C+1) & B\ (-1),\ C\ (+1)\\
+a_2 & h_A\le h_C+2            & C\ (+2)\\
+\bottomrule
+\end{array}
+\]
+Take \(h_A=5\), \(h_B=6\), and \(h_C=3\). The same labels satisfy both rows,
+and Min's choice on a visit to \(A\) determines which reply works. In \(a_1\),
+the term for \(B\) has value \(5\) and the term for \(C\) has value \(4\), so
+only \(B\) works. In \(a_2\), the term for \(C\) has value \(5\), so \(C\) works.
+
+\begin{lemma}\label{lem:game}
+System~\eqref{eq:rows} has an integer solution if and only if \(\val_K(s_0)\ge0\).
+\end{lemma}
+
+\begin{proof}
+Given a solution \(h\), choose at each Max row vertex a term whose value is at
+least the row's left side. Each two-edge move from variable \(i\) through that row
+to \(j\) pays \(c\ge h_i-h_j\). Summing over any number of complete moves
+telescopes, giving a lower bound of \(\min_i h_i-\max_i h_i\) on the total weight.
+The initial edge and the first edge of any unfinished move have weight zero.
+Dividing by the number of edges proves that Max guarantees a nonnegative lower
+limiting average.
+
+Conversely, suppose \(\val_K(s_0)\ge0\) and fix an optimal positional Max strategy.
+Its selected term at each row leaves a graph in which any negative cycle would
+let Min start at a variable on that cycle and repeat it, contradicting the guarantee.
+Contract each variable--row--variable move to a single edge \(i\to j\) of its selected weight
+\(c\). Add a new sink with a zero-weight edge from every variable to the sink.
+Since every variable can reach the sink and the contracted graph has no negative
+cycle, the shortest distances \(h_i\) to the sink are finite integers. Following
+the edge \(i\to j\) and then a shortest path gives \(h_i\le c+h_j\). Thus the
+chosen term satisfies its row, for every row. These distances witness the converse
+after the strategy has been fixed.
+\end{proof}
+
+\section{Threshold reversal and bit complexity}
+
+Combining Lemma~\ref{lem:reach}, \eqref{eq:tighten}, Proposition~\ref{prop:compile},
+and Lemma~\ref{lem:game} gives
+\[
+                 \val_K(s_0)\ge 0 \quad\Longleftrightarrow\quad v_s<t .
+\]
+A zero value in \(K\) already certifies the strict inequality, so it must
+become negative in \(H\). Put \(N=|V(K)|\). Every negative value that can
+occur in \(K\) is at most \(-1/N\), as the cycle argument below shows.
+This gap leaves room for the shift by one after reversing the sign and
+multiplying by \(N\). Make \(H\) on the same graph with all owners swapped
+and with each weight \(w\) replaced by \(-Nw-1\).
+
+Fix a pair of positional strategies \((\sigma,\tau)\) for Max and Min in \(K\).
+The play from \(s_0\) eventually repeats a cycle of length at most \(N\), so it has
+an ordinary limiting average \(p(\sigma,\tau)\). Using the corresponding pair
+\((\tau,\sigma)\) in \(H\) gives the same edge sequence and average
+\(-Np(\sigma,\tau)-1\). Positional determinacy in both games~\cite{em,gkk} lets
+us calculate the value on these finite strategy sets, giving
+\[
+ \val_H(s_0)=\max_{\tau}\min_{\sigma}\bigl(-Np(\sigma,\tau)-1\bigr)
+            =-N\min_{\tau}\max_{\sigma}p(\sigma,\tau)-1
+            =-N\val_K(s_0)-1 .
+\]
+An optimal positional pair realizes \(\val_K(s_0)\) as a cycle mean. If this value
+is negative, its cycle has integer total weight at most \(-1\), so
+\(\val_K(s_0)\le -1/N\). Thus \(\val_H(s_0)\ge0\) exactly when
+\(\val_K(s_0)<0\). In particular, \(\val_K(s_0)=0\) maps to \(-1\).
+Equality \(v_s=t\) rules out the strict certificate, gives \(\val_K(s_0)<0\),
+and therefore gives a yes answer in \(H\).
+
+For the size bound, let \(m\) be the number of listed successor occurrences
+and \(c\) the number of chance states of \(G\). The integer \(D=b3^{n+1}\)
+has \(O(n+\log_2(b+1))\) bits, so \(r\) and \(\bits(Q)=\bits(D)+r+1\) are
+also \(O(n+\log_2(b+1))\). Each chance row contributes \(2+2r\) gates of
+constant size. The other rows and their terms use \(O(n+m)\) entries, including
+the box bounds, and the fresh start adds one edge per variable. Hence \(H\) has
+\(O(n+m+cr)\) vertices and edges combined. Before reweighting, all integer
+offsets have magnitude at most \(Q\), since \(1/b\le t\le1\) implies
+\(0\le\theta\le1\) and every gate shift has magnitude at most one. Each final
+weight has magnitude at most \(NQ+1\), and each vertex index uses
+\(O(\log_2(N+1))\) bits. The encoder writes the game directly from the
+input. The linear programs justify the circuit depth, and the shortest paths in
+Lemma~\ref{lem:game} recover labels once a strategy in \(K\) has been fixed.
+Computing the parameters by binary arithmetic, writing
+the explicit rows and edges, and transforming the weights all take polynomial
+time in the full input bit length. This completes the proof of
+Theorem~\ref{thm:main}.
+
+\section*{Computational record}
+
+The Python implementation of the reduction, called H4 in the repository, compares
+exact rational source decisions with strategy certificates on the emitted graphs.
+The replay covered 3,634 game/threshold cases, including the labeled binary games
+with one or two nonterminal states and unordered successor pairs. The source answers
+agreed with the target certificates and with a separate check of each graph alone
+using the Z3 solver. On the equality example the Python implementation,
+which retains redundant terminal box bounds, emitted a 193-vertex target and a
+verified yes certificate. These are checks of the implementation.
+The code, verifier, and report are available at a fixed revision~\cite{artifact}.
+
+At the cited artifact revision \texttt{b72f00b1}, the companion Lean development
+checked the strict dual certificate for the supremum of the Bellman iterates,
+the bounded rational compiler, the relation between integer
+potentials and selected graph cycles, and the sign calculation for positional
+cycles with a supplied saddle point. The accompanying written proof supplied
+the probabilistic identification of the Bellman limit, the passage from real
+strict witnesses to rational certificates, positional determinacy for game
+payoffs, and the full encoding and bit-time argument. The Lean compiler used a
+general determinant bound and the Python compiler used the game-specific
+precision above. The formal correspondence between those implementations
+remained open at that revision~\cite{artifact}.
+
+\paragraph{Contributions and use of AI.}
+Robert Thomas Collins framed the research question as an exact
+threshold-preserving reduction from simple stochastic games to deterministic
+mean-payoff games. He directed the investigation and review and worked through
+the proof to refine its presentation. OpenAI Codex investigated prior work,
+developed the proof, implemented the Python compiler and replay, formalized the
+reduction in Lean, and drafted and revised the manuscript. Independent specialist review of the full
+reduction remains pending.
+
+\clearpage
+\begin{thebibliography}{99}
+
+\bibitem{abgj}
+X. Allamigeon, P. Benchimol, S. Gaubert, and M. Joswig.
+What tropical geometry tells us about the complexity of linear programming.
+\emph{SIAM Review} 63 (2021), 123--164.
+\href{https://www.cmap.polytechnique.fr/~gaubert/PAPERS/sigest-paper.pdf\#page=27}{Proposition~20 and equation~(30)}.
+
+\bibitem{am}
+A. Atserias and E. Maneva.
+Mean-payoff games and the max-atom problem.
+Technical report, version of 3 February 2010.
+\href{https://www.cs.upc.edu/~atserias/papers/mean-payoff-games-max-atom/mpma.pdf}{Authors' manuscript}.
+
+\bibitem{bnr}
+M. Bezem, R. Nieuwenhuis, and E. Rodr\'iguez-Carbonell.
+Exponential behaviour of the Butkovi\v{c}--Zimmermann algorithm for solving two-sided
+linear systems in max-algebra.
+\emph{Discrete Applied Mathematics} 156 (2008), 3506--3509.
+\href{https://www.cs.upc.edu/~roberto/papers/dam08.pdf\#page=4}{Construction in Section~3}.
+
+\bibitem{bls}
+M. Bodirsky, G. Loho, and M. Skomra.
+Reducing stochastic games to semidefinite programming.
+In \emph{52nd International Colloquium on Automata, Languages, and Programming},
+LIPIcs 334 (2025), article 145.
+\href{https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ICALP.2025.145}{Conference paper}.
+
+\bibitem{condon}
+A. Condon. The complexity of stochastic games.
+\emph{Information and Computation} 96 (1992), 203--224.
+\href{https://doi.org/10.1016/0890-5401(92)90048-K}{Journal article}.
+
+\bibitem{em}
+A. Ehrenfeucht and J. Mycielski. Positional strategies for mean payoff games.
+\emph{International Journal of Game Theory} 8 (1979), 109--113.
+\href{https://doi.org/10.1007/BF01768705}{Journal article}.
+
+\bibitem{gkk}
+V. A. Gurvich, A. V. Karzanov, and L. G. Khachiyan.
+Cyclic games and an algorithm to find minimax cycle means in directed graphs.
+\emph{USSR Computational Mathematics and Mathematical Physics} 28(5) (1988),
+85--91. \href{https://doi.org/10.1016/0041-5553(88)90012-2}{Journal article}.
+
+\bibitem{parys}
+P. Parys. Quasipolynomial algorithms for mean-payoff and simple stochastic games.
+University of Warsaw, Automata Theory Seminar, 28 October 2026.
+\href{https://mimuw.edu.pl/en/seminars/talk/quasipolynomial-algorithms-for-mean-payoff-and-simple-stochastic-games/}{Seminar abstract}.
+
+\bibitem{zp}
+U. Zwick and M. Paterson. The complexity of mean payoff games on graphs.
+\emph{Theoretical Computer Science} 158 (1996), 343--359.
+\href{https://doi.org/10.1016/0304-3975(95)00188-3}{Journal article}.
+
+\bibitem{artifact}
+H4 project. Threshold reduction, exact replay, and Lean modules, 2026.
+Repository revision \texttt{b72f00b1}.
+\href{https://github.com/robbiemu/bayesian-simple-security-games/blob/b72f00b1bb9aebad757f5260a60b3278b2879f0c/notes/H4-ssg-to-mean-payoff.md}{Proof and replay report},
+\href{https://github.com/robbiemu/bayesian-simple-security-games/blob/b72f00b1bb9aebad757f5260a60b3278b2879f0c/experiments/h4_ssg_to_mpg_replay.py}{implementation and verifier},
+\href{https://github.com/robbiemu/bayesian-simple-security-games/blob/b72f00b1bb9aebad757f5260a60b3278b2879f0c/lean/README.md}{formalization scope}.
+
+\end{thebibliography}
+\end{document}
