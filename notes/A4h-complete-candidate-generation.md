@@ -1,6 +1,8 @@
 # A4h Complete candidate generation
 
-An efficient complete list generator would resolve the remaining exact market problem. A4g searches a product of coordinate lists in time polynomial in their total length, so separate lists containing every coordinate of the minimum price would already suffice. A list of regularized affine regions containing the true solution would suffice as well. This investigation gives complete lists under additional structure and lower bounds for several restricted generators. The general polynomial bit-time generator remains open. [Price-list and region finishers](A4g-budgeted-support-search.md)
+Kintali’s algorithm and the A4i reduction recover the exact minimum-price vector at the supplied capacities in polynomial bit time. That vector is a complete singleton list. [Supplied-capacity result](A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities)
+
+This note studies direct candidate generation from the market’s own structure. A4g searches a product of coordinate lists in time polynomial in their total length, so separate lists containing the corresponding coordinates of the minimum-price vector suffice. A list that includes an affine region containing the regularized solution also suffices. The results below give complete lists under additional structure and lower bounds for several restricted generators. A general direct generator that runs in polynomial bit time remains open. [Price-list and region finishers](A4g-budgeted-support-search.md)
 
 ## Polynomially many queries are possible
 

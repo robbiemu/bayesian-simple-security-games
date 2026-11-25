@@ -15,7 +15,7 @@ Parent question · [R · Exact equilibrium in polynomial time](R.md)
 - [A1 · Use payoff thresholds and capacitated transport](A1.md) · 🟩 Result for the stated scope
 - [A2 · Solve the common-intercept class by logarithmic price changes](A2.md) · 🟩 Result for the stated scope
 - [A3 · Extend the log-price algorithm to arbitrary common offsets](A3.md) · 🟩 Result for the stated scope
-- [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) · 🟦 Open
+- [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) · 🟩 Result for the stated scope
 
 ## Where the direction came from
 

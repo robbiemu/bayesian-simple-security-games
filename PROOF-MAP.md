@@ -10,7 +10,11 @@ A result can appear in both diagrams when its market theorem supplies a game sol
 
 ```mermaid
 flowchart TB
-    R(["OPEN<br/>Exact Bayes–Nash in polynomial time?"])
+    R(["Conitzer’s question<br/>Exact Bayes–Nash in polynomial time?"])
+    R --> K["Kintali · November preprint<br/>Exact polynomial-bit-time algorithm"]
+    K --> KL["Lean translation<br/>Executable exactness verified"]
+    KL --> KW["Polynomial binary word cost verified<br/>Public finite-machine refinement open"]
+    K --> KM["Kintali + A4i<br/>Exact polynomial-bit-time market clearing"]
     A["A1 · Equilibrium certificate<br/>Coverage thresholds + transport"]
 
     R --> A
@@ -39,7 +43,7 @@ flowchart TB
     B --> E["Final budget on the hard family<br/>Assignment + LP · Polynomial time"]
 
     A -.-> O["L4b · Game to exact market clearing<br/>Polynomially many polynomial-bit calls"]
-    O --> AS["A4 · General minimum-price search<br/>OPEN"]
+    O --> AS["A4 · Direct polynomial minimum-price search"]
     AS --> RV["A4i · Market to one exact game call<br/>One defender resource"]
     RV -.-> R
 
@@ -47,10 +51,12 @@ flowchart TB
     classDef settled fill:#dcf5e7,stroke:#38805c,color:#143e2a
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
-    class R,A,P,S,L,C,J,B,O,AS,HW,BL proof
-    class F,SP,LP,CP,N,E,JE,IB,RV settled
-    class U,W,PL cap
+    class R,A,P,S,L,C,J,B,O,AS,HW,BL,KL proof
+    class F,SP,LP,CP,N,E,JE,IB,RV,K,KM settled
+    class U,W,PL,KW cap
 ```
+
+[Kintali’s short preprint](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [Lean proof status](lean/Kintali/README.md)
 
 [L1a · Threshold drops](investigation/L1a.md) · [L2a · Tight trajectory length](investigation/L2a.md) · [L2b · Intermediate arithmetic](investigation/L2b.md)
 
@@ -70,7 +76,7 @@ A4c replaces the minimum-price oracle with an oracle for any clearing equilibriu
 
 ```mermaid
 flowchart TB
-    AS(["OPEN<br/>Find exact minimum prices in polynomial time"])
+    AS(["Direct market search<br/>Find exact minimum prices in polynomial time"])
     AS --> V["Given candidate prices<br/>Binary-encoded fractional masses and capacities<br/>Strictly decreasing affine utilities"]
     V --> VC["Candidate verification is polynomial<br/>One rational flow test + reverse graph search"]
 
@@ -80,7 +86,7 @@ flowchart TB
     PL --> NH["L4 · Newton solve-count guarantee<br/>Exponential handicap after regularization"]
     PL --> AF["A4f · Smaller node formulation<br/>Global polynomial handicap open"]
     PL --> AL["A4g · All-ones Lemke path<br/>n^Ω(log n) affine pieces"]
-    AS --> UM["A4i1 · OPEN<br/>Minimum prices of a supplied unit market"]
+    AS --> UM["A4i1 · Direct unit-market search<br/>Minimum prices at supplied unit quantities"]
     UM <--> UG["A4i · Exact equilibrium search<br/>Uniform priors and equal gains"]
     UM --> UD["A4i1a · Degree two on either side<br/>Exact polynomial-time solver"]
     UM --> UA["A4i1b · Deletion matchings<br/>Polynomial with logarithmically many slope exceptions"]
@@ -95,10 +101,11 @@ flowchart TB
     AG --> AH["A4h · Generate complete price lists or regions"]
     AH --> AB["Bounded-size blocks · at most two articulation goods<br/>or bounded buyers and goods per block<br/>Complete polynomial lists"]
     AH --> AO["Small aggregate slope corrections or approximate common offsets<br/>Exact polynomial-time solvers"]
-    AH --> AQ["General markets<br/>Polynomial number of region queries"]
+    AH --> AQ["Direct search on general markets<br/>Polynomial number of region queries"]
     AH --> AX["Complete boundary tables and load hulls<br/>Exponential size"]
     AX --> AT["A4h4 · Count price plateaus or load drops<br/>NP-hard even with unit slopes"]
     AH --> AJ["A4h5 · Use supplied capacities"]
+    AJ --> AK["A4i + Kintali<br/>Exact singleton in polynomial time"]
     AJ --> ASB["Clip branch loads on bounded-size blocks<br/>Polynomial with bounded usable quantity range"]
     AJ --> ASC["Query loads on a near-factorized core<br/>Exact polynomial solver with conditional branch solvers"]
     AJ --> AJT["A4h6 · Safe alternating price jumps<br/>Finite ascent · superpolynomial general path count"]
@@ -140,7 +147,7 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG,AHC proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,US,UD3 settled
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,US,UD3,AK settled
     class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB,A4MQ,A4MF,A4MC cap
 ```
 

@@ -4,10 +4,10 @@
       "id": "R",
       "parent": null,
       "title": "Exact equilibrium in polynomial time",
-      "state": "open",
-      "summary": "The unrestricted question asks for an exact polynomial-time algorithm on binary rational input.",
-      "source": "README.md",
-      "next": "Give such an algorithm for every explicitly specified instance, or establish an appropriate general complexity barrier."
+      "state": "partial",
+      "summary": "Shiva Kintali's November 24, 2026 preprint presents an exact polynomial-time algorithm on binary rational input. Lean verifies correctness of an executable solver following its sweep and quote search.",
+      "source": "lean/Kintali/README.md",
+      "next": "Complete the runtime refinement to the finite machine required by the public Lean statement."
     },
     {
       "id": "L",
@@ -222,10 +222,10 @@
       "id": "A4",
       "parent": "A",
       "title": "Solve the binary-mass minimum-price market with arbitrary slopes",
-      "state": "open",
-      "summary": "General binary-mass market search remains open. A proposed minimum price can be verified efficiently.",
+      "state": "scoped",
+      "summary": "A4i reduces general minimum-price search to one game equilibrium. Kintali's algorithm gives a polynomial-bit-time solver via that reduction.",
       "source": "notes/A4-minimum-price-markets.md",
-      "next": "Find a polynomial-bit-time algorithm returning any clearing equilibrium for arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover the minimum prices."
+      "next": "Study direct market algorithms with arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover minimum prices from any clearing oracle."
     },
     {
       "id": "A4a",
@@ -358,9 +358,9 @@
       "parent": "A4",
       "title": "Generate complete candidate lists before the Hall search",
       "state": "open",
-      "summary": "Polynomially many adaptive queries suffice in the abstract. Selecting the queries efficiently is open.",
+      "summary": "A4h5 obtains a singleton list via A4i and Kintali's algorithm. For direct affine-region search, polynomially many adaptive queries suffice in the abstract and selecting them efficiently remains open.",
       "source": "notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible",
-      "next": "Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market."
+      "next": "Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market."
     },
     {
       "id": "A4h1",
@@ -399,10 +399,9 @@
       "id": "A4h5",
       "parent": "A4h",
       "title": "Generate complete candidates using the supplied capacities",
-      "state": "open",
-      "summary": "Clipping and querying branch loads give capacity-specific polynomial solvers on restricted cores.",
-      "source": "notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices",
-      "next": "Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length.",
+      "state": "scoped",
+      "summary": "At supplied capacities, one call to Kintali's algorithm on the A4i game returns the exact minimum-price vector as a singleton candidate list in polynomial bit time.",
+      "source": "notes/A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities",
       "issue": 1
     },
     {
@@ -460,7 +459,7 @@
       "state": "open",
       "summary": "Each buyer has unit mass and each good has unit capacity. Every offer can have its own positive rational slope.",
       "source": "notes/A4i-market-to-game.md#open-unit-market-search",
-      "next": "Find a polynomial-bit-time solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem."
+      "next": "Find a direct polynomial-bit-time market solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem."
     },
     {
       "id": "H",

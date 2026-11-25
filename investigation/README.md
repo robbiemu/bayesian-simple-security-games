@@ -9,12 +9,10 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds. · [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3)
 - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis. · [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4)
 - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
-- [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) — Find a polynomial-bit-time algorithm returning any clearing equilibrium for arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover the minimum prices.
 - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule. · [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
-- [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
-- [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Find a polynomial-bit-time solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem.
+- [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market.
+- [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Find a direct polynomial-bit-time market solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem.
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
 - [2cda0f31-ecad-4bb0-b12e-b040dafa66cd · Independently check the projected-price argument for the October auction](2cda0f31-ecad-4bb0-b12e-b040dafa66cd.md) — Check whether projection from transaction prices to good prices preserves the required Hall inequality throughout every auction step, and whether the piece count implies the stated iteration lower bound. Give a proof or identify a failing step.
@@ -22,6 +20,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Partial results with open work
 
+- [R · Exact equilibrium in polynomial time](R.md) — Complete the runtime refinement to the finite machine required by the public Lean statement.
 - [L4 · Compare the Newton bound with the continuation landscape](L4.md) — Use a general polynomial-time clearing method to make the threshold recovery unconditional.
 - [B3 · Bound progress with overlapping types](B3.md) — Find a tighter worst-case bound or a broader tractable class with a stated structural assumption.
 - [B3d · Compose groups that share targets](B3d.md) — Determine which budget and flow relations compose over a tree of small separators.
@@ -37,7 +36,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Full tree
 
-- [R · Exact equilibrium in polynomial time](R.md) · 🟦 Open
+- [R · Exact equilibrium in polynomial time](R.md) · 🟨 Partial result
   - [L · Published results and algorithm](L.md) · Background
     - [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md) · 🟩 Result for the stated scope
       - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟦 Open
@@ -64,7 +63,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
     - [A1 · Use payoff thresholds and capacitated transport](A1.md) · 🟩 Result for the stated scope
     - [A2 · Solve the common-intercept class by logarithmic price changes](A2.md) · 🟩 Result for the stated scope
     - [A3 · Extend the log-price algorithm to arbitrary common offsets](A3.md) · 🟩 Result for the stated scope
-    - [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) · 🟦 Open
+    - [A4 · Solve the binary-mass minimum-price market with arbitrary slopes](A4.md) · 🟩 Result for the stated scope
       - [A4a · Test contraction near factorized slopes](A4a.md) · 🟩 Result for the stated scope
       - [A4b · Seek direct search through Hall inequalities](A4b.md) · 🟩 Result for the stated scope
       - [A4c · Reduce minimum-price search to any clearing equilibrium](A4c.md) · 🟩 Result for the stated scope
@@ -86,7 +85,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) · 🟩 Result for the stated scope
         - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) · 🟨 Partial result
         - [A4h4 · Count capacity-price intervals and boundary-load drops](A4h4.md) · 🟩 Result for the stated scope
-        - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open
+        - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟩 Result for the stated scope
         - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
         - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
         - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result

@@ -6,7 +6,7 @@ Blue shows open questions, amber shows partial bounds, and green shows results f
 
 ```mermaid
 flowchart TD
-  n0["R"]:::open
+  n0["R"]:::partial
   n1["L"]:::background
   n0 --> n1
   n2["L1"]:::scoped
@@ -57,7 +57,7 @@ flowchart TD
   n22 --> n24
   n25["A3"]:::scoped
   n22 --> n25
-  n26["A4"]:::open
+  n26["A4"]:::scoped
   n22 --> n26
   n27["A4a"]:::scoped
   n26 --> n27
@@ -99,7 +99,7 @@ flowchart TD
   n42 --> n45
   n46["A4h4"]:::scoped
   n42 --> n46
-  n47["A4h5"]:::open
+  n47["A4h5"]:::scoped
   n42 --> n47
   n48["A4h6"]:::partial
   n42 --> n48

@@ -1,10 +1,22 @@
 # Bayesian simple security games
 
-The research question is whether an exact Bayes–Nash equilibrium can be computed in polynomial time when targets, attacker types, payoffs, and the type distribution are explicitly given. [Conitzer, arXiv:2610.08796](https://arxiv.org/pdf/2610.08796)
+Vincent Conitzer asked whether an exact Bayes–Nash equilibrium can be computed in polynomial time when targets, attacker types, payoffs, and the type distribution are explicitly given. [Conitzer’s open problem](https://arxiv.org/abs/2610.08796)
 
-**The general polynomial-time question is open.** Two main lines organize this investigation. **L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps could be skipped. **A4** seeks a polynomial-time algorithm for exact market clearing that would give an equilibrium at the requested budget.
+## Kintali’s polynomial-time algorithm
 
-[**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Exact market clearing**](#open-a4-market-questions) · [All open questions](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
+**Shiva Kintali’s November 24, 2026 preprint presents a deterministic polynomial-bit-time algorithm for Conitzer’s full problem.** It uses a stable-allocation sweep at the supplied budget, weighted quantile selection of market quotes, and exact recovery by rational linear programming. The nine-page proof is the source for this repository’s Lean formalization. [Short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [Kintali’s papers and other versions](https://shivakintali.github.io/)
+
+**Lean verifies that the executable solver returns an exact equilibrium for every valid rational input**, including the public bitstring encoding. It verifies polynomial work in the project’s binary word-cost model. The remaining formalization is the step bound for the public finite-machine statement. Applying the A4i reduction to Kintali’s theorem also gives polynomial-time exact affine-market clearing and minimum-price recovery. [Lean proof status](lean/Kintali/README.md) · [A4i reverse reduction](notes/A4i-market-to-game.md)
+
+Kintali’s result and the checked Lean development conclude this repository’s main investigation.
+
+The companion manuscript presents the stability argument, exact recovery, and verification of the constructive Lean variant. [Read the manuscript (PDF)](papers/kintali-lean/kintali-lean.pdf) · [Source and verification record](papers/kintali-lean)
+
+The standalone Python implementation reads rational game data and emits an exact equilibrium and a sparse defender lottery. Its replay checks the Python and Lean outputs against the same equilibrium conditions. [Python solver and replay](lean/Kintali/README.md#python-implementation)
+
+**L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps can be skipped. **A4** studies direct algorithms for exact market clearing and lower bounds for specific methods.
+
+[**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Direct market algorithms**](#open-a4-market-questions) · [Investigation archive](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
 
 ## Open L1/L2 continuation questions
 
@@ -18,11 +30,13 @@ L1 describes the published continuation. L2 gives an exact implementation. Some 
 
 ## Open A4 market questions
 
-Each buyer’s utility for a good is a decreasing affine function of its price. The slope can differ for every buyer and good. With masses, capacities and payoffs given as binary rationals, can we find any exact clearing equilibrium in polynomial bit time? A proposed vector of minimum prices can already be checked in polynomial time. [A4 question and certificate](investigation/A4.md)
+Each buyer’s utility for a good is a decreasing affine function of its price, with a slope specific to that buyer and good. Exact clearing with binary rational data and exact security-game equilibrium are polynomial-time Turing equivalent. A4i recovers the minimum prices from one equilibrium of a game with one defender resource. Applying Kintali’s algorithm to that game settles the polynomial-time existence question. [A4i reverse reduction](investigation/A4i.md) · [Kintali’s short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf)
 
-Exact affine-market clearing and exact security-game equilibrium are polynomial-time Turing equivalent. A4c recovers the original minimum from any clearing of an enlarged market. L4b recovers an exact game equilibrium at the requested budget with polynomially many clearing calls, and A4i recovers minimum market prices from one game with one defender resource. [A4c supply perturbation](investigation/A4c.md) · [L4b budget recovery](investigation/L4b.md) · [A4i reverse reduction](investigation/A4i.md)
+For one supplied market, the recovered minimum-price vector is the complete singleton candidate list requested in A4h5. [Supplied-capacity result](notes/A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities) · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 
-Unit-market search is also equivalent to exact equilibrium search in games with uniform priors and equal defender gains. Finding a polynomial-bit-time solver for arbitrary affine slopes at unit quantities remains open. [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets)
+The A4 branches below study direct market algorithms. A4c recovers the original minimum from any clearing of an enlarged market. L4b recovers an exact game equilibrium at the requested budget with polynomially many clearing calls. [A4 question and certificate](investigation/A4.md) · [A4c supply perturbation](investigation/A4c.md) · [L4b budget recovery](investigation/L4b.md)
+
+Unit-market search is also equivalent to exact equilibrium search in games with uniform priors and equal defender gains. A4i1 studies direct solvers for arbitrary affine slopes at unit quantities. [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Direct search question](investigation/A4i1.md)
 
 **Conditional November bounds.** Under the pinned OpenAI fixed-point preprint, A4m takes polynomial bit time on markets passing an alternating-path LP or with a logarithmic-size vertex cover. The latter also covers explicitly supplied games with logarithmically many targets or positive-prior types. The written proof audit found support for these two transfers. The public Lean comparator covers rational LP, with distinct hypotheses for its related fixed-point material. An inverse-polynomial strict gap in the frozen-map certificate also suffices by ordinary iteration. [Source audit and exact dependencies](notes/A4m-november-source-audit.md)
 
@@ -32,8 +46,8 @@ A4h9's projected Hall cut excludes a region of boundary quotes after a failed jo
 
 | Question | What would advance it | Join |
 | --- | --- | --- |
-| [A4i1 · Exact unit-market prices](investigation/A4i1.md) | Find the minimum prices of one supplied unit market with arbitrary affine slopes in polynomial bit time and recover a clearing assignment. | [A4i1 node](investigation/A4i1.md) |
-| [A4h · Complete candidate prices](investigation/A4h.md) | For one supplied capacity vector, generate polynomial-size lists in polynomial bit time. Each good’s list must contain its minimum price. | [A4h5 node](investigation/A4h5.md) · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1) |
+| [A4i1 · Direct unit-market solver](investigation/A4i1.md) | Give a direct market algorithm that computes minimum prices and a clearing assignment for one supplied unit market with arbitrary affine slopes in polynomial bit time. | [A4i1 node](investigation/A4i1.md) |
+| [A4h · Direct candidate-price search](investigation/A4h.md) | Find a polynomial-bit-time direct rule for choosing which affine region to query next. | [Candidate generation](investigation/A4h.md) |
 | [A4e · Reweighted covering LP](investigation/A4e.md) | Each iteration costs polynomial work. Prove a polynomial bound on the number of iterations or construct a family forcing a superpolynomial run for this rule. | [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2) |
 | [A4f · Complementarity formulation](investigation/A4f.md) | Find an equivalent formulation with polynomially bounded handicap, the parameter controlling the Newton iteration bound. Show that solving it and recovering an exact equilibrium take polynomial bit time. | [Contribute to A4f](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4f%5D+) |
 
@@ -47,7 +61,7 @@ Open the contribution form on any node to propose a question, post a competing a
 
 - **Superpolynomial continuation lower bound.** For certain games with $n$ targets and $n$ uniformly likely types, varying the defender budget to one forces $n^{\Omega(\log n)}$ distinct attack flows in a single fixed-threshold, fixed-total phase. The bound applies to the published continuation and to jumps that maximize coverage while holding one attack flow fixed. At budget one those same games can be solved directly by an assignment problem and a feasibility LP. [Lower bound and scope](notes/B3f-forced-flow-switches.md)
 
-- **General upper bound.** The October ARRIVAL preprint's Theorem 1.2 and A4m's vertex-cover elimination give an exact Bayes–Nash equilibrium in $2^{O(\sqrt{\min(n,k)}\log(2+L))}\mathrm{poly}(L)$ bit time, with $n$ targets, $k$ positive-prior types and binary input length $L$. For explicitly tabulated games this is at most $2^{O(L^{1/4}\log(2+L))}\mathrm{poly}(L)$. The proof covers weak payoff inequalities by rational perturbation and repair. [October block solver](https://arxiv.org/html/2610.28241v1#S1.Thmtheorem1.2) · [Market elimination and game bound](notes/A4m-discrete-contraction.md)
+- **Earlier subexponential upper bound.** The October ARRIVAL preprint's Theorem 1.2 and A4m's vertex-cover elimination give an exact Bayes–Nash equilibrium in $2^{O(\sqrt{\min(n,k)}\log(2+L))}\mathrm{poly}(L)$ bit time, with $n$ targets, $k$ positive-prior types and binary input length $L$. For explicitly tabulated games this is at most $2^{O(L^{1/4}\log(2+L))}\mathrm{poly}(L)$. The proof covers weak payoff inequalities by rational perturbation and repair. [October block solver](https://arxiv.org/html/2610.28241v1#S1.Thmtheorem1.2) · [Market elimination and game bound](notes/A4m-discrete-contraction.md)
 - **Continuation and enumeration bounds.** Each of these methods gives a $2^{O(\min(n,k)\log(nk+1))}\mathrm{poly}(L)$ bit bound. [Arrangement count](notes/B1-classify-run-lengths.md) · [Exact continuation](notes/L2-exact-arithmetic-audit.md)
 - **Tractable structure.** Polynomial time suffices when each connected component of the graph of potentially optimal choices has a bounded number of types. There may be arbitrarily many components sharing one defender budget. A different polynomial-time case allows arbitrary attacker-loss slopes when the uncovered utilities can be written $a_{it}=A_i+d_{it}c_t$ for type offsets $A_i$ and target offsets $c_t$. [Component composition](notes/B2-component-composition.md) · [Exact log-price algorithm](notes/A3-mixed-offsets.md)
 - **Prior partials.** The supplied collection already gives the fixed-type arrangement, the rank-one algorithm, the threshold ordering used in component composition, and the affine rent-division correspondence. The review records the evidence for its approximation argument and a zero-threshold endpoint correction for its rank-one algorithm. [Prior research collection](sources/prior-collection.md) · [Partial-results review](notes/L3-prior-partials.md)

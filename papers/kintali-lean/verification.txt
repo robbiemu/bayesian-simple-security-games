@@ -1,0 +1,491 @@
+Local verification for “A constructive Lean realization of Kintali’s exact equilibrium algorithm”
+25 November 2026
+
+Source and environment
+----------------------
+Software             75bc25c2ddfac1813064434a3165b3ddd1a1f63d
+Formal Conjectures   9bd16c570aed942e00ae000c7522dd42ebbb25eb
+Mathlib              fc4f59e577feb1a4956671bc04ac18aaaf8cd842
+Lean                 4.36.0, 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9
+Host                 arm64 macOS 27.2.1, 51,539,607,552 bytes of installed RAM (48 GiB)
+Python               3.9.6
+
+The software tree was exported from the Git revision. Before the fresh build,
+its lean/.lake directory contained only a link to the third-party packages.
+There was no project build output. Run the build and Lean replays from lean/.
+The paper’s appendix gives the commands for obtaining both Git repositories.
+
+Fresh project build
+-------------------
+$ env LEAN_NUM_THREADS=4 /usr/bin/time -p lake --no-cache --wfail build Kintali
+
+Exit 0. All 236 Kintali source modules and 34 local StochasticGames imports
+appear as newly built. The remaining Lake jobs include cached third-party
+dependencies. The complete Lake output is at the end of this file.
+Wall time was 269.78 seconds, including 160 seconds for BuilderParameters.
+The measured-solver theorem compiled. A separate single-file check overlapped
+part of this build. These times are observations from this machine.
+
+Isolated module checks
+----------------------
+These checks used the identical source file and already-built imports at
+the software revision above, with one Lean thread.
+
+$ /usr/bin/time -p lake env lean -j1 -M2800 Kintali/QuotaSweep/BuilderParameters.lean
+Exit 134 after 30.09 seconds. Lean reported a memory exception in the interpreter.
+The source prefix up to the final theorem (through line 75, followed by the
+namespace closing line) checked at the same cap with lean --stdin.
+
+$ /usr/bin/time -p lake env lean -j1 -M12000 Kintali/QuotaSweep/BuilderParameters.lean
+Exit 0. The whole module checked.
+real 177.00
+user 172.55
+sys 4.40
+
+Replays against the fresh build
+------------------------------
+$ lake env lean Replay/KintaliSearch.lean
+Exit 0. The search guards completed with no output.
+
+$ python3 -B Kintali/InputOutput/check_upstream.py ../../upstream.git
+Exit 0. The compatibility replay completed with no output. The argument is
+the local bare repository containing the Formal Conjectures commit above.
+
+Run the next command from the software root.
+$ python3 -B experiments/kintali_replay.py --systematic
+7 Python equilibrium and lottery fixtures passed. Repair and quote update checks passed.
+224 systematic Python checks passed.
+6 Lean binary fixture checks passed and 6 matched Python exactly.
+Exit 0.
+
+Axiom dependencies
+------------------
+$ lake env lean Replay/KintaliAxioms.lean
+'Kintali.Game.solve_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.solveBits_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.defenses_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.QuotaSweep.Book.budget_contact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.ExactRecovery.Expanded.full_pattern_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.ExactRecovery.Expanded.relaxed_or_omitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.Market.contact_eq_or_omitted_blocker' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.MarketTrial.prepare_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.ExactRecovery.repair_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.LinearProgramming.RationalInput.run_binary_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.QuoteSearch.DriverWork.search_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.QuotaSweep.RankRun.NativeComparison.keyLess_compiled' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Kintali.InputOutput.interior_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.CodecWork.solveRun_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.ContactSize.solveBits_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.MeasuredSolver.exact_output' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.MeasuredSolver.binary_work_polynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.LotteryWork.run_binary_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.InputOutput.LotteryWork.output_width' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.Machine.Delimiter.polyTime' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.Machine.exists_polyTime_bayesNash_of_runs' depends on axioms: [propext, Classical.choice, Quot.sound]
+Exit 0.
+
+$ lake env lean --stdin <<'LEAN'
+import Kintali.StableAllocation
+#print axioms Kintali.Market.slack_variation_le
+#print axioms Kintali.Market.signed_slack_change
+LEAN
+'Kintali.Market.slack_variation_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Kintali.Market.signed_slack_change' depends on axioms: [propext, Classical.choice, Quot.sound]
+Exit 0.
+
+Timings for the fractional fixture
+----------------------------------
+The timer ran after the build and replays, around each fresh subprocess.
+Each call includes launch, input, solution and captured output. Python emits
+the lottery and compact profile. The Lean adapter emits the compact binary
+profile. The parent prepares both inputs and validates the outputs outside
+the timed region. The script below takes the exported software root as
+its only argument, e.g. python3 -B time-mixed.py /path/to/bssg.
+
+mixed-affine canonical input: 387 bits; Python 3.9.6
+Python JSON seconds: 0.047403, 0.049879, 0.051706, 0.048641, 0.048342
+Python JSON median seconds: 0.048641
+Lean binary seconds: 83.238095
+
+Timing script
+-------------
+import json
+import statistics
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+repo = Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(repo / "experiments"))
+from kintali_replay import decode_strategy, encode_game, fixtures
+
+game, expected = next((game, want) for name, game, want in fixtures()
+                      if name == "mixed-affine")
+bits = encode_game(game)
+payload = json.dumps(dict(resources=1, prior=[1], intercept=[[0, "1/2"]],
+                          slope=[[2, 2]], gain=[2, 3])) + "\n"
+entries = [
+    ("Python JSON", repo, [sys.executable, "-B", "experiments/kintali_solver.py"], payload),
+    ("Lean binary", repo / "lean", ["lake", "env", "lean", "--run", "Replay/KintaliBinary.lean"],
+     bits + "\n"),
+]
+samples = {label: [] for label, *_ in entries}
+print(f"mixed-affine canonical input: {len(bits)} bits; Python {sys.version.split()[0]}", flush=True)
+for label, cwd, argv, data in entries:
+    for _ in range(5 if label == "Python JSON" else 1):
+        tick = time.perf_counter_ns()
+        run = subprocess.run(argv, cwd=cwd, input=data, text=True, capture_output=True, check=True)
+        samples[label].append((time.perf_counter_ns() - tick) / 1e9)
+        if label == "Lean binary":
+            assert decode_strategy(run.stdout.strip()) == expected
+        else:
+            output = json.loads(run.stdout)
+            assert output["coverage"] == ["5/8", "3/8"]
+            assert output["attacks"] == [["3/5", "2/5"]]
+            assert output["defender_lottery"] == [
+                {"targets": [0], "probability": "5/8"}, {"targets": [1], "probability": "3/8"}]
+    durations = samples[label]
+    print(f"{label} seconds: " + ", ".join(f"{s:.6f}" for s in durations), flush=True)
+    if len(durations) > 1:
+        print(f"{label} median seconds: {statistics.median(durations):.6f}", flush=True)
+
+Complete output of the fresh project build
+------------------------------------------
+✔ [3411/3429] Built Kintali.Equilibrium (1.1s)
+✔ [3413/3627] Built Kintali.StableAllocation (1.4s)
+✔ [3609/3881] Built StochasticGames.BoundedLinearProgram (1.3s)
+✔ [3830/3895] Built StochasticGames.DeterminantGap (1.2s)
+✔ [3844/3895] Built Kintali.ExactRecovery.Pattern (990ms)
+✔ [3848/3977] Built Kintali.ContactComparison (1.1s)
+✔ [3850/3977] Built Kintali.QuotaSweep.QuotePartitions (1.2s)
+✔ [3854/3977] Built Kintali.QuoteSearch.Runs (977ms)
+✔ [3855/3977] Built Kintali.QuoteSearch (1.4s)
+✔ [3860/3977] Built StochasticGames.BinarySize (920ms)
+✔ [3863/3977] Built Kintali.ExactRecovery.Rows (1.4s)
+✔ [3866/3979] Built Kintali.QuotaSweep.Choices (1.2s)
+✔ [3868/3979] Built Kintali.ExactRecovery.Scale (1.3s)
+✔ [3870/3979] Built Kintali.Preprocessing (977ms)
+✔ [3875/3979] Built Kintali.QuoteSearch.PrefixSearch (950ms)
+✔ [3877/3979] Built Kintali.QuoteSearch.Selection (1.1s)
+✔ [3880/3981] Built StochasticGames.CompilerRun (1.1s)
+✔ [3883/3981] Built Kintali.LinearProgramming.System (1.1s)
+✔ [3884/3981] Built Kintali.QuotaSweep.Routing (1.0s)
+✔ [3886/3983] Built Kintali.QuotaSweep.Preservation (1.1s)
+✔ [3890/3983] Built StochasticGames.TightRows (1.2s)
+✔ [3891/3989] Built Kintali.ExactRecovery.Grid (1.2s)
+✔ [3895/3989] Built Kintali.LinearProgramming.Bird (1.2s)
+✔ [3896/3989] Built Kintali.QuoteSearch.WeightUpdate (1.0s)
+✔ [3901/3989] Built Kintali.LinearProgramming.ArithmeticRun (1.0s)
+✔ [3903/3989] Built Kintali.QuotaSweep.Cycle (969ms)
+✔ [3907/3989] Built Kintali.QuotaSweep.Rates (1.2s)
+✔ [3908/3989] Built StochasticGames.LinearFeasibilityGap (1.2s)
+✔ [3911/3989] Built Kintali.ExactRecovery.Holdings (1.2s)
+✔ [3915/3989] Built Kintali.LinearProgramming.BasisSearch (1.3s)
+✔ [3917/3989] Built Kintali.QuotaSweep.GraphCycle (985ms)
+✔ [3920/3989] Built Kintali.LinearProgramming.BirdRun (1.3s)
+✔ [3923/3989] Built Kintali.QuoteSearch.Algorithm (2.3s)
+✔ [3925/3999] Built Kintali.LinearProgramming.Bounds (1.2s)
+✔ [3926/3999] Built Kintali.ExactRecovery.Pruning (1.3s)
+✔ [3929/3999] Built Kintali.QuotaSweep.Events (1.1s)
+✔ [3935/3999] Built Kintali.Theorem1 (966ms)
+✔ [3936/3999] Built Kintali.QuoteSearch.BlockingInterval (947ms)
+✔ [3937/3999] Built Kintali.ExactRecovery.Matrix (3.3s)
+✔ [3940/3999] Built Kintali.LinearProgramming.DeterminantCost (1.3s)
+✔ [3945/4103] Built Kintali.LinearProgramming.BorderMinor (1.3s)
+✔ [4047/4433] Built Kintali.LinearProgramming.Rounding (1.5s)
+✔ [4048/4433] Built Kintali.QuotaSweep.Endpoints (1.2s)
+✔ [4305/4433] Built Kintali.ExactRecovery.Determinant (1.3s)
+✔ [4306/4433] Built Kintali.QuoteSearch.Witness (1.0s)
+✔ [4307/4433] Built Kintali.QuotaSweep.Restriction (991ms)
+✔ [4310/4435] Built Kintali.QuotaSweep.Run (1.2s)
+✔ [4318/4435] Built Kintali.QuotaSweep.ScanWork (1.1s)
+✔ [4321/4439] Built Kintali.QuotaSweep.RoutingWork (1.1s)
+✔ [4323/4439] Built Kintali.InputOutput.Tables (1.1s)
+✔ [4327/4439] Built Kintali.LinearProgramming.SlackWindow (1.4s)
+✔ [4329/4443] Built Kintali.QuotaSweep.RankTable (1.0s)
+✔ [4333/4473] Built Kintali.ExactRecovery.Contact (1.4s)
+✔ [4334/4473] Built Kintali.QuotaSweep.Contact (1.2s)
+✔ [4341/4473] Built Kintali.QuotaSweep.ChoiceWork (1.1s)
+✔ [4342/4473] Built Kintali.LinearProgramming.PivotSelection (1.3s)
+✔ [4349/4473] Built Kintali.InputOutput.Breakpoints (1.2s)
+✔ [4351/4473] Built Kintali.QuotaSweep.GroupFill (1.2s)
+✔ [4352/4473] Built Kintali.BudgetContact (1.3s)
+✔ [4353/4473] Built Kintali.QuotaSweep.FastChoices (1.0s)
+✔ [4354/4473] Built Kintali.ExactRecovery.Book (1.8s)
+✔ [4361/4479] Built Kintali.ExactRecovery.Size (3.2s)
+✔ [4363/4479] Built Kintali.LinearProgramming.Recovery (1.3s)
+✔ [4364/4479] Built Kintali.InputOutput.Lottery (1.1s)
+✔ [4365/4479] Built Kintali.LinearProgramming.PivotRun (1.8s)
+✔ [4368/4479] Built Kintali.QuotaSweep.GroupLayout (1.4s)
+✔ [4377/4479] Built Kintali.QuotaSweep.WorkGraph (1.2s)
+✔ [4378/4489] Built Kintali.RetainedQuotes (1.5s)
+✔ [4379/4489] Built Kintali.ExactRecovery.BookContact (1.8s)
+✔ [4388/4491] Built Kintali.LinearProgramming.RationalBounds (1.6s)
+✔ [4393/4491] Built Kintali.QuotaSweep.Grouping (1.6s)
+✔ [4397/4493] Built Kintali.QuotaSweep.WorkEvent (1.3s)
+✔ [4403/4497] Built Kintali.ExactRecovery.QuoteOrder (1.3s)
+✔ [4408/4497] Built Kintali.InputOutput.Binary (1.1s)
+✔ [4409/4499] Built Kintali.LinearProgramming.ScalarRun (1.2s)
+✔ [4415/4499] Built Kintali.QuotaSweep.WorkFrame (1.1s)
+✔ [4416/4499] Built Kintali.ExactRecovery.Cutoff (1.3s)
+✔ [4417/4499] Built Kintali.InputOutput.LotterySize (1.3s)
+✔ [4419/4499] Built Kintali.ExactRecovery.Witness (2.1s)
+✔ [4423/4511] Built Kintali.InputOutput.Codec (1.0s)
+✔ [4425/4511] Built Kintali.InputOutput.Bounds (1.3s)
+✔ [4431/4511] Built Kintali.QuotaSweep.WorkRun (1.2s)
+✔ [4432/4515] Built Kintali.LinearProgramming.PointRun (1.6s)
+✔ [4434/4515] Built Kintali.LinearProgramming.PrecisionRun (1.7s)
+✔ [4439/4515] Built Kintali.LinearProgramming.WindowRun (2.4s)
+✔ [4442/4615] Built Kintali.QuotaSweep.IndexEquality (1.0s)
+✔ [4816/5165] Built Kintali.ExactRecovery.Sparse (1.7s)
+✔ [5088/5165] Built Kintali.ExactRecovery.Trial (1.3s)
+✔ [5089/5165] Built Kintali.LinearProgramming.CramerRun (1.7s)
+✔ [5092/5171] Built Kintali.QuotaSweep.IntervalGroups (1.3s)
+✔ [5094/5171] Built Kintali.QuotaSweep.LayoutTables (1.3s)
+✔ [5106/5171] Built Kintali.QuotaSweep.KeyTable (1.5s)
+✔ [5107/5173] Built Kintali.ExactRecovery.Geometry (1.2s)
+✔ [5117/5287] Built Kintali.ExactRecovery.FullMarket (1.2s)
+✔ [5250/5347] Built Kintali.ExactRecovery.SparseExtension (1.4s)
+✔ [5251/5347] Built Kintali.QuotaSweep.SparseRefinement (1.2s)
+✔ [5252/5359] Built Kintali.LinearProgramming.CramerCost (1.7s)
+✔ [5261/5359] Built Kintali.QuoteSearch.TraceBounds (1.0s)
+✔ [5262/5359] Built Kintali.ContactSize.Rational (1.2s)
+✔ [5263/5359] Built StochasticGames.ShiftedComparisons (1.1s)
+✔ [5264/5359] Built Kintali.InputOutput.CodecWorkArithmetic (1.2s)
+✔ [5265/5359] Built Kintali.ExactRecovery.SparseGrouping (1.4s)
+✔ [5273/5359] Built Kintali.QuotaSweep.Expansion (1.3s)
+✔ [5274/5359] Built Kintali.LinearProgramming.RecoveryRun (1.3s)
+✔ [5279/5359] Built Kintali.TrialSize (1.4s)
+✔ [5280/5359] Built StochasticGames.Precision (1.0s)
+✔ [5281/5371] Built Kintali.ExactRecovery.SparseView (1.5s)
+✔ [5289/5371] Built Kintali.QuotaSweep.SparseContact (1.4s)
+✔ [5292/5371] Built Kintali.TrialWork.Arithmetic (1.0s)
+✔ [5295/5371] Built StochasticGames.AverageFeasibility (958ms)
+✔ [5297/5373] Built StochasticGames.MeanPayoffGame (852ms)
+✔ [5299/5373] Built Kintali.QuotaSweep.Arithmetic (1.1s)
+✔ [5301/5373] Built Kintali.LinearProgramming.RecoveryCost (2.2s)
+✔ [5310/5389] Built Kintali.QuotaSweep.RankRun (1.4s)
+✔ [5312/5389] Built Kintali.QuotaSweep.Scale (1.1s)
+✔ [5320/5399] Built Kintali.QuotaSweep.SparseWork (1.6s)
+✔ [5322/5399] Built StochasticGames.BranchLinearization (1.3s)
+✔ [5331/5399] Built Kintali.QuotaSweep.BitBounds (1.3s)
+✔ [5340/5405] Built StochasticGames.MaxAverageReduction (1.3s)
+✔ [5348/5407] Built Kintali.QuotaSweep.KeyWidth (1.4s)
+✔ [5351/5407] Built Kintali.LinearProgramming.PointEncoding (1.8s)
+✔ [5355/5409] Built Kintali.ContactSize.Sweep (1.4s)
+✔ [5357/5409] Built StochasticGames.MeanPayoffGraph (1.1s)
+✔ [5359/5409] Built StochasticGames.RealStrictWitness (1.7s)
+✔ [5360/5409] Built StochasticGames.AtomEncoding (1.6s)
+✔ [5365/5415] Built StochasticGames.DiscountedArena (1.3s)
+✔ [5369/5415] Built StochasticGames.MeanPayoffThreshold (1.2s)
+✔ [5371/5417] Built Kintali.QuotaSweep.EncodedKeyRun (1.5s)
+✔ [5377/5421] Built Kintali.LinearProgramming.RationalInput (1.9s)
+✔ [5381/5423] Built StochasticGames.IntegerAtoms (1.2s)
+✔ [5386/5423] Built StochasticGames.MeanPayoffRegions (1.1s)
+✔ [5390/5423] Built Kintali.ExactRecovery.Hadamard (1.4s)
+✔ [5395/5489] Built Kintali.QuotaSweep.ExpandedIdentifier (1.3s)
+✔ [5835/6007] Built Kintali.Recovery (1.5s)
+✔ [5975/6185] Built Kintali.ExactRecovery (1.2s)
+✔ [6144/6495] Built StochasticGames.AtomArena (1.4s)
+✔ [6831/6891] Built Kintali.MarketTrial (1.2s)
+✔ [6833/6891] Built StochasticGames.SourceGame (916ms)
+✔ [6835/6891] Built StochasticGames.MeanPayoffPlay (1.3s)
+✔ [6836/6891] Built StochasticGames.SourceRows (1.1s)
+✔ [6839/6891] Built StochasticGames.CompilationScale (1.3s)
+✔ [6840/6891] Built Kintali.InputOutput.Grid (1.3s)
+✔ [6841/6891] Built StochasticGames.ThresholdInput (980ms)
+✔ [6842/7093] Built Kintali.FullContact (1.4s)
+✔ [6844/7093] Built StochasticGames.MeanPayoffDetermination (3.4s)
+✔ [6848/7093] Built Kintali.QuotaSweep.PreparationWork (1.3s)
+✔ [6849/7093] Built Kintali.InputOutput.CodecWorkRead (1.2s)
+✔ [6850/7093] Built StochasticGames.CompilationCounts (1.6s)
+✔ [6851/7093] Built StochasticGames.SourceLinearization (1.7s)
+✔ [6852/7093] Built Kintali.TrialWork.Scan (1.2s)
+✔ [6853/7093] Built Kintali.QuoteSearch.ClockWork (913ms)
+✔ [6854/7093] Built Kintali.ExactRecovery.RowWork (1.7s)
+✔ [6855/7093] Built Kintali.QuoteSearch.PrefixWork (1.2s)
+✔ [6856/7093] Built Kintali.TrialWork.ListBuild (1.1s)
+✔ [6859/7093] Built Kintali.QuoteSearch.RunBounds (987ms)
+✔ [6865/7093] Built Kintali.QuotaSweep.RealSweep (1.4s)
+✔ [6866/7093] Built Kintali.LinearProgramming.StoredSystem (1.2s)
+✔ [6872/7093] Built Kintali.LinearProgramming.OutputSize (1.4s)
+✔ [6875/7093] Built Kintali.ContactSize.Parameters (1.4s)
+✔ [6876/7093] Built Kintali.SearchBounds (1.3s)
+✔ [6877/7093] Built StochasticGames.MeanPayoffSemantics (1.8s)
+✔ [6878/7093] Built Kintali.TrialContactView (1.7s)
+✔ [6879/7093] Built Kintali.TrialWork.Fields (1.4s)
+✔ [6881/7093] Built Kintali.TrialWork.Projection (1.9s)
+✔ [6885/7097] Built Kintali.QuoteSearch.UpdateWork (1.1s)
+✔ [6887/7112] Built StochasticGames.SourcePrecision (1.5s)
+✔ [6893/7112] Built Kintali.QuoteSearch.QuantileWork (1.5s)
+✔ [6894/7112] Built Kintali.LinearProgramming.RationalOutput (1.3s)
+✔ [6895/7112] Built Kintali.QuotaSweep.RealContinuity (1.4s)
+✔ [6896/7112] Built StochasticGames.ArenaEncoding (1.7s)
+✔ [6897/7112] Built Kintali.TrialWitness (1.3s)
+✔ [6902/7112] Built Kintali.TrialWork.Terms (1.5s)
+✔ [6909/7112] Built Kintali.TrialWork.Pattern (1.6s)
+✔ [6910/7112] Built Kintali.TrialWork.Inventory (2.2s)
+✔ [6911/7112] Built Kintali.TrialWork.QuotePredicates (1.3s)
+✔ [6914/7112] Built Kintali.QuoteSearch.SelectionWork (1.3s)
+✔ [6919/7112] Built Kintali.ExactRecovery.OutputWork (1.6s)
+✔ [6920/7112] Built Kintali.TrialCorrectness (1.6s)
+✔ [6922/7112] Built Kintali.TrialWork.RowRules (1.6s)
+✔ [6927/7112] Built Kintali.TrialWork.Blockers (1.3s)
+✔ [6928/7112] Built StochasticGames.CompilationCost (3.1s)
+✔ [6931/7112] Built Kintali.QuoteSearch.DriverWork (1.7s)
+✔ [6935/7112] Built Kintali.ExactRecovery.RepairWork (1.4s)
+✔ [6936/7112] Built Kintali.Solver (1.4s)
+✔ [6938/7112] Built Kintali.TrialWork.StoredPattern (1.4s)
+✔ [6942/7112] Built Kintali.TrialWork.Intervals (1.5s)
+✔ [6943/7112] Built StochasticGames.BinaryEncoding (1.6s)
+✔ [6944/7112] Built Kintali.Machine.BitStacks (1.1s)
+✔ [6945/7112] Built Kintali.QuotaSweep.OperandBounds (1.4s)
+✔ [6950/7112] Built Kintali.InputOutput.Solver (1.2s)
+✔ [6951/7112] Built Kintali.TrialWork.Relaxed (1.2s)
+✔ [6954/7112] Built Kintali.Machine.Delimiter (1.1s)
+✔ [6956/7112] Built Kintali.QuotaSweep.StageOperands (1.4s)
+✔ [6957/7112] Built Kintali.Machine.PublicSolver (1.2s)
+✔ [6958/7112] Built Kintali.InputOutput (1.2s)
+✔ [6961/7112] Built Kintali.SolverWork (1.7s)
+✔ [6964/7112] Built StochasticGames.CostedBinary (4.4s)
+✔ [6966/7112] Built Kintali.TrialWork.Repair (1.2s)
+✔ [6968/7112] Built Kintali.InputOutput.CodecWorkOutput (1.6s)
+✔ [6970/7112] Built Kintali.LinearProgramming.OutputEncoding (1.8s)
+✔ [6972/7112] Built Kintali.ContactSize.View (7.0s)
+✔ [6974/7112] Built Kintali.InputOutput.CodecWork (1.4s)
+✔ [6976/7112] Built Kintali.InputOutput.StrategyWork (1.5s)
+✔ [6978/7112] Built Kintali.LinearProgramming.AnswerStream (1.3s)
+✔ [6979/7112] Built Kintali.ContactSize.Prefix (1.4s)
+✔ [6981/7112] Built Kintali.InputOutput.CodecWorkSolver (1.3s)
+✔ [6983/7112] Built Kintali.InputOutput.CodecWorkReencode (1.3s)
+✔ [6985/7112] Built Kintali.ContactSize.Recovery (2.1s)
+✔ [6988/7112] Built Kintali.LinearProgramming (1.2s)
+✔ [6990/7112] Built Kintali.QuotaSweep.SelectedWork (1.4s)
+✔ [6992/7112] Built Kintali.InputOutput.DirectWorkTables (1.5s)
+✔ [6994/7112] Built Kintali.QuotaSweep.StoredLookupRun (1.3s)
+✔ [6996/7112] Built Kintali.ContactSize.Output (1.3s)
+✔ [6998/7112] Built Kintali.QuotaSweep.ContactCharge (1.5s)
+✔ [7000/7112] Built Kintali.InputOutput.NormalizedWork (1.6s)
+✔ [7002/7112] Built Kintali.InputOutput.DirectWorkPlan (1.0s)
+✔ [7004/7112] Built Kintali.ContactSize.Polynomial (1.3s)
+✔ [7005/7112] Built Kintali.TrialWork.SelectedLists (1.7s)
+✔ [7006/7112] Built Kintali.QuotaSweep.SelectedPreparation (1.4s)
+✔ [7007/7112] Built Kintali.InputOutput.DirectWorkResponse (1.4s)
+✔ [7012/7112] Built Kintali.InputOutput.LotteryWork (2.1s)
+✔ [7014/7112] Built Kintali.InputOutput.NormalizedFields (1.4s)
+✔ [7015/7112] Built Kintali.InputOutput.ValidityWork (1.9s)
+✔ [7016/7112] Built Kintali.InputOutput.EligibilityWork (2.5s)
+✔ [7017/7112] Built Kintali.QuotaSweep.RankComparison (1.4s)
+✔ [7021/7112] Built Kintali.TrialWork.InventoryWork (1.7s)
+✔ [7023/7112] Built Kintali.TrialWork.SelectedAccess (1.5s)
+✔ [7025/7112] Built Kintali.InputOutput.DirectWork (1.4s)
+✔ [7028/7112] Built Kintali.InputOutput.PublicWork (1.6s)
+✔ [7029/7112] Built Kintali.InputOutput.OutsideWork (1.8s)
+✔ [7030/7112] Built Kintali.InputOutput.DatumWork (2.1s)
+✔ [7032/7112] Built Kintali.QuotaSweep.NativeComparison (1.5s)
+✔ [7036/7112] Built Kintali.QuotaSweep.RankConstruction (1.6s)
+✔ [7038/7112] Built Kintali.InputOutput.CoreWork (1.5s)
+✔ [7040/7112] Built Kintali.TrialWork.SelectedProjection (1.8s)
+✔ [7042/7112] Built Kintali.InputOutput.MaximaWork (1.4s)
+✔ [7044/7112] Built Kintali.InputOutput.DenominatorWork (1.4s)
+✔ [7046/7112] Built Kintali.QuotaSweep.RankedContact (1.8s)
+✔ [7048/7112] Built Kintali.InputOutput.ScalesWork (1.5s)
+✔ [7050/7112] Built Kintali.TrialWork.SelectedChecks (1.7s)
+✔ [7052/7112] Built Kintali.QuotaSweep.RuntimeRanks (1.4s)
+✔ [7054/7112] Built Kintali.QuotaSweep.KeyEvaluation (1.5s)
+✔ [7056/7112] Built Kintali.InputOutput.PrepareWork (1.0s)
+✔ [7058/7112] Built Kintali.InputOutput.ToleranceWork (2.7s)
+✔ [7060/7112] Built Kintali.TrialWork.SelectedPolynomial (1.4s)
+✔ [7062/7112] Built Kintali.TrialWork.Execute (1.4s)
+✔ [7064/7112] Built Kintali.InputOutput.PlanWork (1.4s)
+✔ [7066/7112] Built Kintali.QuotaSweep.KeyColumns (1.6s)
+✔ [7068/7112] Built Kintali.InputOutput.InitializationWork (1.4s)
+✔ [7070/7112] Built Kintali.QuotaSweep.InventoryRun (1.4s)
+✔ [7072/7112] Built Kintali.InputOutput.InitializationPolynomial (1.5s)
+✔ [7073/7112] Built Kintali.TrialWork.SelectedExecute (1.6s)
+✔ [7076/7112] Built Kintali.TrialWork.BuiltInventory (2.0s)
+✔ [7078/7112] Built Kintali.QuotaSweep (1.2s)
+✔ [7080/7112] Built Kintali.QuotaSweep.BuilderCuts (1.6s)
+✔ [7082/7112] Built Kintali.TrialWork.TrialPolynomial (1.3s)
+✔ [7084/7112] Built Kintali.InputOutput.InventorySearch (1.4s)
+✔ [7086/7112] Built Kintali.QuotaSweep.BuilderColumns (2.5s)
+✔ [7088/7112] Built Kintali.InputOutput.CheckedSearch (2.9s)
+✔ [7090/7112] Built Kintali.QuotaSweep.BuilderOrders (3.0s)
+✔ [7092/7112] Built Kintali.InputOutput.CheckedPolynomial (1.3s)
+✔ [7094/7112] Built Kintali.QuotaSweep.BuilderOrderSpec (1.2s)
+✔ [7096/7112] Built Kintali.QuotaSweep.BuilderBaseRank (1.3s)
+✔ [7098/7112] Built Kintali.QuotaSweep.BuilderBook (1.5s)
+✔ [7100/7112] Built Kintali.QuotaSweep.BuilderOrderWork (38s)
+✔ [7102/7112] Built Kintali.QuotaSweep.BuilderParameters (160s)
+✔ [7104/7112] Built Kintali.QuotaSweep.BuilderEntry (1.2s)
+✔ [7106/7112] Built Kintali.QuotaSweep.BuilderQuotaWork (2.0s)
+✔ [7108/7112] Built Kintali.QuotaSweep.SelectedBuilder (1.2s)
+✔ [7110/7112] Built Kintali.InputOutput.MeasuredSolver (1.3s)
+Build completed successfully (7112 jobs).
+real 269.78
+user 541.95
+sys 138.21
+
+Three-target group count
+------------------------
+The second review of PR #15 supplied a one-type, one-resource game with
+gains (1, 1, 0) and constant attack costs (1, 1, 0). The outside target
+has cost zero. The two active targets have cost one at every quote, so
+the selection has no eligible real bids. The grid has G = 1.
+
+Run from lean/ at the software revision above after building Kintali.
+The input uses payoff pairs. The check reads the measured group rows
+and reports each group's mass divided by the private scale.
+
+$ lake env lean -DwarningAsError=true --stdin <<'LEAN'
+import Kintali.Solver
+import Kintali.InputOutput.MeasuredSolver
+
+open Kintali Kintali.InputOutput Kintali.ExactRecovery Kintali.MarketTrial
+open Kintali.TrialWork.Selected
+
+namespace StorageReplay
+def data : Input := (1, [(0, 1), (0, 1), (0, 0)], [(1, [(-1, -1), (-1, -1), (0, 0)])])
+example : data.Valid := by unfold Input.Valid; decide +kernel
+def dest := redirect data.game (by decide)
+def sel : QuoteSearch.Selection (data.types * data.targets) := #v[[], [], []]
+def gsize := grid data.game
+def stored : Lists data dest sel where
+  bids := Sparse.realOrder (G := grid data.game) data.game dest sel
+  cuts := Vector.ofFn fun j => (Sparse.siteCuts (G := grid data.game) data.game dest sel j).sort
+  bidOrder := rfl
+  cutOrder := by intro j; simp
+def counts := (List.finRange data.targets).map fun j => (stored.groupRow j).value.length
+def shares : List ℚ :=
+  let scale := privateScale data.game
+  let p := Sparse.selectedParameters (G := grid data.game) data.game dest sel scale
+  stored.groups.value.map fun h => p.mass (.inr h) / scale
+#eval (gsize, stored.bids.length, counts, shares)
+#guard (gsize, stored.bids.length, counts, shares) == (1, 0, [1, 1, 1], [1, 1, 0])
+end StorageReplay
+LEAN
+(1, 0, [1, 1, 1], [1, 1, 0])
+
+The entries are grid size, retained real bids, group counts by target,
+and relative masses in group order. For the same game, run the independent
+Python grouping routine from experiments/.
+
+$ python3 -B - <<'PY'
+from kintali_market import _grouped_bids
+from kintali_model import Game
+from kintali_repair import contact_tolerance
+from kintali_solver import prepare_quotes
+game = Game(1, (1,), ((1, 1, 0),), ((0, 0, 0),), (1, 1, 0))
+grid, scale, dest, eligible = prepare_quotes(game, contact_tolerance(game))
+bids, masses = _grouped_bids(game, grid, scale, dest, eligible, ((), (), ()))
+real = sum(b.buyer < game.types for b in bids)
+counts = [sum(b.buyer >= game.types and b.site == j for b in bids)
+          for j in range(game.targets)]
+shares = [mass / scale for mass in masses[game.types:]]
+assert (grid, real, counts, shares) == (1, 0, [1, 1, 0], [1, 1])
+print(grid, real, counts, list(map(str, shares)))
+PY
+1 0 [1, 1, 0] ['1', '1']

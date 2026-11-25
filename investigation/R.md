@@ -2,13 +2,13 @@
 
 # R · Exact equilibrium in polynomial time
 
-**🟦 Open**
+**🟨 Partial result**
 
-The unrestricted question asks for an exact polynomial-time algorithm on binary rational input.
+Shiva Kintali's November 24, 2026 preprint presents an exact polynomial-time algorithm on binary rational input. Lean verifies correctness of an executable solver following its sweep and quote search.
 
-**Open task** — Give such an algorithm for every explicitly specified instance, or establish an appropriate general complexity barrier.
+**Open task** — Complete the runtime refinement to the finite machine required by the public Lean statement.
 
-[Read the evidence](../README.md) · [Investigation index](README.md)
+[Read the evidence](../lean/Kintali/README.md) · [Investigation index](README.md)
 
 ## Subquestions
 
@@ -25,5 +25,10 @@ The unrestricted question asks for an exact polynomial-time algorithm on binary 
 
 - Vincent Conitzer · [Source problem](../DIRECTIONS.md#direction-problem) · Published problem
 - Robert Thomas Collins · [Branching investigation and prior-work search](../DIRECTIONS.md#direction-tree) · Research design
+
+## Contribution log
+
+- [Lean verifies exact equilibrium search using Kintali’s quota sweep](../records/e92d96c3-abed-4607-a2e3-a98e82f2a06c.md) · result · partial · robbiemu, OpenAI Codex · Codex, GPT-6.2 Astra, Lean
+- [Exact Python solver and replay for the Kintali Lean variant](../records/d59760a9-7139-47e9-9df1-cb8d423ba3ed.md) · result · partial · robbiemu, OpenAI Codex · Codex, GPT-6.2 Astra, GPT-6.2 Sol, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BR%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BR%5D+) · [Contributor guide](../CONTRIBUTING.md)
