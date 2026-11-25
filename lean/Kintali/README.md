@@ -1,86 +1,98 @@
-# Formalizing Kintali’s Bayesian security-game algorithm
+# Formalizing Kintali’s exact equilibrium algorithm
 
-The target is the $L^{O(1)}$ deterministic bit-time result in Shiva
-Kintali’s nine-page November 24, 2026 preprint. This work checks parts
-of that proof with Lean 4.36.0 and the pinned Mathlib. The paper credits
-Baïou and Balinski for ordinal transportation. [Short preprint](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [PDF at the author’s Git revision](https://github.com/shivakintali/shivakintali.github.io/blob/b28db0428e4cdcef7e9048a386b05d942d1eb57e/papers/SecurityGames-short.pdf)
+Shiva Kintali’s November 24, 2026 preprint gives a deterministic
+polynomial-bit-time algorithm for Vincent Conitzer’s Bayesian simple
+security games problem. The paper uses Baïou and Balinski’s ordinal
+transportation framework. [Short preprint](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [PDF at the author’s Git revision](https://github.com/shivakintali/shivakintali.github.io/blob/b28db0428e4cdcef7e9048a386b05d942d1eb57e/papers/SecurityGames-short.pdf)
 
-I found no public author-led or independent solution formalization as
-of November 25, 2026. I checked Kintali’s homepage, public repositories,
-recent website commits, and public announcement, and searched for Lean
-code and discussion by the paper title, Conitzer’s arXiv ID, and the
-public theorem’s name. Work in private is unknown. Bocowgill’s merged
-Formal Conjectures PR supplies a binary-rational input and compact
-equilibrium predicate. Its theorem `exists_isPolyTime_bayesNash` has a
-`sorry` proof term. [Author’s homepage](https://shivakintali.github.io/) · [Author’s repositories](https://github.com/shivakintali?tab=repositories) · [Formal Conjectures PR #8174](https://github.com/google-deepmind/formal-conjectures/pull/8174) · [Pinned Lean statement](https://github.com/google-deepmind/formal-conjectures/blob/9bd16c570aed942e00ae000c7522dd42ebbb25eb/FormalConjectures/Arxiv/2610.08796/BayesianSecurityGames.lean)
+**Lean checks an executable exact solver for every valid rational input.**
+The solver uses the paper’s grouped sweep and weighted quote search. It
+augments the witness and rounds a relaxed contact by integer linear
+algebra. The correctness proof covers the exact public bit encoding,
+zero priors and nonnegative slopes and defender gains. The complete
+machine-level polynomial-time theorem remains a separate obligation.
+[Solver](Solver.lean) · [Public bitstring theorem](InputOutput/Solver.lean)
 
-## Checked statements
+## Proof in paper order
 
-| Paper location | Lean file | Kernel-checked claim |
-| --- | --- | --- |
-| §1, exact certificate | [Equilibrium.lean](Equilibrium.lean) | A feasible certificate gives the compact best-response inequalities. Joint masses normalize to conditional probabilities, and a zero-prior row chooses a minimizing reference target. |
-| Lemma 5 | [StableAllocation.lean](StableAllocation.lean) | Every outside and vacancy balance is invariant at fixed quotas. The total absolute change in those balances is bounded by the total absolute change in quotas. |
-| Equation (5) and Lemma 6 | [ContactComparison.lean](ContactComparison.lean) | At a stable allocation, positive ordinary bids number at most the sum of the numbers of incident buyers and sites. At two equal-budget contacts, their coverage vectors either agree or one of the omitted witness bids blocks the restricted allocation. |
-| §3, failure bound | [QuoteSearch.lean](QuoteSearch.lean) | An interval missing every selected internal quantile carries weight at most $V/J$, including either endpoint interval. Each failure marks a member of a fixed witness of size at most $h$. With at most $G$ bids per pair and marked weight by pair at most its current total divided by $4h$, fewer than `2 * h * (G.log2 + 1)` failures are possible. |
+| Paper step | Checked result |
+| --- | --- |
+| §1, game and direct cases | The compact best-response predicate follows from the equilibrium certificate. The dispatcher handles zero budget, full budget, and enough resources to cover every positive-gain target. [Equilibrium](Equilibrium.lean) · [Preprocessing](Preprocessing.lean) |
+| §1, Lemma 2 | Clearing denominators gives an integer pattern system. A determinant bound separates zero residual from any positive minimum. [Exact pattern system](ExactRecovery/Matrix.lean) · [Determinant bound](ExactRecovery/Determinant.lean) |
+| §2, Lemma 3 | The deterministic quota sweep preserves feasibility and stability through acyclic and cyclic stages. The contact is the first feasible pressure at the supplied budget. The computation stores grouped private intervals, with a proved expansion to the elementary market. [Sweep](QuotaSweep/Run.lean) · [Sparse contact](QuotaSweep/SparseContact.lean) |
+| §2, Lemmas 4–6 | The full-grid contact induces an exact-feasible pattern. Stable allocations preserve outside and vacancy balances at fixed quotas. Comparing two contacts at the same budget gives equal coverage or an omitted blocking bid. [Full-grid pattern](ExactRecovery/FullMarket.lean) · [Quota comparison](StableAllocation.lean) · [Contact comparison](ContactComparison.lean) |
+| §3, weighted quote search | Each blocked trial doubles an interval that misses selected quantiles and contains a member of one fixed witness. The search finishes within `2 * h * (G.log2 + 1)` trials. [Executable search](QuoteSearch/Algorithm.lean) · [Witness certificate](TrialCorrectness.lean) |
+| §3, exact recovery | A successful trial supplies its own relaxed point. A nonsingular integer minor repairs that point and returns an exact equilibrium. There is an addressed binary work bound for the implemented repair on its materialized inputs. [Recovery](Recovery.lean) · [Charged repair](LinearProgramming/RationalInput.lean) |
+| §1, explicit strategy output | A sparse defender lottery has at most as many outcomes as there are targets. Every emitted defense uses exactly the supplied budget and reproduces the compact coverage marginals. Constructing the weighted membership masks takes polynomial addressed work in the binary length of the coverage. [Lottery](InputOutput/Lottery.lean) · [Lottery work](InputOutput/LotteryWork.lean) · [Public solver](InputOutput/Solver.lean) |
 
-## Two simplifications of the contact proof
+[Theorem1.lean](Theorem1.lean) gives the paper-order composition. The
+concrete trial and sweep discharge its premises in [Solver.lean](Solver.lean).
+`Game.solve_correct` and `InputOutput.solveBits_correct` establish total
+exact recovery on valid inputs.
 
-**The support bound follows from stability.** At least one endpoint of
-each positive ordinary bid rejects more of that bid. The bid is then
-a worst positive holding at that endpoint. Strict ranks give each
-endpoint only one such holding, so charging each bid to a rejecting
-endpoint gives the count. Apply this to optional real bids to obtain
-the fixed witness bound $k+m_+$ at any stable contact allocation.
+## Constructive recovery
 
-**Comparative statics also follows from stability.** Compare stable
-allocations $X,Y$ in the same restriction with different quotas.
-At a vertex let $P,N$ be the total increases and decreases on its
-records. By the rejection argument of Lemma 5, the charged weight
-there is at most $\max(P,N)=(P+N+|P-N|)/2$, where $P-N$ is the
-quota change. Each ordinary record contributes twice to the
-incident weight and each outside or vacancy record contributes once.
-Every changed record contributes at least once to the charged
-weight. Summing bounds the absolute slack variation by the absolute
-quota variation.
+Kintali’s witness includes the real bids that have positive flow at the
+full-grid contact. The formalization adds the first eligible quote above
+the contact coverage for each buyer and active target, when that quote
+exists below the permanent cap. The witness therefore has size at most
+`k + m₊ + k * m₊`. If its added bids do not block the restricted contact,
+the restricted allocation itself satisfies the relaxed pattern rows.
+[Witness](ExactRecovery/Witness.lean) · [Relaxed restricted contact](TrialCorrectness.lean)
 
-When only site quotas increase, conservation expresses the total
-quota increase as site vacancy increases minus changes in buyer
-outside balances, summed with their signs. The absolute variation
-bound forces equality term by term. Thus each buyer’s outside
-balance is nonincreasing, including each private buyer’s. The
-private outside sums divided by their original mass give the
-componentwise coverage order. For Lemma 6, join the two bid sets
-through the witness and apply that order directly at their two
-contact pressures. Equal budgets force equality in every coordinate.
-Stability of those two allocations on the union suffices for the comparison.
+The recovery routine appends the inequality requiring zero residual.
+Among consecutive multiplicative windows for the row slacks, it finds an
+empty one. A maximal independent set of rows below that window determines
+a small projection via a nonsingular integer minor. The projection makes
+the nearby rows exact, and the slack above the window absorbs the
+movement. The program computes the minor by bordered tests and uses
+integer determinants to recover all coordinates. This implements a
+variant of the preprint’s LP recovery. Kintali’s original
+full-contact pattern-feasibility result is also checked.
+[Slack windows](LinearProgramming/SlackWindow.lean) · [Projection proof](LinearProgramming/Recovery.lean) · [Stored determinant](LinearProgramming/BirdRun.lean)
 
-## Remaining proof obligations
+## Binary work and public statement
 
-- Construct and verify the finite quota sweep from Lemma 3. Prove
-  proposal and stability invariants, progress at cycles and
-  exhaustions, first budget contact, and the rational bit bound.
-- Connect finite quote grids and grouped private buyers to the
-  ordinal market model. Verify the blocker interval, the compressed
-  updates, and exact recovery from the full market’s pattern in
-  Lemmas 2 and 4, including the determinant bound.
-- Supply a polynomial-time rational LP implementation or a
-  machine-model theorem for that subroutine. Connect the compact
-  tables to the public list encoding, and compose the bit bounds
-  with `IsPolyTime`. The compact output suffices for the public
-  theorem. The paper also recovers a lottery on pure defenses.
+- Initialization computes the quote grid, private slope scale, outside
+  options and eligible prefixes from the binary payoff tables. The search
+  uses polynomially many trials and polynomial-width lists of compressed
+  quote weights. Each trial builds a sparse inventory from selected quotes.
+  [Initialization](InputOutput/InitializationWork.lean) · [Search bounds](SearchBounds.lean) · [Selected inventory](TrialWork/BuiltInventory.lean)
+- The sweep counts scalar and indexed operations. Lean bounds the sizes
+  of the stored states, coverage, joint masses, rounding inputs and compact
+  output. The same work interface includes both blocker searches and exact
+  recovery. [Sweep work](QuotaSweep/ContactCharge.lean) · [State widths](ContactSize/Prefix.lean) · [Trial work](TrialWork/SelectedExecute.lean) · [Output width](ContactSize/Output.lean)
+- The public codec and market validity test cover all bitstreams,
+  including malformed encodings and invalid tables. The assembled solver
+  has one polynomial binary word-cost bound across all of those inputs.
+  The sweep’s operation counter and rational arithmetic tariffs supply
+  its part of the bound. [Public codec](InputOutput/PublicWork.lean) · [Measured solver](InputOutput/MeasuredSolver.lean)
+
+The work bounds use the project’s indexed binary word-cost model.
+The public Formal Conjectures proposition `exists_isPolyTime_bayesNash`
+asks for one Mathlib `FinTM2` machine and a polynomial step bound on all
+canonically encoded typed games. Lean checks the finite bit-stack
+embedding, an executable public delimiter and the theorem that derives
+the public proposition from actual runs of one solver program.
+Refining the full solver to those runs remains open.
+[Machine refinement](Machine/README.md) · [Formal Conjectures PR #8174](https://github.com/google-deepmind/formal-conjectures/pull/8174) · [Pinned public statement](https://github.com/google-deepmind/formal-conjectures/blob/9bd16c570aed942e00ae000c7522dd42ebbb25eb/FormalConjectures/Arxiv/2610.08796/BayesianSecurityGames.lean)
 
 ## Replay
 
-Run both commands from `lean/` with the project’s pinned packages and Lean toolchain.
+Run from `lean/` with the pinned Lean 4.36.0 toolchain and Mathlib.
 
 ```sh
 lake --wfail build Kintali
 lake env lean Replay/KintaliAxioms.lean
+lake env lean Replay/KintaliSearch.lean
 ```
 
-The derivation of the stronger quota comparison and the support
-charging argument, and the Lean translation, were developed with
-OpenAI Codex. Both commands passed on November 25, 2026. The audit
-reported dependencies among `propext`, `Classical.choice`, and
-`Quot.sound`. The source of the algorithm and the fixed-quota
-rejection argument is Kintali’s manuscript.
+The upstream compatibility check replays the public compact predicate
+and the binary encoders against the pinned Formal Conjectures source.
+[Compatibility replay](InputOutput/check_upstream.py)
+
+The algorithm and original quota comparison come from Kintali’s
+preprint. The witness extension, constructive recovery, and Lean
+development were prepared with OpenAI Codex. The external table
+and bit conventions follow the Formal Conjectures Authors’ public
+statement.

@@ -121,18 +121,14 @@ private theorem hits_witness_sum (marked : ℕ → Finset Bid) (witness : Finset
     simp only [hits, Finset.sum_add_distrib]
     omega
 
-/-- Starting with unit weights, the number of failed trials is smaller
-than `2 * h * (G.log2 + 1)`. Each group starts with at most `G` bids and
-the marked weight in that group is at most its total divided by `4 * h`.
-Every failed trial marks a member of the same witness set, of size at
-most `h`. -/
-theorem failure_bound (marked : ℕ → Finset Bid) (witness : Finset Bid)
-    (pair : Bid → Pair) (bids : Pair → Finset Bid) {T h G : ℕ}
-    (hh : 0 < h) (hSize : witness.card ≤ h) (hGroups : ∀ p, (bids p).card ≤ G)
-    (hBelongs : ∀ b ∈ witness, b ∈ bids (pair b))
+/-- The growth argument needs only the weights of the fixed witness
+and the group totals. This form also applies to compressed runs. -/
+theorem failure_bound_of_growth (marked : ℕ → Finset Bid) (witness : Finset Bid)
+    (pair : Bid → Pair) (total : Pair → ℕ → ℚ) {T h G : ℕ}
+    (hh : 0 < h) (hSize : witness.card ≤ h) (hInitial : ∀ p, total p 0 ≤ G)
+    (hWithin : ∀ b ∈ witness, ∀ t ≤ T, weight marked b t ≤ total (pair b) t)
     (hHit : ∀ t < T, ∃ b ∈ witness, b ∈ marked t)
-    (hMarked : ∀ t < T, ∀ p, totalWeight marked ((bids p).filter (· ∈ marked t)) t ≤
-      totalWeight marked (bids p) t / (4 * (h : ℚ))) :
+    (hStep : ∀ t < T, ∀ p, total p (t + 1) ≤ total p t * (1 + 1 / (4 * (h : ℚ)))) :
     T < 2 * h * (G.log2 + 1) := by
   let k := G.log2 + 1
   let t₀ := (2 * h) * k
@@ -141,22 +137,12 @@ theorem failure_bound (marked : ℕ → Finset Bid) (witness : Finset Bid)
   have hk : 0 < k := by dsimp [k]; omega
   by_contra! hLong
   have hPrefix : t₀ ≤ T := hLong
-  have hGrowth (t : ℕ) (ht : t ≤ T) (p : Pair) :
-      totalWeight marked (bids p) t ≤ (G : ℚ) * rate ^ t := by
+  have hGrowth (t : ℕ) (ht : t ≤ T) (p : Pair) : total p t ≤ (G : ℚ) * rate ^ t := by
     induction t with
-    | zero =>
-      simp [totalWeight, weight, hits]
-      exact_mod_cast hGroups p
+    | zero => simpa using hInitial p
     | succ t ih =>
-      have hOld := ih (by omega)
-      have hStep :
-          totalWeight marked (bids p) (t + 1) ≤ totalWeight marked (bids p) t * rate := by
-        rw [totalWeight_succ]
-        have hm := hMarked t (by omega) p
-        dsimp only [rate]
-        rw [mul_add, mul_one, ← mul_div_assoc, mul_one]
-        linarith
-      exact hStep.trans (by rw [pow_succ, ← mul_assoc]; exact mul_le_mul_of_nonneg_right hOld hRate)
+      exact (hStep t (by omega) p).trans
+        (by rw [pow_succ, ← mul_assoc]; exact mul_le_mul_of_nonneg_right (ih (by omega)) hRate)
   have hMany : ∃ b ∈ witness, 2 * k ≤ hits marked b t₀ := by
     by_contra! hFew
     have hTotal := hits_witness_sum marked witness (T := t₀)
@@ -173,11 +159,10 @@ theorem failure_bound (marked : ℕ → Finset Bid) (witness : Finset Bid)
       ((Nat.mul_le_mul_right (2 * k - 1) hSize).trans_lt (hLt.trans_eq hSwap)))
   obtain ⟨b, hb, hDoubled⟩ := hMany
   have hG : (G : ℚ) < (2 : ℚ) ^ k := by exact_mod_cast (Nat.lt_log2_self (n := G))
-  have hLower : (2 : ℚ) ^ (2 * k) ≤ totalWeight marked (bids (pair b)) t₀ := by
+  have hLower : (2 : ℚ) ^ (2 * k) ≤ total (pair b) t₀ := by
     apply (pow_le_pow_right₀ (by norm_num : (1 : ℚ) ≤ 2) hDoubled).trans
-    exact Finset.single_le_sum (f := fun a => weight marked a t₀)
-      (fun _ _ => by unfold weight; positivity) (hBelongs b hb)
-  have hUpper : totalWeight marked (bids (pair b)) t₀ ≤ (G : ℚ) * (2 : ℚ) ^ k := by
+    exact hWithin b hb t₀ hPrefix
+  have hUpper : total (pair b) t₀ ≤ (G : ℚ) * (2 : ℚ) ^ k := by
     apply (hGrowth t₀ hPrefix (pair b)).trans
     dsimp only [t₀]
     rw [pow_mul]
@@ -185,6 +170,30 @@ theorem failure_bound (marked : ℕ → Finset Bid) (witness : Finset Bid)
       (pow_le_pow_left₀ (by positivity) (block_growth hh) k) (by positivity)
   rw [two_mul, pow_add] at hLower
   exact (not_lt_of_ge (hLower.trans hUpper)) (mul_lt_mul_of_pos_right hG (by positivity))
+
+/-- Starting with unit weights, the number of failed trials is smaller
+than `2 * h * (G.log2 + 1)`. Each group starts with at most `G` bids and
+the marked weight in that group is at most its total divided by `4 * h`.
+Every failed trial marks a member of the same witness set, of size at
+most `h`. -/
+theorem failure_bound (marked : ℕ → Finset Bid) (witness : Finset Bid)
+    (pair : Bid → Pair) (bids : Pair → Finset Bid) {T h G : ℕ}
+    (hh : 0 < h) (hSize : witness.card ≤ h) (hGroups : ∀ p, (bids p).card ≤ G)
+    (hBelongs : ∀ b ∈ witness, b ∈ bids (pair b))
+    (hHit : ∀ t < T, ∃ b ∈ witness, b ∈ marked t)
+    (hMarked : ∀ t < T, ∀ p, totalWeight marked ((bids p).filter (· ∈ marked t)) t ≤
+      totalWeight marked (bids p) t / (4 * (h : ℚ))) :
+    T < 2 * h * (G.log2 + 1) := by
+  refine failure_bound_of_growth marked witness pair (fun p => totalWeight marked (bids p))
+    hh hSize ?_ ?_ hHit ?_
+  · intro p
+    simpa [totalWeight, weight, hits] using (show ((bids p).card : ℚ) ≤ G by exact_mod_cast hGroups p)
+  · intro b hb t _
+    exact Finset.single_le_sum (f := fun a => weight marked a t)
+      (fun _ _ => by unfold weight; positivity) (hBelongs b hb)
+  · intro t ht p
+    rw [totalWeight_succ, mul_add, mul_one, ← mul_div_assoc, mul_one]
+    exact add_le_add_right (hMarked t ht p) _
 
 end QuoteSearch
 end Kintali

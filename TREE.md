@@ -2,10 +2,11 @@
 
 **Root question.** Given rational utilities and type probabilities in the explicitly enumerated model, is there a polynomial-time algorithm for an exact Bayes–Nash equilibrium? [Conitzer, arXiv:2610.08796](https://arxiv.org/pdf/2610.08796)
 
-[Color-coded proof map](PROOF-MAP.md)
+Shiva Kintali’s November 24, 2026 preprint gives a deterministic polynomial-bit-time algorithm. Lean checks the exactness of an executable solver using the paper’s sweep and search. [Kintali’s short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [Lean proof status](lean/Kintali/README.md) · [Color-coded proof map](PROOF-MAP.md)
 
 ```text
 R    Exact equilibrium in polynomial time
+├── Kintali’s algorithm and its Lean formalization
 ├── L    Published results and algorithm
 │   ├── L1   Locate the exact algorithm and its worst-case bottleneck
 │   │   └── L1a  Count strict threshold drops within one fixed-boundary phase
@@ -99,7 +100,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | B3e | Complete | [Long path with no attack-flow switch](notes/B3e-parametric-path-lower-bound.md) |
 | B3f | Complete | [Superpolynomial number of forced flow switches](notes/B3f-forced-flow-switches.md) |
 | B3g | Complete | [Independent checks of the forced-switch proof](notes/B3g-lower-bound-audit.md) |
-| A4 | General polynomial time open | [Minimum-price certificate, subclasses, and auction lower bounds](notes/A4-minimum-price-markets.md) |
+| A4 | Polynomial via A4i and Kintali’s algorithm. Direct methods under study. | [Reverse reduction](notes/A4i-market-to-game.md) · [Minimum-price certificate, subclasses, and auction lower bounds](notes/A4-minimum-price-markets.md) |
 | A4a | Polynomial subclass | [Exact search for nearly factorized slope matrices](notes/A4a-near-factorized-slopes.md) |
 | A4b | Polynomial subclasses | [Good elimination, bounded-depth graphs, and arbitrary forests](notes/A4b-direct-hall-search.md) |
 | A4c | Reduction and upper bound proved | [One enlarged clearing market suffices; market and game search are in CLS](notes/A4c-any-clearing-equilibrium.md) |

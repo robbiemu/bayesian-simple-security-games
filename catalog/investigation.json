@@ -4,10 +4,10 @@
       "id": "R",
       "parent": null,
       "title": "Exact equilibrium in polynomial time",
-      "state": "open",
-      "summary": "The unrestricted question asks for an exact polynomial-time algorithm on binary rational input.",
-      "source": "README.md",
-      "next": "Give such an algorithm for every explicitly specified instance, or establish an appropriate general complexity barrier."
+      "state": "partial",
+      "summary": "Shiva Kintali's November 24, 2026 preprint presents an exact polynomial-time algorithm on binary rational input. Lean verifies correctness of an executable solver following its sweep and quote search.",
+      "source": "lean/Kintali/README.md",
+      "next": "Complete the runtime refinement to the finite machine required by the public Lean statement."
     },
     {
       "id": "L",
@@ -222,10 +222,10 @@
       "id": "A4",
       "parent": "A",
       "title": "Solve the binary-mass minimum-price market with arbitrary slopes",
-      "state": "open",
-      "summary": "General binary-mass market search remains open. A proposed minimum price can be verified efficiently.",
+      "state": "scoped",
+      "summary": "A4i reduces general minimum-price search to one game equilibrium. Kintali's algorithm gives a polynomial-bit-time solver via that reduction.",
       "source": "notes/A4-minimum-price-markets.md",
-      "next": "Find a polynomial-bit-time algorithm returning any clearing equilibrium for arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover the minimum prices."
+      "next": "Study direct market algorithms with arbitrary positive pair-specific slopes. Apply the [supply perturbation in A4c](A4c.md) to recover minimum prices from any clearing oracle."
     },
     {
       "id": "A4a",
@@ -460,7 +460,7 @@
       "state": "open",
       "summary": "Each buyer has unit mass and each good has unit capacity. Every offer can have its own positive rational slope.",
       "source": "notes/A4i-market-to-game.md#open-unit-market-search",
-      "next": "Find a polynomial-bit-time solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem."
+      "next": "Find a direct polynomial-bit-time market solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem."
     },
     {
       "id": "H",

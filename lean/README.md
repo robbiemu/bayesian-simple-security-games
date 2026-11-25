@@ -2,6 +2,10 @@
 
 This Lake package contains library checks for the fixed-flow investigation and an end-to-end proof and executable binary compiler for the stochastic-game reduction. It pins Lean and mathlib to v4.36.0. The Lake manifest records the exact revision of each dependency.
 
+## Bayesian security-game algorithm
+
+The `Kintali` library verifies executable exact Bayes–Nash equilibrium search using Shiva Kintali’s grouped quota sweep and weighted quote selection. Run `lake --wfail build Kintali`. The proof notes record correspondence with the paper and the status of the binary runtime theorem. [Kintali’s short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf) · [Lean development](Kintali/README.md)
+
 ## Running the checks
 
 Open this directory as the project folder in your Lean editor. From the repository root, run
