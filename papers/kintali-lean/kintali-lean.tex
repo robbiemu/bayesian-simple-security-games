@@ -1,0 +1,1056 @@
+% Build in this directory with: latexmk -pdf -halt-on-error kintali-lean.tex
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1.04in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype,booktabs,fancyvrb,needspace,xcolor}
+\usepackage{upquote}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+\newcommand*{\manuscriptauthor}{Robert Thomas Collins}
+\definecolor{linkblue}{RGB}{30,69,101}
+\hypersetup{colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue,
+  pdftitle={A constructive Lean realization of Kintali’s exact equilibrium algorithm},
+  pdfauthor={\manuscriptauthor},
+  pdfsubject={Bayesian security games, ordinal transportation and verified exact computation},
+  pdfkeywords={Bayes-Nash equilibrium, stable allocation, sensitivity to quotas, Lean, exact arithmetic}}
+\urlstyle{same}
+\newcommand{\code}[1]{\textnormal{\texttt{\detokenize{#1}}}}
+\newcommand{\baseurl}{https://github.com/robbiemu/bayesian-simple-security-games/blob/75bc25c2ddfac1813064434a3165b3ddd1a1f63d}
+\newcommand{\decl}[3]{\href{\baseurl/lean/#1.lean\#L#2}{\code{#3}}}
+\newcommand{\atfile}[2]{\href{\baseurl/#1}{#2}}
+\newcommand{\Rats}{\mathbb{Q}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\normone}[1]{\lVert#1\rVert_1}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\DefineVerbatimEnvironment{commands}{Verbatim}{fontsize=\small}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries A constructive Lean realization of\\[.10em]
+    Kintali's exact equilibrium algorithm\par}
+  \medskip{\large\manuscriptauthor\par}
+  \medskip{\small Working draft \enspace\textperiodcentered\enspace 25 November 2026\par}
+\end{center}
+
+\begin{abstract}
+We implement Shiva Kintali's polynomial-time equilibrium algorithm for
+Bayesian simple security games in Lean. Kintali solves a linear program
+whose constraints come from a quota sweep. Our executable tests the
+sweep's allocation and uses a nonsingular integer minor to repair it.
+A two-target restriction gives an exactly feasible pattern whose allocation
+fails this test. We extend Kintali's fixed witness by at most one bid per
+type and active target so that every failure exposes a blocking bid in
+that set. To compare contacts, we prove that for stable allocations on
+the same retained bids with the same rankings, the $\ell^1$ change in
+outside-option and vacancy balances is at most the $\ell^1$ change in
+quotas. Lean verifies exact output for every valid rational input and
+polynomial measured binary word cost. A polynomial execution bound for
+one machine in the public finite-machine model remains open.
+\end{abstract}
+
+\section{An executable exact solver}
+\label{sec:implementation}
+
+Give the Lean solver one resource, one attacker type and two targets.
+The defender gains $2$ or $3$ from covering an attack on the first or
+second target. At coverage probabilities $x_1,x_2$, the two attack costs
+are $2x_1$ and $\tfrac12+2x_2$. From this binary input Lean returns
+coverage $(5/8,3/8)$ and attack probabilities $(3/5,2/5)$. Both attacks
+then cost $5/4$, and either defense earns marginal gain $2(3/5)=3(2/5)=6/5$.
+The independent Python solver returns the same fractions
+(Section~\ref{sec:replay}). \cite{artifact,pythonfollow}
+
+Shiva Kintali's algorithm for Conitzer's game uses Baïou and Balinski's
+ordinal transportation model. Each type is a buyer, each positive-gain
+target a site. A bid pairs the two at a \emph{quote}, a proposed coverage
+probability. A trial keeps a subset of bids. Its coverage determines a
+\emph{pattern} of linear constraints on coverage, attack masses and a
+threshold. Kintali uses rational linear programming (LP) to find any
+exact solution of that pattern.
+\cite[Theorem~1 and \S3]{kintali} \cite{conitzer,bb}
+
+We had yet to find a checked general rational LP solver callable from Lean.
+Our market search gives every eligible bid below coverage one an initial
+selection weight of one and repeats three steps.
+\begin{enumerate}
+\setlength{\itemsep}{.15\baselineskip}
+\setlength{\parsep}{0pt}
+\item \emph{Select bids.} For each buyer--site pair, choose bids at equally
+spaced fractions of its cumulative weight. Always keep eligible bids at
+coverage one and the private buyers that measure coverage.
+\item \emph{Sweep to the budget.} Hold the bid list fixed. Starting at zero,
+raise a common pressure that increases the sites' quotas. Stop the first
+time the resulting coverages sum to the defender's budget. This is the
+\emph{budget contact}. Read its coverage, joint attack masses and pressure.
+\item \emph{Test the contact.} Substitute those quantities into the pattern,
+allowing a small error only in cost and pressure comparisons. If the point
+passes, repair it and return the exact strategies. If it fails, double
+the weights of the omitted bids that both endpoints would accept and go
+back to step~1.
+\end{enumerate}
+Each new selection uses the same quote grid and starts its sweep at
+pressure zero. A weight determines which bids are selected. The sweep
+determines how much mass each selected bid carries. A trial can fail
+step~3 even when its pattern contains an exact solution.
+We use software revision \code{75bc25c} and the lemma numbers of Kintali's
+nine-page preprint of 24 November 2026. \cite{artifact,review,followup,kintali}
+
+\subsection{The constraints a trial tests}
+\label{sec:pattern}
+
+There are $m\ge1$ targets and an integer budget $0\le r\le m$. The
+defender chooses $r$ distinct targets to cover as the attacker
+simultaneously chooses one to attack. Only the attacker observes its type,
+drawn from $k$ types with priors $\pi_i\ge0$ summing to one.
+Type $i$ earns $a_{ij}$ for attacking uncovered $j$ and loses $b_{ij}\ge0$
+of that payoff if $j$ is covered. It therefore minimizes the expected cost
+$F_{ij}(x_j)=-a_{ij}+b_{ij}x_j$. The defender gains $d_j\ge0$ from covering
+an attacked $j$. At coverage $x$ returned by the sweep, choose the least-index
+minimizer $j_i$ for each type. Mark every $(i,j)$ whose cost at $x$ is
+within the trial tolerance $\tau$ of that minimum. A target with $x_j=0$
+has lower status, one with $x_j=1$ upper status, and all others balanced
+status. These marks and statuses determine the pattern. \cite[\S\S1,3]{kintali}
+
+Write $y$ for coverage in a candidate solution and $q_{ij}$ for the
+probability that the attacker has type $i$ and attacks $j$. Then
+$P_j=d_j\sum_i q_{ij}$ is the defender's marginal gain from covering $j$.
+The marks and statuses chosen at $x$ stay fixed while $y,q$ and the
+threshold $\lambda$ vary. At residual $e\in[0,1]$ the pattern requires
+\[
+  0\le y_j\le1,\quad \sum_j y_j=r,\qquad
+  q_{ij}\ge0,\quad\sum_j q_{ij}=\pi_i,\quad
+  q_{ij}=0\ \text{on unmarked pairs}.
+\]
+It also requires a threshold $\lambda\ge0$ and the rows
+\[
+ F_{ij_i}(y_{j_i})\le F_{i\ell}(y_\ell)+e\quad(\text{all }i,\ell),\qquad
+ F_{ij}(y_j)\le F_{ij_i}(y_{j_i})+e\quad((i,j)\text{ marked}).
+\]
+These rows compare the reference to every target and each marked target
+back to the reference. Lower status fixes $y_j=0$ and requires $P_j\le\lambda+e$.
+Upper fixes $y_j=1$ and requires $P_j\ge\lambda-e$. Balanced permits
+any $y_j\in[0,1]$ and requires $\abs{P_j-\lambda}\le e$.
+Only the cost and pressure inequalities receive the allowance $e$. In
+particular, an unmarked pair must carry zero mass even in the relaxed
+test. At $e=0$ every positive attack is a minimizer. Moving coverage
+from a target with $y_j>0$ to one with $y_\ell<1$ earns
+$P_\ell-P_j\le\lambda-\lambda=0$ per unit. The two sets of rows thus
+certify the two players' best responses.
+\cite[\S1, (1)--(3)]{kintali}
+
+\paragraph{The feasibility gap used by Lean.}
+For the positive budgets that reach the search, Kintali's Lemma~2 gives
+a single height $H$ such that a feasible residual $e<1/H$ implies exact
+feasibility for the same pattern.
+The implementation has $n=km+m+2$ variables including $\lambda,e$.
+Take the distinct rational values among $1,r$, the priors, gains, cost
+intercepts and slopes. With $D$ the product of their reduced denominators
+and $M$ the maximum of one and their absolute numerators, clearing
+denominators gives integer rows bounded by $C=2DM$. Every full-size row
+determinant is bounded by $n!C^n\le H=(nC)^n$, with $\log H$ polynomial
+in the input length. \cite[Lemma~2]{kintali}
+
+The project already had a feasibility-gap lemma from H4, its reduction
+of simple stochastic reachability games to deterministic mean-payoff
+games. \decl{Kintali/ExactRecovery/Determinant}{86}{ExactRecovery.recover}
+applies this lemma to the relaxed system with $e$ as its objective. The mass and
+coverage constraints bound $q,y$. Since $r>0$, some $y_j>0$ and its
+pressure row gives $\lambda\le P_j+e\le\max_j d_j+1$. For integer normals,
+right-hand sides $b/D_0$ with integral $b$ and $D_0>0$, and absolute
+full-size row determinants bounded by $B>0$,
+\decl{StochasticGames/LinearFeasibilityGap}{42}{exists_point_with_gap_of_det_bound}
+gives a feasible point with residual $e'\le e$ and every positive
+coordinate at least $1/(D_0B)$. Here $D_0=1$ and $B=H$. Starting from
+$e<1/H$ therefore forces $e'=0$. The executable constructs exact
+coordinates by a separate argument in
+Section~\ref{sec:repair}. \cite{h4}
+
+\section{Computing the contact at the supplied budget}
+\label{sec:sweep}
+
+For zero or full budget the defender's choice is fixed. If the budget
+suffices to cover every positive-gain target, cover them all and fill any
+remaining places in target order. Each type then chooses a cheapest target.
+For the sweep write $S=\{j:d_j>0\}$,
+$m_+=|S|$, and assume $0<r<m_+$. All $m$ targets remain available for
+attack, and all $k$ type rows remain in the implementation, including
+those of mass zero. Put $\eta=1/(4H)$. Kintali's grid uses $\tau=\eta$.
+The program takes the smaller of $\eta$ and the repair precision in
+Section~\ref{sec:repair}. For either choice let
+\[
+ \sigma=\frac{\tau}{\max(1,\max_j d_j)},\qquad
+ G=\max\!\left(1,\left\lceil\frac{\max_{1\le i\le k,\,j\in S} b_{ij}}{\tau}
+                                  \right\rceil\right),\qquad
+ p_z=z/G\quad(0\le z\le G).
+\]
+Then $d_j\sigma\le\tau$ and $b_{ij}/G\le\tau$ at active sites.
+\cite[\S\S1--2]{kintali}
+
+A real buyer $i$ has mass $\pi_i$. It may leave mass unassigned to a
+bid at outside cost $w_i=\min_j F_{ij}(\mathbf 1_{j\in S})$.
+Write $o(i)$ for the least-index target attaining this minimum, computed
+once from coverage one on $S$ and zero elsewhere. An eligible bid $(i,j,z)$ has
+$j\in S$ and $F_{ij}(p_z)\le w_i$. The buyer ranks eligible bids by
+increasing cost, site index and quote, with its outside option last.
+Sites prefer higher quotes and break ties by lower buyer index.
+A restriction keeps eligible caps ($p_G=1$) and any selected eligible
+bids below the cap. Each grid gap at a site contains a private buyer of
+mass $\sigma/G$ who prefers buying at that site to staying outside. Its
+sole bid ranks between the adjacent quotes and is always retained. At
+pressure $t$ active site $j$ has quota $t/d_j$. An ordinary bid records
+a purchase at both its buyer and its site, with no separate limit on its
+size. An outside option records
+unused buyer mass, and a vacancy records unused site quota. These last
+two kinds of record each rank last at their sole endpoint. An endpoint
+\emph{accepts} a bid if it holds positive
+mass on a strictly worse record and could transfer some of that mass to the
+bid. If both endpoints accept, the bid \emph{blocks}. Stability means that
+no retained bid blocks.
+\cite[\S2, pp.~3--4]{kintali}
+
+The grouped sweep stores just one private buyer of mass $(b-a)\sigma/G$
+between successive retained quote indices $a,b$ at a site, adjoining
+$0,G$ as boundaries. To expand a purchase, fill the elementary private
+buyers in descending site priority. All retained real bids have the same
+order relative to every member of a group. Consequently a block across
+groups would already block the grouped allocation, and descending fill
+precludes a block inside a group. This lets the executable store at most
+the number of retained real bids plus $m_+$ private groups. Its correctness
+proof compares their expansions on the common elementary market.
+\cite[\S2]{kintali}
+
+Each active site has total private mass $\sigma$. If $U_j$ is the part
+purchased at $j$, the fraction still outside is its coverage. Write $O$
+for the total private mass still outside. Then
+\begin{equation}
+ x_j=1-U_j/\sigma\ (j\in S),\qquad x_j=0\ (j\notin S),\qquad
+ O=\sum_{j\in S}(\sigma-U_j)=\sigma\sum_j x_j .
+ \label{eq:contact}
+\end{equation}
+The sweep must therefore stop at $O=\sigma r$. At $t=0$ all buyers are
+outside and $O=\sigma m_+$. At the upper pressure $\bar t=1+\max_j d_j$,
+each active quota exceeds $1+\sigma$, the most real and private mass that
+site could buy. With vacancy at a site, any unfilled private buyer would
+block. Thus all private mass is purchased and $O=0$.
+
+At each stage a site proposes its highest-ranked bid whose buyer would
+accept more of it, or points to a terminal for vacancy if there is none. Each positive-mass
+buyer points along its worst occupied record, to the site on that bid or
+to the terminal if the record is its outside option.
+The site's arc adds mass and the buyer's arc releases it.
+On a directed cycle, transfer the smallest mass on a releasing arc around
+the cycle and recompute the pointers. The pressure stays fixed. A private
+buyer accepting its sole bid releases outside mass to the terminal, so
+this trade also leaves $O$ fixed.
+
+If there is no cycle, inject rate $1/d_j$ at each active site. In
+topological order, pass the total incoming rate and any injection along
+each outgoing arc. Holdings now change linearly with pressure. A holding
+of size $u$ draining at rate $v>0$ empties after an increment $u/v$.
+Take the least of $\bar t-t$ and all such exhaustion increments. If the
+segment reaches $\sigma r$, the slope $\dot O$ is negative and the sweep
+stops at $(\sigma r-O)/\dot O$ units of additional pressure, including
+equality at the event. Otherwise it advances to the event, recomputes all
+pointers and continues. Kintali's Lemma~3 bounds the number of stages.
+Lean verifies stability of the expanded contact at the supplied budget.
+Every stable allocation on this restriction at a smaller nonnegative
+pressure has $O>\sigma r$. \cite[Lemma~3]{kintali}
+
+The search also needs to test bids omitted from the restriction.
+A real holding at quote $p$ requires all $\sigma(1-p)$ private mass
+ranked above it to be filled, or an unfilled private bid would block.
+Thus $U_j\ge\sigma(1-p)$ and $p\ge x_j$. A vacancy forces $x_j=0$.
+The site accepts an eligible bid at $p>x_j$
+and rejects it at $p<x_j$. At $p=x_j$ it accepts exactly when it has
+vacancy or a lower-priority positive real holding at the same quote.
+\cite[\S2, (4)]{kintali}
+
+The return from the sweep uses the two kinds of outside balance differently.
+Equation~\eqref{eq:contact} reads coverage from the \emph{private} buyers.
+For a \emph{real} buyer $i$, let $u_i$ be its outside balance and $X_{ijz}$
+the mass it holds on bid $(i,j,z)$, zero for an omitted bid. Its joint
+attack row is
+\begin{equation}
+ q^X_{ij}=\sum_z X_{ijz}+\mathbf 1_{\{j=o(i)\}}u_i .
+ \label{eq:joint}
+\end{equation}
+This assigns every unit of the buyer's mass to a target, so the row sums
+to $\pi_i$. The outside target $o(i)$ was fixed before the sweep. The
+pattern reference $j_i$ is chosen at the resulting coverage. The trial
+uses the common sweep pressure $t$ as its candidate threshold $\lambda$
+and computes the individual target pressures $P_j$ from $q^X$.
+\decl{Kintali/ExactRecovery/Contact}{106}{Holdings.joint}.
+
+\section{Comparing a restricted contact with the full grid}
+\label{sec:comparison}
+
+\subsection{What Kintali's full grid certifies}
+
+On the full eligible grid at $\tau=\eta$, Kintali's Lemma~4 shows that
+the joint table in \eqref{eq:joint} uses only marked pairs at
+the first budget contact $x$. At pressure $t$ it satisfies
+$P_j\ge t-d_j\sigma$ wherever $x_j>0$ and $P_j\le t$ wherever $x_j<1$.
+Thus $(x,q,t,\eta)$ satisfies the relaxed rows, and Lemma~2 gives
+\begin{equation}
+       \exists\,y,q',\lambda\quad
+       (y,q',\lambda,0)\text{ satisfies the pattern selected by }x.
+       \label{eq:full}
+\end{equation}
+This is the original full-grid feasibility result. On the paper's grid,
+\decl{Kintali/ExactRecovery/FullMarket}{23}{Expanded.full_pattern_exact}
+accepts any stable full allocation at the stated budget and nonnegative
+pressure under the game hypotheses above. Its exact solution may have
+different coordinates from the contact. The search must decide what it can
+infer about an allocation computed on a restriction. \cite[Lemma~4]{kintali}
+
+\subsection{Sensitivity of outside-option and vacancy balances}
+\label{sec:variation}
+
+Fix finite sets of vertices $V$ and records $E$. Each record $a$ has an
+endpoint set $\partial a$ of size one or two. At each vertex the incident
+records have distinct ranks, with smaller rank preferred. Each one-ended
+record ranks strictly below every other incident record at its endpoint.
+Let $E_1$ be the one-ended records. They represent outside options and
+vacancies. Fix a common retained set $R$. An allocation $X:E\to\Rats_{\ge0}$
+is \emph{stable on $R$ at quota $Q$} if
+\[
+   \sum_{a:\,v\in\partial a}X_a=Q_v\quad(v\in V),
+\]
+every positive two-ended holding belongs to $R$, and no two-ended record
+in $R$ is accepted at both endpoints. Acceptance at $v$ means that $v$
+holds positive mass on a strictly worse record. Thus a buyer can hold a
+bid and still reject more of it. This definition permits
+parallel bids. Bipartiteness enters the application below.
+
+\begin{theorem}[Variation of one-ended balances]\label{thm:variation}
+Let $X$ and $Y$ be stable on the same retained set with the same incidence
+and ranks, at rational quotas $Q$ and $Q'$, respectively. Then
+\begin{equation}
+ \normone{(X-Y)|_{E_1}}
+   =\sum_{a\in E_1}\abs{X_a-Y_a}
+   \ \le\ \sum_{v\in V}\abs{Q_v-Q'_v}
+   =\normone{Q-Q'}.                                      \label{eq:variation}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Write $\delta_a=X_a-Y_a$. At an endpoint of a differing record, count
+$|\delta_a|$ if that endpoint rejects the record in the allocation giving
+it \emph{less} mass. Count separately at each rejecting endpoint. Every
+differing two-ended record is retained, because the larger holding is
+positive. By stability in the allocation giving it less mass, at least
+one endpoint rejects it. A one-ended record is always rejected at its sole
+endpoint because it ranks last. Thus, writing $A$ for the sum of
+$|\delta_a|$ on two-ended records, $B$ for its sum on one-ended records,
+and $W$ for the total counted weight, we have $W\ge A+B$.
+
+At a vertex $v$ counted differences have only one sign. Indeed, suppose
+$\delta_a>0$ is counted in $Y$ and $\delta_b<0$ is counted in $X$.
+Then $Y_b>0$. Rejection of $a$ in $Y$ forces $b$ to rank above $a$.
+But $X_a>0$, so rejection of $b$ in $X$ forces $a$ to rank above $b$.
+Strict incidence ranks make this impossible. Let $p_v$ and $n_v$ be the
+sums of the positive and absolute negative incident differences. The quota
+equations give $p_v-n_v=Q_v-Q'_v$. The weight $W_v$ counted at $v$ is
+at most $\max(p_v,n_v)$, hence
+\[
+       2W_v\le p_v+n_v+\abs{Q_v-Q'_v}.
+\]
+In $\sum_v(p_v+n_v)$ each ordinary bid contributes $|\delta_a|$ at both
+endpoints and a one-ended record contributes it just once. This sum
+is $2A+B$, so
+$2(A+B)\le 2W\le 2A+B+\normone{Q-Q'}$. Cancelling gives
+\eqref{eq:variation}.
+\end{proof}
+
+This is \decl{Kintali/StableAllocation}{192}{Market.slack_variation_le}.
+Kintali's proof of Lemma~5 supplies the counted rejections and their
+one-sign property. At fixed quotas $p_v=n_v$. Retaining the imbalance
+term in that proof gives the variable-quota estimate. When $Q=Q'$, the
+right-hand side vanishes, so every outside balance and vacancy agrees.
+Each private buyer's purchase is its fixed mass minus its outside balance,
+which recovers Lemma~5. More generally the outside and vacancy vector
+is a well-defined 1-Lipschitz function on quotas
+admitting stable allocations. Individual ordinary holdings may still vary
+at a fixed quota. A one-buyer market attains equality. Give the buyer mass
+one and a single bid at a site of quota $t\in[0,1]$. Stability forces a
+purchase of $t$, so increasing $t$ changes the buyer's outside balance by
+exactly the quota increment.
+\cite[Lemma~5]{kintali}
+
+\paragraph{Relation to stable allocation theory.}
+For a fixed capacitated ordinal transportation instance, Baïou and
+Balinski's Lemma~8 proves equality of each row sum and each column sum
+across stable allocations. Their Lemma~9 proves equality of the entire row
+or column of an undersubscribed agent. \cite[p.~674, Lemmas 8--9]{bb}
+In the discrete hospital model Roth's theorem
+likewise fixes the identities of the residents at a hospital that is
+underfilled in one stable outcome. \cite[p.~426]{roth} In schedule matching with consistent,
+persistent, size-monotone choice functions, Alkan and Gale's Theorem~6
+(\emph{Unisize}) fixes the size of each agent's schedule. Their Corollary~3
+fixes the full schedule for an underfilled agent with quota-filling choice.
+\cite[Theorem 6 and Corollary 3]{alkan}
+
+There are also precedents for comparing different markets. Baïou and
+Balinski's inductive algorithm extends a stable allocation after the
+addition of one row. \cite[\S2, Theorem 2]{bb} Alkan and Gale's Theorem~3
+orders the firm-optimal outcomes after entry of a firm or a worker.
+For example, after a new firm enters, incumbent firms weakly prefer the
+old outcome and workers weakly prefer the new one. \cite[Theorem 3]{alkan}
+Equation~\eqref{eq:variation}
+compares arbitrary stable allocations at two quota vectors on the same
+records. It gives a numerical bound on the sum over both sides for
+simultaneous, possibly oppositely directed quota changes. Fixed-quota
+invariance thus has established precedents. We present the unit-constant
+inequality as a transferable formulation of the rejection argument.
+Priority for the general variable-quota estimate remains undetermined.
+\cite[Lemmas 5--6]{kintali}
+
+\subsection{A direct comparison on the union market}
+
+Give sites sign $s_v=+1$ and buyers sign $s_v=-1$. Consider two stable
+allocations on the same retained set. Suppose each two-ended record joins opposite signs and
+$s_v(Q_v-Q'_v)=\abs{Q_v-Q'_v}$ at every vertex. Subtract and sum the quota
+equations with these signs. Ordinary holdings cancel, leaving
+\[
+  \normone{Q-Q'}=\sum_{a\in E_1}s_{v(a)}(X_a-Y_a)
+       \ \le\ \sum_{a\in E_1}|X_a-Y_a|\ \le\ \normone{Q-Q'}.
+\]
+Here $v(a)$ is the sole endpoint, and the last inequality is
+Theorem~\ref{thm:variation}. Each difference
+$|X_a-Y_a|-s_{v(a)}(X_a-Y_a)$ is nonnegative and their sum is zero,
+so each vanishes. In particular, when site quotas rise and
+buyer masses stay fixed, each buyer's outside balance weakly falls and
+each site vacancy weakly rises. The mass released from outside options
+and the new vacancies together account for the entire increase in capacity.
+Coverage at $j$ is the sum of its private outside balances divided
+by $\sigma$, so it can only decrease or stay constant as pressure rises.
+For any subset of buyers, its outside total changes by at most
+$|t-u|\sum_{j\in S}1/d_j$ between pressures $t,u$. The development also
+extends continuity of private purchases to the real-pressure sweep.
+\decl{Kintali/StableAllocation}{259}{Market.signed_slack_change},
+\decl{Kintali/QuotaSweep/RealContinuity}{105}{privatePurchases_regular}.
+
+Fix one full-grid contact $Y$ at pressure $t_F$. Let $W_0$ be its positive
+\emph{optional real} bids. The paper bounds $|W_0|\le k+m_+$ by counting
+site proposals and buyers' worst holdings. The formal proof gives a static
+count. Assign each positive real bid to an endpoint rejecting it, which
+exists by stability. At a vertex a positive rejected bid is its unique
+worst positive record. This gives at most one assigned bid per real buyer
+or active site. The full grid defines a fixed witness for the proof.
+The search can proceed without computing $W_0$.
+\cite[(5), Lemma~6]{kintali}
+
+\begin{corollary}[Equal-budget contacts]\label{cor:union}
+Let $X$ be stable at pressure $t_R$ on a restriction $R$, and $Y$ stable
+at $t_F$ on the full book. Suppose their coverage sums agree.
+Let $W$ consist of full-book records such that $R\cup W$ contains every
+positive ordinary holding of $Y$. Then their coverages agree
+coordinatewise, or some $a\in W\setminus R$ blocks $X$.
+\end{corollary}
+\begin{proof}
+First expand both contacts onto the same elementary records. Passing from
+$R$ to $R\cup W$ adds only bids in $W\setminus R$. If none blocks $X$,
+it is still stable there. Passing from the full book to the same union
+retains all positive holdings of $Y$ and can introduce no new blocker.
+We can now apply the sign argument on a single retained set. If
+$t_R\le t_F$, every site quota at $Y$ is at least its quota at $X$, so
+$x^X_j\ge x^Y_j$ for all $j$. Their sums agree, forcing equality in each
+coordinate. The opposite pressure order gives the reversed inequalities
+and the same conclusion.
+\end{proof}
+
+The permanent records and $W_0$ satisfy the support premise for every
+restriction. Kintali sweeps the union and invokes fixed-quota invariance
+at each pressure. The quota bound lets us compare the restricted and full
+allocations directly on that union, even when their pressures differ.
+\cite[Lemma~6]{kintali}
+\decl{Kintali/ContactComparison}{169}{Market.contact_eq_or_omitted_blocker}.
+
+\section{A stopping rule for the computed allocation}
+\label{sec:search}
+
+For Kintali's LP, absence of a $W_0$ blocker gives equality of coverages
+by Corollary~\ref{cor:union}, hence the same references, marks and statuses.
+The full pattern has an exact solution by \eqref{eq:full}, so the LP may
+return that solution. The executable substitutes the trial's own $x^X$,
+the $q^X$ from \eqref{eq:joint}, and its contact pressure $t_R$.
+The acceptance test is
+\begin{equation}
+ (x^X,q^X,t_R,\tau)\text{ satisfies every row of the relaxed trial pattern.}
+ \label{eq:test}
+\end{equation}
+A positive answer passes these coordinates to the repair routine. A
+negative answer triggers a search for blocking intervals. Equality of the
+two coverage vectors fixes the pattern, but allocations at that coverage
+can put mass on different pairs. \decl{Kintali/MarketTrial}{65}{relaxedCheck_spec}.
+
+\subsection{A legal restriction with crossed holdings}
+\label{sec:crossed}
+
+Take two types, two sites, $r=1$, $\pi=(1/2,1/2)$ and $d=(1,1)$, with costs
+\[
+  F_{11}(x_1)=2x_1,\qquad F_{12}(x_2)=3/2,\qquad
+  F_{21}(x_1)=3/2,\qquad F_{22}(x_2)=2x_2 .
+\]
+For each buyer $w_i=3/2$, so only its off-diagonal cap is eligible.
+Select no optional quote for any of the four pairs. This is a legal
+restricted market. Since $d_1=d_2=1$, each site has quota $t$. Up to
+$t=1/2$ each buys only its off-diagonal cap, exhausting that buyer's
+half-unit. Each then buys private mass at rate one, so $U_j=t-1/2$.
+The budget equation is $2(1-(t-1/2)/\sigma)=1$. It gives
+$t_R=(1+\sigma)/2$ and $x=(1/2,1/2)$. Compare
+the returned joint masses with the diagonal reassignment in~\eqref{eq:crossed}.
+\begin{equation}
+    q^X=\begin{pmatrix}0&1/2\\1/2&0\end{pmatrix},\qquad
+    q^\ast=\begin{pmatrix}1/2&0\\0&1/2\end{pmatrix}.
+    \label{eq:crossed}
+\end{equation}
+At this coverage the diagonal costs are $1$ and the off-diagonal costs are
+$3/2$. Since $\tau\le\eta<1/2$, only the diagonal is marked. Both sites
+are balanced. In \eqref{eq:test} the unmarked coordinates must vanish
+even with residual $\tau$, so $q^X$ fails immediately. Since
+$\tau\le1/4$ and the maximum slope is two, $G\ge8$. The first diagonal
+quote above $1/2$ is at most $1/2+1/G\le5/8$. Its cost is below
+$3/2$ and the site accepts it, giving an omitted blocker. With $q^\ast$
+the support condition holds, row sums are $1/2$, each positive edge is a
+minimizer, and $P_1=P_2=\lambda=1/2$. These are all the exact pattern
+conditions at $e=0$. Thus the pattern LP can succeed on this very
+restriction. The threshold for its exact point is free to differ from $t_R$.
+
+The Lean executable assertion builds the sparse contact from four empty lists,
+checks its coverage and crossed joint table, tests the diagonal reassignment
+row by row at $e=0$, and requires a nonempty blocking interval. The example
+specifies the restriction by hand. Section~\ref{sec:weights} traces a
+separate game in which the default search chooses both restrictions itself.
+\cite{followup,pythonrecord} \decl{Replay/KintaliSearch}{36}{checksCrossedTrial}.
+
+\subsection{A fixed witness for the stricter test}
+
+Fix one full contact on the executable's grid and take $W_0$ from that
+contact. Its support bids are enough to recover the full coverage vector
+when none of them blocks the trial. To control what each buyer actually
+holds at that coverage we also need a quote the site will accept.
+For each $(i,j)$ with
+$j\in S$ and $x^Y_j<1$, consider $z_j=\lfloor Gx^Y_j\rfloor+1$. Add the
+bid $(i,j,z_j)$ to $W_0$ if eligible and $z_j<G$. An eligible bid at $G$
+is already permanent. The enlarged set $W$ is fixed throughout the search
+and satisfies
+\begin{equation}
+                  |W|\le h:=k+m_++k m_+.                 \label{eq:witness}
+\end{equation}
+Suppose no bid from $W\setminus R$ blocks the trial. First apply the union
+comparison using the support bids to get $x^X=x^Y$. The added bids are
+therefore the first quotes \emph{above the trial coverage} as well.
+The strict step above $x^X_j$ guarantees site acceptance even if the site
+would reject a bid tied at $x^X_j$. An eligible next bid is in the witness
+or is permanent. It cannot block, so its buyer must reject it. Every
+record the buyer holds costs at most the cost of that bid, which in turn
+is at most $F_{ij}(x^X_j)+b_{ij}/G$. If the bid is ineligible,
+even $w_i$ is below its cost. For an inactive or fully covered site
+$w_i\le F_{ij}(x^X_j)$ directly. Since $b_{ij}/G\le\tau$ at active
+sites, every held record costs at most $\min_j F_{ij}(x^X_j)+\tau$.
+A real purchase at $p\ge x^X_j$ therefore
+uses a marked pair. Outside mass redirected to a target attaining $w_i$
+also uses a marked pair. If that target is active, its permanent cap
+would block unless the target were fully covered.
+
+When $x^X_j>0$ there is no vacancy, so real purchases before redirection
+equal $t_R/d_j-U_j$. Hence $P_j\ge t_R-d_j\sigma\ge t_R-\tau$.
+An active site with $x^X_j<1$ receives no redirected mass, giving
+$P_j\le t_R$ there. Inactive sites have $P_j=x^X_j=0$. Together these
+bounds prove \eqref{eq:test} for the trial's own $(x^X,q^X,t_R)$.
+By contraposition, every failed test has an omitted blocker in the same
+fixed set $W$. The search updates all its blockers without computing $W$.
+\decl{Kintali/ExactRecovery/Witness}{184}{extended_card_active},
+\decl{Kintali/ExactRecovery/Trial}{86}{Expanded.relaxed_or_omitted}.
+
+\subsection{Compressed weights and a finite trial bound}
+\label{sec:weights}
+
+On each pair the eligible optional indices form a prefix of
+$0,\ldots,G-1$ because cost is nondecreasing in the quote. Give each such
+index weight one. With $J=4h$ and pair total $V>0$, select the first index
+whose cumulative weight, including that bid, is at least $aV/J$, for
+$a=1,\ldots,J-1$. Only the distinct selected bids and eligible caps enter
+the real book. An empty prefix needs no bid. For a fixed pair, lower quotes
+are cheaper for the buyer, or preferred on a cost tie. Thus the
+buyer-accepted optional indices are exactly those below some $u$ in the
+eligible prefix. Site acceptance starts at an index $\ell$ and continues
+to the end of the prefix, by the rule of Section~\ref{sec:sweep}. Either
+cutoff can equal the length of the prefix. The blocker indices are
+exactly those with $\ell\le z<u$, an empty interval if $\ell\ge u$.
+The executable locates both boundaries by binary search on the saved contact.
+After failure, double all weights in every such interval.
+\cite[\S3, pp.~8--9]{kintali}
+
+Two invariants control the search. A blocker interval cannot contain a
+selected bid, by stability. If its weight exceeded $V/J$, the cumulative
+weight would cross one of the selection thresholds inside the interval.
+Hence doubling adds at most $V/J$ to the pair total. At the same time at
+least one member of the fixed $W$ doubles on every failure. Put
+$b=1+\lfloor\log_2 G\rfloor$. After $2hb$ failures, one of the at most
+$h$ witness bids must have doubled at least $2b$ times, reaching weight
+at least $2^{2b}$. Its entire pair started at weight at most $G$ and
+grew by a factor of at most $1+1/(4h)$ per failure. Since
+$(1+1/(4h))^{2h}\le\exp(1/2)<2$ and $G<2^b$, that pair would still
+weigh less than $2^{2b}$. This contradiction bounds the total by $2hb$
+trials, including the successful one. An empty witness precludes the
+first failure. Kintali uses $h=k+m_+$ for the LP. The executable uses
+$h$ from \eqref{eq:witness}.
+\cite[\S3]{kintali} \decl{Kintali/QuoteSearch/Algorithm}{167}{QuoteSearch.solve_correct}.
+
+Within a prefix the program stores lengths of constant runs and their
+integer doubling exponents. After $T$ failures there are at most $1+2T$
+runs per nonempty prefix, weights at most $2^T$, and totals at most
+$G2^T$. Quantiles are recovered by cumulative lengths and weights with
+integer comparisons. Consequently the binary length of $G$ enters the
+representation and trial bound even when an elementary book of $G$ private
+buyers per site would be prohibitive.
+
+\Needspace{10\baselineskip}
+\paragraph{One update with the default selection.}
+Change the off-diagonal costs in Section~\ref{sec:crossed} from $3/2$ to
+$33/32$. A diagonal quote above half coverage is now eligible only for
+$1/2<p\le33/64$, since its cost is $2p$. We replayed the first two trials
+of the pinned Python implementation with its default $J=32$. Both sweeps
+gave $x=(1/2,1/2)$. The second column counts selected quotes above $1/2$
+for each diagonal pair.
+\begin{center}
+\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+Trial & Count per diagonal pair & Positive joint masses & Action\\
+\midrule
+1 & 0 & $q_{12}=q_{21}=1/2$ & Double blocker weights\\
+2 & 1 & $q_{11}=q_{22}=1/2$ & Repair and return\\
+\bottomrule
+\end{tabular}
+\end{center}
+The new selection gave each buyer access to a diagonal bid above half
+coverage. The switch in attack masses let the second trial pass its row
+test at the same coverage.
+\href{\baseurl/experiments/kintali_replay.py\#L236}{\code{check_default_update}}.
+
+\section{Recovering an exact point from the accepted allocation}
+\label{sec:repair}
+
+An accepted trial supplies a rational vector $z=(q^X,x^X,t_R,\tau)$,
+listing the flows first in the order used by the program. Form the integer
+matrix of the relaxed rows of Section~\ref{sec:pattern}, writing each
+equality as two inequalities. These rows already enforce $e\ge0$.
+Append one \emph{unscaled} row $e\le0$. In the resulting system $Az\le b$,
+the slack $s_i=b_i-A_i z$ measures how much room the candidate has in
+row $i$. Every old slack is nonnegative. Only the added row is violated,
+by exactly $\tau$ even after the other rows have been scaled. Satisfying
+all the rows will force $e=0$. There are $n=km+m+2$ variables and
+$N=6m+4km+2k+6$ stored rows, counting inactive rows.
+\decl{Kintali/Recovery}{120}{contactTolerance}.
+
+Let $C\ge1$ be an integer bounding the absolute coefficients of $A$,
+including the added unit row. The program uses
+\begin{equation}
+ B=(n+1)!\,C^{\,n+1},\qquad
+ A_0=n^2CB,\qquad K=A_0+2,\qquad
+ \varepsilon=(B K^{N+1})^{-1}.                         \label{eq:precision}
+\end{equation}
+The dimensions and $C$ are determined by the input, so the market can
+set $\tau=\min(\eta,\varepsilon)$ before its first trial. This is the
+tolerance for the grid, private scale, marks and relaxed test. The
+repair itself uses $\varepsilon$ to separate rows that it will make
+tight from rows with enough room to absorb the correction. The factor
+$B$ bounds the determinants and cofactors used below. These constants
+have bit lengths polynomial in the dimensions and the bit length of $C$.
+
+\begin{theorem}[Repair from row slacks]\label{thm:repair}
+Let $A$ be an $N$-by-$n$ integer matrix with $\abs{A_{ij}}\le C$, and
+let $b$ be integral. Given rational $z$ such that every $s_i\ge-\varepsilon$,
+the following minor computation returns rational $z'$ with $Az'\le b$.
+\end{theorem}
+
+\begin{proof}
+Consider the $N+1$ disjoint windows
+$(\varepsilon K^\ell,\varepsilon K^{\ell+1}]$ for $0\le\ell\le N$.
+There are only $N$ row slacks, so one window is empty. Scan in order and
+write $a$ for the lower endpoint of the first empty window. Every row is
+either near, with $\abs{s_i}\le a$, or far,
+with $s_i>Ka$. Negative slacks are near because $s_i\ge-\varepsilon$.
+
+Start with the empty minor, whose determinant is $1$. Extend it by an
+unused near row and an unused column whenever the enlarged square matrix
+has nonzero determinant. Stop when no such extension exists. Write $I,T$
+for the selected row and column lists, $M=A_{I,T}$, and $d=\det M$.
+Maximality makes the rows of $A_I$ span every near row. Indeed, the determinant
+obtained by bordering $M$ with row $i$ and column $j$ is, up to the row
+and column order, $d(A_{ij}-A_{i,T}M^{-1}A_{I,j})$. If the row is
+independent, one such test succeeds. Use this minor to correct the point by
+\[
+       z'_T=z_T+M^{-1}s_I,\qquad
+       z'_{T^{\mathrm c}}=z_{T^{\mathrm c}} .
+\]
+This gives $A_I z'=b_I$. Each change of slack is at most $A_0a$ in
+absolute value. To see this, expand
+$A_{i,T}\operatorname{adj}(M)s_I/d$. There are at most $n^2$ terms,
+the coefficients have magnitude at most $C$, the cofactors at most $B$,
+and the nonzero integer $d$ has $|d|\ge1$. A far row began with
+$s_i>Ka$, so its new slack exceeds $(K-A_0)a=2a>0$.
+
+For a near row, set $\alpha_i=A_{i,T}\operatorname{adj}(M)$.
+Since $dA_i=\alpha_i A_I$, its \emph{new} slack satisfies
+\[
+           d(b_i-A_i z')= d b_i-\alpha_i b_I\in\mathbb Z .
+\]
+This identity also covers dependent near rows whose right-hand sides
+have yet to be shown consistent. Such a row started with $|s_i|\le a$
+and changed by at most $A_0a$. Multiplying the new slack by
+$|d|\le B$ gives an integer of absolute value at most $B(1+A_0)a$.
+Since $a\le\varepsilon K^N=1/(BK)$ and $1+A_0<K$, the only possible
+integer is zero. All near rows are now tight and every far row has
+positive slack.
+\end{proof}
+
+The executable puts the input point over a common denominator, scans
+bordered minors in a fixed order, and evaluates the Cramer numerators of
+the displacement by stored integer determinants. It materializes the
+intermediate matrices in Bird's division-free determinant algorithm, bounds
+their entries, and identifies its result with Mathlib's determinant through
+\code{BirdDet.birdDetSpec_eq_det}. The proof above explains why coordinates
+outside the pivot can keep their original denominators. Both residual rows
+now hold, so $e=0$ and the exact certificate yields the output strategies.
+\cite{bird} \decl{Kintali/LinearProgramming/Recovery}{34}{System.recover_feasible},
+\decl{Kintali/Recovery}{215}{ExactRecovery.repair_correct}.
+
+For a nonzero correction one can check by hand, the repair replay supplies
+one attacker type, unit gains, costs $(x_1,x_2)$ and budget one. Its input
+has $q=(1/2,1/2)$, threshold $1/2$ and coverage
+$(1/2+\tau/4,1/2-\tau/4)$. The cost gap is $\tau/2$, so both targets
+are marked. At residual zero the marked costs must agree, while the
+budget still requires $y_1+y_2=1$. Thus repair must subtract $\tau/4$
+from the first coverage and add it to the second. The Lean and Python
+checks both recover $(1/2,1/2)$ from this hand-supplied point.
+\decl{Replay/KintaliSearch}{21}{rounded},
+\href{\baseurl/experiments/kintali_replay.py\#L192}{\code{check_nonzero_repair}}.
+
+\section{What the public theorems establish}
+\label{sec:public}
+
+\paragraph{Exact strategies.}
+The Formal Conjectures Authors' typed input lists the resource count, the defender's uncovered
+and covered payoffs per target, and each prior paired with a full attacker
+payoff row. Validity requires a nonempty target set, a legal budget,
+nonnegative normalized priors and the two weak payoff monotonicities of
+Section~\ref{sec:pattern}. For every such game, the internal solver returns
+$\mathrm{some}(x,\alpha)$, where $\alpha$ is conditional on type. The public
+encoders represent rational numbers by reduced fractions and lists by
+delimited bit strings. On the canonical encoding of a valid input, decoding
+the solver's output succeeds and gives a well-shaped compact Bayes--Nash
+equilibrium. For any stream decoding to a valid input the measured solver
+agrees with the public bit solver and its output decodes to the typed
+solution. A positive-prior type uses $\alpha_{ij}=q_{ij}/\pi_i$.
+At zero prior the executable assigns probability one to a minimizing target.
+A separate function implements Kintali's prefix-sum lottery. It returns
+at most $m$ positive-weight defenses, each covering exactly $r$ targets,
+with weights summing to one and marginals $x$. \cite[\S1]{kintali}
+\cite{artifact,upstream}
+
+\paragraph{Polynomial binary word cost.}
+The bound concerns an executable measured function on \emph{all} bit
+streams, including malformed streams and encodings of invalid tables.
+A run carries a value, a slot count $s$ and a maximum charged operand width
+$w$. Sequencing adds counts and takes the maximum of widths. For an input
+of length $L$, write $\ell(u)$ for the binary length of a natural number.
+H4's \code{CompilerRun} supplies the address allowance and word tariff
+\[
+ a(L,s,w)=\ell(L+1)+\ell(s+1)+3\ell(w+1)+8,\qquad
+ c(u)=64(u+1)^3 .
+\]
+The theorem asserts that a \emph{single} $P\in\mathbb N[X]$ bounds
+$s\,c(\max(w,a(L,s,w)))$ by $P(L)$ for the work recorded by every run.
+The length here is the length of the actual input stream. The proof combines
+decoding, validity checks, initialization, compressed selection and updates,
+ranked sparse contact, relaxed tests, repair and compact output encoding.
+The separate addressed bound for lottery construction measures the binary
+description of the supplied marginals. \cite{artifact,h4}
+
+This is the second concrete use of H4. Besides its feasibility-gap lemma,
+the development imports H4's binary size estimates and its count-and-width
+run operations for integer arithmetic and indexed data. The recovery work
+theorem first bounds work in the length of its \emph{materialized} integer
+matrix, right-hand sides, rational point and height. The solver composition
+bounds those sizes in the original input length. For the sweep the
+\code{ContactCharge.price} adapter takes the computed scalar/index-operation
+count and gives each unit a uniform slot tariff at a proved width. The
+arithmetic tariff covers normalized rational addition, multiplication,
+division and comparisons. The program also charges for constructing the
+selected inventory and its rank and quota tables. These conventions specify
+what a slot measures. \decl{Kintali/LinearProgramming/RationalInput}{118}{RationalInput.run_binary_work},
+\decl{Kintali/QuotaSweep/ContactCharge}{48}{ContactCharge.price}.
+
+\paragraph{Finite-machine executions.}
+The public Formal Conjectures proposition asks for one function computed
+by one Mathlib \code{FinTM2} with a polynomial step bound on \emph{every
+canonically encoded typed game}. Even an invalid typed game needs a
+canonical output within the clock. Equilibrium is required on valid games.
+Words outside the image of the public input encoder carry no execution
+obligation in that proposition. \cite{upstream}
+
+The artifact embeds finite programs on bit stacks with one machine step
+per instruction. Its delimiter program terminates after $5L+4$ steps on
+an $L$-bit word. The solver theorem at this level is conditional. Supply
+one program, one polynomial clock, and for each typed input a run from the
+specified initial configuration to the clean final configuration with
+the encoded output, within that clock. On valid games the output must
+agree with the verified solver. Those data imply the public proposition.
+Constructing such a program and proving its execution and clock bounds for
+the whole solver remain open. This requires, in particular, realizing the
+charged operations by sequences of stack instructions within the clock.
+\decl{Kintali/Machine/Delimiter}{137}{Delimiter.steps},
+\decl{Kintali/Machine/PublicSolver}{22}{exists_polyTime_bayesNash_of_runs}.
+
+\section{Independent implementation and observed runs}
+\label{sec:replay}
+
+The Python program reads normalized cost-form JSON, computes with
+standard-library \code{Fraction}, and writes rational coverage, conditional
+attack rows, and a lottery of zero-based target sets. It implements the
+grouped sweep, the compressed quantiles and interval doublings, and the
+same test and slack-window choice. Its repair eliminates rational rows and
+back-substitutes for the pivot displacement. In the Lean implementation,
+bordered and replaced-column integer determinants perform the pivot tests
+and correction. The Python runner can execute without Lean. Its evidence
+is experimental. \cite{pythonrecord,pythonfollow}
+
+\paragraph{A fractional binary replay.}
+For the opening example in Section~\ref{sec:implementation}, the Python
+harness builds the public payoff table and encodes it in 387 bits. The Lean
+adapter checks canonical input, calls \code{MeasuredSolver.run}, and emits
+the output bits. Python independently decodes those bits and checks
+$x=(5/8,3/8)$ and $\alpha=(3/5,2/5)$. On the JSON side the two singleton
+defenses have weights $5/8$ and $3/8$. This case exercises the entire
+binary route.
+\cite{pythonfollow,pythonrecord}
+
+\paragraph{Scope of comparison.}
+All six shared fixtures gave identical decoded strategies in Lean and
+Python. They cover zero budget, full budget, zero gains with a zero prior,
+flat costs, a strict affine case and the mixed affine game above.
+The independent checker verifies box and mass constraints. It compares
+each type's expected cost with its cheapest attack and the defender's
+expected gain with the sum of the $r$ largest pressures. For the Python
+lottery it checks weights, cardinalities and every marginal. The harness
+prints the exact-match count. In the flat-cost game a match also requires
+the two programs to resolve ties alike. \cite{pythonrecord}
+
+Python alone checked equilibria and lotteries on 224 further two-target
+games. These comprise 128 one-type endpoint games with binary intercepts,
+slopes and gains, 16 interior-budget flat-slope games, 32 one-type games
+with a strictly preferred target at every coverage, and 48 two-type games varying priors,
+strict rows, slopes and gains. All passed. Another fixture checks an
+interior zero-prior response. Sections~\ref{sec:crossed} and~\ref{sec:repair}
+give the two hand-supplied stage checks. Section~\ref{sec:weights} also
+runs its two-trial game through the default Python solver. The reviewer
+separately ran a two-type binary game returning half coverage and opposite
+pure attacks. Cross-language agreement is established on the six shared
+inputs. General equivalence would require a proof.
+\cite{review,pythonrecord,pythonfollow}
+
+\paragraph{Practical speed.}
+At revision \code{4c397db} the review timed two mixed games with
+\code{lake env lean}, including startup. For one type and two targets
+with equal positive slopes and gains, the paper and repair grid
+denominators had 24 and 758 bits. The solver was still running at
+50 seconds. On the second game the denominators had 35 and 1,138 bits
+and the run exceeded 60 seconds. These lower bounds on elapsed time
+cover the whole solver. For the LP-based procedure the reported figure is
+the bit length of the grid denominator.
+In a separate 64-run, 31-quantile probe, reusing the pair total preserved
+every selected index and reduced the routine's count from 32,190 to
+12,505 \emph{recorded slots}. \cite{review,followup}
+
+The Python follow-up reports two small inputs still searching at six
+seconds. \cite{pythonfollow} On our fractional fixture, five fresh
+Python~3.9.6 processes returned strategies and lottery from JSON in a
+median of 48.6\,ms (range 47.4--51.7\,ms). One invocation of
+\code{lake env lean --run} \code{Replay/KintaliBinary.lean} read the 387-bit
+input and returned compact binary strategies in 83.24\,s. Both timings
+include startup and I/O on arm64 macOS after the fresh build. Lean loads
+the adapter and Python constructs the lottery. Input preparation and
+answer checking took place outside the timed interval.
+The script and samples for this game are in \code{verification.txt}.
+
+\appendix
+\section{Computational record and reproducibility}
+\label{sec:reproduce}
+
+\paragraph{Revisions.}
+The \atfile{lean/Kintali/README.md}{paper-to-Lean correspondence} links
+the proofs in preprint order. All four sources are pinned below.
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Object & Git commit\\
+\midrule
+\href{https://github.com/robbiemu/bayesian-simple-security-games/tree/75bc25c2ddfac1813064434a3165b3ddd1a1f63d}{Software and Lean proofs}
+ & \code{75bc25c2ddfac1813064434a3165b3ddd1a1f63d}\\
+\href{https://github.com/shivakintali/shivakintali.github.io/blob/b28db0428e4cdcef7e9048a386b05d942d1eb57e/papers/SecurityGames-short.pdf}{Kintali, nine-page PDF}
+ & \code{b28db0428e4cdcef7e9048a386b05d942d1eb57e}\\
+\href{https://github.com/google-deepmind/formal-conjectures/tree/9bd16c570aed942e00ae000c7522dd42ebbb25eb}{Formal Conjectures}
+ & \code{9bd16c570aed942e00ae000c7522dd42ebbb25eb}\\
+\href{https://github.com/leanprover-community/mathlib4/tree/fc4f59e577feb1a4956671bc04ac18aaaf8cd842}{Mathlib (Lean 4.36.0)}
+ & \code{fc4f59e577feb1a4956671bc04ac18aaaf8cd842}\\
+\bottomrule
+\end{tabular}
+\end{center}
+The preprint PDF at the author's revision has the following SHA-256 digest.
+\begin{commands}
+45c1d4757aa4fc2e2af3d6a4812dc0ed0abbfb9092a7a3b768b20d24809fbcfc
+\end{commands}
+
+\paragraph{Build and replay.}
+Start in an empty directory with Git, Python~3 and Lean's \code{elan}.
+The artifact's \code{lean-toolchain} and \code{lake-manifest.json}
+select the compiler and library revisions.
+\begin{commands}
+artifact=75bc25c2ddfac1813064434a3165b3ddd1a1f63d
+public=9bd16c570aed942e00ae000c7522dd42ebbb25eb
+git clone --no-checkout \
+  https://github.com/robbiemu/bayesian-simple-security-games.git bssg
+git -C bssg fetch origin "$artifact"
+git -C bssg checkout --detach "$artifact"
+git init --bare public-spec.git
+git -C public-spec.git fetch --depth=1 \
+  https://github.com/google-deepmind/formal-conjectures.git "$public"
+cd bssg/lean
+lake exe cache get
+env LEAN_NUM_THREADS=4 lake --no-cache --wfail build Kintali
+lake env lean Replay/KintaliAxioms.lean
+lake env lean Replay/KintaliSearch.lean
+python3 -B Kintali/InputOutput/check_upstream.py ../../public-spec.git
+cd ..
+python3 -B experiments/kintali_replay.py --systematic
+\end{commands}
+The compatibility script reads the upstream declarations with
+\code{git show}. It verifies equality of the validity and equilibrium
+predicates, agreement of the input and output encoders, and the public
+proposition under the finite-run premise. It omits the upstream proof
+placeholder. For the standalone Python checks append \Verb|--python-only|
+to the last command.
+
+\Needspace{6\baselineskip}
+The fractional JSON fixture can be run from the software root.
+\begin{commands}
+python3 -B experiments/kintali_solver.py <<'JSON'
+{"resources":1,"prior":[1],"intercept":[[0,"1/2"]],
+ "slope":[[2,2]],"gain":[2,3]}
+JSON
+\end{commands}
+
+\paragraph{Audit and build evidence at the pin.}
+The public follow-up used cached project artifacts. \cite{followup}
+Our build of the same revision started with an empty project build directory
+on arm64 macOS~27.2.1 with 48\,GiB of RAM. We reused the third-party
+package cache, including Mathlib. Lake rebuilt all 236 Kintali modules and
+34 local stochastic-game modules in 269.78\,s with warnings treated as
+errors. The measured-solver theorem checked. The search guards, upstream
+comparison and cross-language replay then passed. The accompanying
+\code{verification.txt} records the results.
+
+All 21 declarations in the \atfile{lean/Replay/KintaliAxioms.lean}{axiom audit},
+including the public correctness and measured cost theorems, reported precisely
+\code{propext}, \code{Classical.choice} and \code{Quot.sound}. Separate queries
+for \code{Market.slack_variation_le} and \code{Market.signed_slack_change}
+gave the same list. The solver's return values come from executable
+definitions. Its proofs use classical reasoning. The audit prints each
+dependency list. CI enforcement of an axiom allowlist remains open.
+
+GitHub Actions run
+\href{https://github.com/robbiemu/bayesian-simple-security-games/actions/runs/45696752976}{45696752976}
+passed on the pinned PR head. Its three jobs checked the research map,
+replayed stochastic games with Z3, and built Lean's \code{StochasticGames}
+target with the H4 axiom audit. The \atfile{.github/workflows/check.yml}{workflow}
+has no job for the Kintali build or its replays. \cite{followup}
+
+The original review at \code{4c397dbb0fcfccd95fab97cfd2412b1c8e8ccd93}
+reported exit 137 on a fresh Kintali build. A single-thread retry stopped
+after about six minutes. At a 2,800\,MB cap the reviewer traced excessive
+memory use to \decl{Kintali/QuotaSweep/BuilderParameters}{77}{quotaData_value},
+which identifies the values of the constructed quota parameters. Five
+declarations and the upstream comparison checked before the review ended,
+leaving the final measured theorem unchecked in that build. The affected
+source file is identical at our pin. \cite{review,followup}
+
+We repeated the isolated check with cached imports on the 48\,GiB laptop.
+\begin{commands}
+lake env lean -j1 -M2800 Kintali/QuotaSweep/BuilderParameters.lean
+lake env lean -j1 -M12000 Kintali/QuotaSweep/BuilderParameters.lean
+\end{commands}
+At 2,800\,MB Lean reported a memory exception in the interpreter and
+exited with code 134 after 30.09\,s. The source through the line preceding
+the final theorem checked at that cap. At 12,000\,MB the entire file,
+including \code{quotaData_value}, checked in 177.00\,s. The full project
+build compiled the same module in 160\,s without an explicit cap. These
+are proof-checking times. The minimum memory requirement and behavior on
+a clean CI runner remain open.
+
+\Needspace{13\baselineskip}
+\paragraph{Locating the public claims.}
+The table links the mathematical claims to their Lean declarations.
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Claim & Declaration at revision \code{75bc25c}\\
+\midrule
+First budget contact & \decl{Kintali/QuotaSweep/Contact}{29}{budget_contact}\\
+Grouped contact and expansion & \decl{Kintali/QuotaSweep/SparseContact}{118}{selectedContact_correct}\\
+Success or fixed-witness blocker & \decl{Kintali/TrialCorrectness}{21}{MarketTrial.prepare_correct}\\
+Exact compact strategies & \decl{Kintali/Solver}{98}{Game.solve_correct}\\
+Canonical binary output & \decl{Kintali/InputOutput/Solver}{45}{InputOutput.solveBits_correct}\\
+Measured output on valid inputs & \decl{Kintali/InputOutput/MeasuredSolver}{25}{MeasuredSolver.exact_output}\\
+Cost on every bit stream & \decl{Kintali/InputOutput/MeasuredSolver}{73}{MeasuredSolver.binary_work_polynomial}\\
+Defender lottery & \decl{Kintali/InputOutput/Solver}{29}{InputOutput.defenses_correct}\\
+Cost of lottery construction & \decl{Kintali/InputOutput/LotteryWork}{477}{LotteryWork.run_binary_work}\\
+\bottomrule
+\end{tabular}
+\end{center}
+The \atfile{experiments/kintali_replay.py}{replay harness} and
+\decl{Replay/KintaliBinary}{22}{Lean adapter} give the six shared inputs
+and their encoding. Rebuild this PDF beside its bibliography with
+\code{latexmk -pdf -halt-on-error kintali-lean.tex}.
+
+\section*{Contributions and use of AI}
+\addcontentsline{toc}{section}{Contributions and use of AI}
+
+Robert Thomas Collins directed the investigation. On 22 November he asked
+for a constructive Lean proof whose main theorem follows the written
+argument, with a named lemma for each major step. He carried this design
+into the formalization of Shiva Kintali's algorithm and requested the
+independent Python implementation. \cite{leansetup,leanrecord,pythonrecord}
+
+Kintali's pattern test calls for an LP feasibility check. At that point
+the project had yet to find a checked general-purpose rational LP solver
+it could call from Lean. The H4 investigation that Collins had directed already supplied a
+determinant-based feasibility gap and a way to account for work on binary
+integers. In that setting, OpenAI Codex proposed repairing the allocation
+returned by the sweep. It enlarged the fixed witness to prove progress
+when the test failed and composed the solver's work bounds.
+\cite{h4,leanrecord}
+
+The investigation used GPT-6 and GPT-6.2 models. GPT-6.2 Astra formalized
+the grouped sweep, repair, strategy encodings and machine interfaces, and
+implemented the sweep and repair in Python. GPT-6.2 Sol wrote the
+cross-language replay and independent equilibrium checks. The ChatGPT Pro
+review highlighted the two stopping rules and identified the quota-variation
+bound for separate treatment. Codex drafted this manuscript, checked the
+stable-allocation references, and ran the build, axiom audit and replays
+in Appendix~\ref{sec:reproduce}. \cite{leanrecord,pythonrecord,review}
+
+\clearpage
+\bibliographystyle{unsrt}
+\bibliography{kintali-lean}
+\end{document}
