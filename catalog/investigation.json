@@ -440,9 +440,9 @@
       "parent": "A4h",
       "title": "Combine price jumps, certified ties, and boundary load queries",
       "state": "partial",
-      "summary": "A grouped solve compares a proposed price relation with the minimum. A factorized core with tractable branches attached at single buyers or goods admits exact polynomial-bit-time clearing.",
+      "summary": "A grouped solve tests price relations. Factorized cores with single-attachment branches admit polynomial-bit-time clearing. A projected Hall cut excludes a quote region after a failed joint test, even if private prices and demands change.",
       "source": "notes/A4h-hybrid-jumps.md",
-      "next": "Find a polynomial-bit-time rule that selects useful certificates or solves the remaining core on unrestricted supplied markets.",
+      "next": "Find a polynomial-bit-time rule that combines projected Hall cuts and price-relation certificates to search independently quoted ports.",
       "issue": 1
     },
     {
@@ -545,7 +545,7 @@
       "parent": "A4i1",
       "title": "Bound exact ascent by deletion-matching products",
       "state": "scoped",
-      "summary": "Minimum-product deletion matchings give an exact rational ascent. The update count is polynomial under logarithmic cycle rank or logarithmically many slope exceptions.",
+      "summary": "Cycle charging and allowed-edge decomposition give polynomial ascent on cactus graphs and under logarithmic local rank. A degree-three family forces superpolynomially many strict minimum-product drops on the deletion-matching ascent in every insertion order.",
       "source": "notes/A4j-unit-matching-ascent.md"
     },
     {
@@ -577,7 +577,7 @@
       "parent": "A4",
       "title": "Transfer max-norm and lattice fixed-point algorithms to affine markets",
       "state": "partial",
-      "summary": "The November theorem gives polynomial time under an alternating-path LP or logarithmic vertex-cover size. The October solver gives exact subexponential search using vertex-cover elimination and direct integer flow recovery. Convex quadratic programming handles slope-balanced interiors.",
+      "summary": "The pinned November preprint gives conditional polynomial bounds under an alternating-path LP or logarithmic vertex-cover size. The October solver gives exact subexponential search using vertex-cover elimination and direct integer flow recovery. The source audit records the scope of the imported statements.",
       "source": "notes/A4m-november-transfer.md",
       "next": "Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets."
     }
@@ -1212,6 +1212,20 @@
       "relation": "uses",
       "reason": "The signed node contraction admits an integer approximation that preserves unit increments.",
       "source": "notes/A4m-discrete-contraction.md#round-transfers-while-preserving-unit-increments"
+    },
+    {
+      "origin": "A4h9",
+      "target": "A4b",
+      "relation": "extends",
+      "reason": "A conditional private minimum and joint upper Hall test exclude a whole region of independent boundary quotes.",
+      "source": "notes/A4h-two-port-hall-cuts.md#project-a-failed-hall-test-to-the-boundary"
+    },
+    {
+      "origin": "A4i1b",
+      "target": "B3f",
+      "relation": "uses",
+      "reason": "The forced-flow family gives a fixed reached phase with superpolynomially many strictly decreasing deletion products even after degree-three splitting.",
+      "source": "notes/A4j-forced-deletion-switches.md#transfer-the-forced-assignments-to-a-unit-market"
     },
     {
       "origin": "A4m",

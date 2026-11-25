@@ -20,4 +20,8 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 
 - Robert Thomas Collins · [Classify the longest single continuation run](../DIRECTIONS.md#direction-busy) · Independently proposed framing
 
+## Contributions elsewhere that cite this work
+
+- [Realize linear deletion-product drops and bound internal updates by simple cycles](../records/c15fec3c-5d6f-4014-8238-9752778f75eb.md)
+
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BB3a%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BB3a%5D+) · [Contributor guide](../CONTRIBUTING.md)
