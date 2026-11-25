@@ -111,6 +111,8 @@ flowchart TB
     AHM --> AJC["A4h11 · Common-offset core<br/>Exact polynomial solver with mixed branches"]
     AB --> AJP["A4h12 · Buyer-to-good proxy<br/>Exact polynomial solver on bounded incidence blocks"]
     AS --> F["A4a · Near-factorized slopes<br/>Exact polynomial-time solver"]
+    F --> A4MF["A4m · LP-certified max-norm frozen prices<br/>Exact polynomial time on the certified class"]
+    AF --> A4MB["A4m · Lattice block search<br/>Exact subexponential bound"]
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
     CV --> CD["Reweighted cover with slope tie-break<br/>Exact search · exponential iteration bound"]
@@ -133,13 +135,13 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA settled
-    class CL,PL,NH,CD,AQ,AJT,AHY,U3 cap
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,A4MF settled
+    class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB cap
 ```
 
 [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Open unit-market search](investigation/A4i1.md)
 
-[Unit-market endpoint support](investigation/A4i1d.md) · [Price-contract scaling](investigation/A4f3.md) · [Ordinal stable allocation](investigation/A4l.md)
+[Unit-market endpoint support](investigation/A4i1d.md) · [Price-contract scaling](investigation/A4f3.md) · [Ordinal stable allocation](investigation/A4l.md) · [Max-norm certificate and lattice block search](investigation/A4m.md)
 
 [Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
 

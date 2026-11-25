@@ -32,6 +32,10 @@ jobs:
           for check in experiments/market_checks/*.py; do
             python3 "$check"
           done
+      - name: Replay market fixed-point transfers
+        run: |
+          python3 -B experiments/a4m_maxnorm_replay.py
+          python3 -B experiments/a4m_lattice_replay.py
 
   stochastic-games-lean:
     name: Lean stochastic game build

@@ -68,7 +68,10 @@ R    Exact equilibrium in polynomial time
 │       │       ├── A4i1b  Bound exact ascent by deletion-matching products
 │       │       ├── A4i1c  Reduce arbitrary unit markets to degree three
 │       │       └── A4i1d  Find support through multiplier lists and price boxes
-│       └── A4l  Find exact clearing through ordinal stable allocation
+│       ├── A4l  Find exact clearing through ordinal stable allocation
+│       └── A4m  Apply max-norm and lattice fixed-point solvers
+│           ├── Certify frozen price maps by alternating-path LP bounds
+│           └── Solve general affine markets by exact lattice block search
 └── H    Complexity and counterexamples
     ├── H1   Pin down compact complexity and certificate bounds
     └── H2   Test a structural conjecture or a candidate hardness reduction
@@ -121,6 +124,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4i1c | General unit market reduces to degree three | [Degree-three reduction](investigation/A4i1c.md) |
 | A4i1d | Polynomial with a small multiplier-list product or fixed cycle-gain rank | [Representatives and price-box tests](investigation/A4i1d.md) |
 | A4l | Polynomial with separated cutoffs at binary quotas | [Ordinal stable allocation](investigation/A4l.md) |
+| A4m | Polynomial time under an LP certificate and a subexponential general bound | [Fixed-point algorithms and source theorems](investigation/A4m.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points
