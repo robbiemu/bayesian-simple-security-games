@@ -39,6 +39,7 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/792ca289-2e48-4b18-b6c2-67c2cb68a5a2.md)
 - [Use one answer endpoint to certify the threshold search](../records/835e8a45-90e9-432d-a45c-dbf2f80f1444.md)
 - [Reduce mixed buyer and good articulations to the one-good block solver](../records/9633dd66-8ec4-4f53-91b2-447e98e34710.md)
+- [Sharpen the exact lattice bound by pinning a vertex cover](../records/97fe3bb1-1a6c-4fc7-93f2-3e153d799d0c.md)
 - [Reduce mixed buyer and good articulations to the one-good block solver](../records/e1fb17e8-e666-42cd-9900-778c96ddd3c6.md)
 - [Clear a common-offset core with heterogeneous single-vertex branches](../records/e1fcfa01-8d57-4849-b50f-d8773258ea1e.md)
 - [Reduce exact affine-market clearing to one defender resource](../records/f4f5b6ed-bad7-4af7-bb54-4175c6f95eed.md)

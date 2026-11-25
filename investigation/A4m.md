@@ -4,7 +4,7 @@
 
 **🟨 Partial result**
 
-An alternating-path LP certifies polynomial-time exact price search for additional slope patterns. Conservative lattice rounding gives a subexponential exact algorithm for arbitrary binary affine markets.
+The November residual theorem gives polynomial time for markets passing an alternating-path LP. Conservative rounding and vertex-cover elimination give an exact subexponential algorithm using the October lattice block solver.
 
 **Open task** — Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets.
 
@@ -22,5 +22,6 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 - [Obtain a subexponential exact market solver by lattice block search](../records/02970891-b5d8-42fe-8b87-a99dcfe5d543.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
 - [Certify exact polynomial-time clearing with a path bound on frozen prices](../records/e3aa26cd-1de3-424f-97c3-82db725e63cf.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
+- [Sharpen the exact lattice bound by pinning a vertex cover](../records/97fe3bb1-1a6c-4fc7-93f2-3e153d799d0c.md) · result · proof · ChatGPT 6 Pro, Robert Thomas Collins, OpenAI Codex · ChatGPT 6 Pro, GPT-6, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4m%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4m%5D+) · [Contributor guide](../CONTRIBUTING.md)

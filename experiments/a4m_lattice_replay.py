@@ -87,6 +87,34 @@ def kleene(mapping, dimension, mesh):
     raise AssertionError("ascending Kleene orbit exceeded the box height")
 
 
+def scalar_least_fixed_point(mapping, mesh):
+    """Find the first crossing of the diagonal by an integer unit-increment map."""
+    lo, hi = -1, mesh
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        if mapping(mid) <= mid:
+            hi = mid
+        else:
+            lo = mid
+    assert mapping(hi) == hi
+    return hi
+
+
+def independent_fixed_point(mapping, mesh, dimension, pins):
+    """Lift given pins when every remaining coordinate only depends on its own value."""
+    point = [pins.get(v, 0) for v in range(dimension)]
+    for v in range(dimension):
+        if v in pins:
+            continue
+
+        def coordinate(value):
+            point[v] = value
+            return mapping(tuple(point))[v]
+
+        point[v] = scalar_least_fixed_point(coordinate, mesh)
+    return tuple(point)
+
+
 def check_covers(table, mesh):
     count = 0
     for x, output in table.items():
@@ -164,7 +192,82 @@ def check_one_offer(market):
         print(f"N={mesh}, integer least fixed point {fixed}, normalized l1 error {error}")
 
 
+def check_mixed_cover():
+    mesh = 15
+    market = Market([1, 2, 1], [1, 1, 2],
+                    [(0, 0, 3, 2), (0, 1, 4, 1), (0, 2, 2, F(1, 2)),
+                     (1, 0, 3, F(3, 2)), (2, 0, 2, 1)],
+                    5, F(1, 2), F(1, 16))
+    boundary, interior = (0, 3), (1, 2, 4, 5)
+    assert all(i in boundary or j in boundary for i, j, _, _ in market.edges)
+
+    def mapping(point):
+        return market.rounded(point, mesh)
+
+    lifted, reduced = {}, {}
+    for pins in product(range(mesh + 1), repeat=len(boundary)):
+        lifted[pins] = independent_fixed_point(mapping, mesh, market.dimension,
+                                                dict(zip(boundary, pins)))
+
+        def interior_map(u):
+            x = (pins[0], u[0], u[1], pins[1], u[2], u[3])
+            y = mapping(x)
+            return tuple(y[v] for v in interior)
+
+        assert tuple(lifted[pins][v] for v in interior) == kleene(interior_map, len(interior), mesh)
+        reduced[pins] = tuple(mapping(lifted[pins])[v] for v in boundary)
+
+    least = kleene(reduced.__getitem__, len(boundary), mesh)
+    assert lifted[least] == kleene(mapping, market.dimension, mesh)
+    assert scalar_least_fixed_point(lambda x: clip(x, 3, 9), mesh) == 3
+    covers = check_covers(reduced, mesh)
+    print(f"Mixed vertex cover: {len(lifted)} lifts, {covers} reduced increments, least point {least}")
+
+
+def check_rational_recovery():
+    denominator = 49152
+    epsilon = F(1, denominator)
+    mass, capacity, bid, slope = 2, 1, 2, 2
+    market = Market([mass], [capacity], [(0, 0, bid, slope)], 4, epsilon, epsilon / 8)
+    mesh = 2**150
+
+    def mapping(point):
+        return market.rounded(point, mesh)
+
+    def lift(y):
+        return independent_fixed_point(mapping, mesh, market.dimension, {1: y})
+
+    # Pin the good, solve the buyer, then find the least fixed price coordinate.
+    y = scalar_least_fixed_point(lambda t: mapping(lift(t))[1], mesh)
+    point = lift(y)
+    assert mapping(point) == point
+
+    # The fixture has u = 0, x = capacity + epsilon*p, and epsilon*x = bid - slope*p.
+    cap = slope * denominator**2 + capacity
+    error = market.width * market.error_constant / (mesh * (1 - market.q))
+    assert error < F(1, 2 * cap**2)
+    signed = tuple((lo + market.width * F(z, mesh)).limit_denominator(cap)
+                   for lo, z in zip(market.lower, point))
+    u, minus_price = signed
+    price = -minus_price
+    assert (u, price) == (0, F(4831789056, 4831838209))
+    z = tuple((v - lo) / market.width for v, lo in zip(signed, market.lower))
+    assert market.exact(z) == z
+    assert 0 < (bid - u - slope * price) / epsilon == capacity + epsilon * price < mass
+
+    # The repair on this support fills the good, leaves positive outside mass,
+    # and makes the good tight at the same utility as the outside option.
+    sold, outside = capacity, mass - capacity
+    original_price = F(bid, slope)
+    assert sold == outside == 1 and original_price == 1
+    assert bid - slope * original_price == 0
+    print(f"Rational support recovery: regularized price {price}, original price {original_price}, "
+          f"flow {sold} real and {outside} outside")
+
+
 if __name__ == "__main__":
+    if not __debug__:
+        raise SystemExit("Run without -O to keep the exact checks enabled.")
     single = Market([1], [1], [(0, 0, 2, 1)], 2, F(1, 2), F(1, 8))
     fixtures = [
         (single, 16),
@@ -186,3 +289,5 @@ if __name__ == "__main__":
               f"{reduced} reduced covers, max normalized l1 error {error}, "
               f"least fixed point {fixed}")
     check_one_offer(single)
+    check_mixed_cover()
+    check_rational_recovery()

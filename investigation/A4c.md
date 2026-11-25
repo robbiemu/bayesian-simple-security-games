@@ -33,6 +33,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [Contract certified ties and recover the original allocation](../records/4becb293-dc4a-4f61-a4f5-af881f58eaa2.md)
 - [Scale affine-market prices with stable contracts and exact support repair](../records/521d0fb1-878f-4e35-8f94-75eff883c296.md)
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/792ca289-2e48-4b18-b6c2-67c2cb68a5a2.md)
+- [Sharpen the exact lattice bound by pinning a vertex cover](../records/97fe3bb1-1a6c-4fc7-93f2-3e153d799d0c.md)
 - [Discover a clearing support through separated ordinal cutoffs](../records/a3264efb-3fa1-4fa8-88dc-d37f641d1c3a.md)
 - [Find synchronized boundary quotes using signed branch loads](../records/b0f2709c-7011-4504-b5d9-c80c48ba7687.md)
 - [Solve a factorized core with branches at shared buyers and goods](../records/c21ceda9-a451-4c9f-8ad0-8902f8678e95.md)

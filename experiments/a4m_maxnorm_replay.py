@@ -3,7 +3,7 @@
 from fractions import Fraction as F
 from itertools import product
 
-from a4j_unit_prices import check_certificate, solve
+from a4j_unit_prices import check_certificate, demands_at, solve
 
 
 def linear_solution(matrix, rhs):
@@ -165,13 +165,38 @@ def check_frozen_boundary():
         errors = [slopes[i][j] - 1 for i in range(len(bids)) if bids[i][j] > 0]
         assert max(map(abs, errors)) == F(1, 2)
         assert max(abs(first - second) for first, second in product(errors, repeat=2)) == F(1, 2)
-    for trial, expected in (((0, 0), (1, 1)), ((1, 1), (1, 2)), ((1, 3), (1, 3))):
+    def frozen_solve(trial):
         adjusted = [[F(b) - (s - 1) * p for b, s, p in zip(row, rates, trial)]
                     for row, rates in zip(bids, slopes)]
         prices, matching, _ = solve(adjusted, uniform)
         check_certificate(adjusted, uniform, prices, matching, exhaustive=True)
-        assert tuple(prices) == expected
+        return tuple(prices), matching, demands_at(adjusted, uniform, prices)[2]
+
+    for trial, expected in (((0, 0), (1, 1)), ((1, 1), (1, 2)), ((1, 3), (1, 3))):
+        assert frozen_solve(trial)[0] == expected
     print("Frozen assignment: certified boundary factor one and exact least price (1, 3)")
+
+    delta = F(1, 2**30)
+    trial = (1, 3 - 2 * delta)
+    frozen, matching, demand = frozen_solve(trial)
+    assert frozen == (1, 3 - delta)
+    assert max(abs(p - t) for p, t in zip(frozen, trial)) == delta
+    assert demand[0] == {-1, 0} and demand[1] == {0, 1}
+
+    # Preserve the outside tie and the two-good tie in the original slopes.
+    repaired = linear_solution(((slopes[0][0], 0), (slopes[1][0], -slopes[1][1])),
+                               (bids[0][0], bids[1][0] - bids[1][1]))
+    assert repaired == (1, 3)
+    assert demands_at(bids, slopes, repaired)[2] == demand
+    check_certificate(bids, slopes, repaired, matching, exhaustive=True)
+
+    # Both goods also sell at the higher prices with this same matching.
+    higher = (2, 7)
+    _, _, higher_demand = demands_at(bids, slopes, higher)
+    assert all(good in higher_demand[buyer] for buyer, good in matching.items())
+    assert set(matching.values()) == {-1, 0, 1}
+    assert sum(bool(choices & {0, 1}) for choices in higher_demand) == 2
+    print("Tie repair: positive residual 2^-30, least price (1, 3), higher clearing price (2, 7)")
 
 
 

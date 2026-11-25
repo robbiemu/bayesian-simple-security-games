@@ -577,7 +577,7 @@
       "parent": "A4",
       "title": "Transfer max-norm and lattice fixed-point algorithms to affine markets",
       "state": "partial",
-      "summary": "An alternating-path LP certifies polynomial-time exact price search for additional slope patterns. Conservative lattice rounding gives a subexponential exact algorithm for arbitrary binary affine markets.",
+      "summary": "The November residual theorem gives polynomial time for markets passing an alternating-path LP. Conservative rounding and vertex-cover elimination give an exact subexponential algorithm using the October lattice block solver.",
       "source": "notes/A4m-november-transfer.md",
       "next": "Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets."
     }
