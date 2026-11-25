@@ -24,6 +24,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 ## Contributions elsewhere that cite this work
 
+- [Obtain a subexponential exact market solver by lattice block search](../records/02970891-b5d8-42fe-8b87-a99dcfe5d543.md)
 - [Use grouped clearing to compare a proposed price relation](../records/03eaaf28-5c08-4810-9236-03878f2496cd.md)
 - [Clear a common-offset core with heterogeneous single-vertex branches](../records/050f6342-7cce-48ec-b308-036810d0c200.md)
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/05ac5a83-21c6-4859-a3a6-3e9ee5a62863.md)

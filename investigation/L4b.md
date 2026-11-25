@@ -30,6 +30,7 @@ Parent question · [L4 · Compare the Newton bound with the continuation landsca
 
 ## Contributions elsewhere that cite this work
 
+- [Obtain a subexponential exact market solver by lattice block search](../records/02970891-b5d8-42fe-8b87-a99dcfe5d543.md)
 - [Clear a common-offset core with heterogeneous single-vertex branches](../records/050f6342-7cce-48ec-b308-036810d0c200.md)
 - [Equate unit market search with equilibrium under uniform priors and gains](../records/05ac5a83-21c6-4859-a3a6-3e9ee5a62863.md)
 - [Reduce exact affine-market clearing to one defender resource](../records/0952bf4d-148a-4ea4-9130-b8c0ff07156e.md)
