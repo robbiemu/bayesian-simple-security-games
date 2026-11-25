@@ -8,6 +8,8 @@ Vincent Conitzer asked whether an exact Bayes–Nash equilibrium can be computed
 
 **Lean verifies that the executable solver returns an exact equilibrium for every valid rational input**, including the public bitstring encoding. It verifies polynomial work in the project’s binary word-cost model. The remaining formalization is the step bound for the public finite-machine statement. Applying the A4i reduction to Kintali’s theorem also gives polynomial-time exact affine-market clearing and minimum-price recovery. [Lean proof status](lean/Kintali/README.md) · [A4i reverse reduction](notes/A4i-market-to-game.md)
 
+Kintali’s result and the checked Lean development conclude this repository’s main investigation.
+
 **L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps can be skipped. **A4** studies direct algorithms for exact market clearing and lower bounds for specific methods.
 
 [**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Direct market algorithms**](#open-a4-market-questions) · [Investigation archive](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
@@ -26,6 +28,8 @@ L1 describes the published continuation. L2 gives an exact implementation. Some 
 
 Each buyer’s utility for a good is a decreasing affine function of its price, with a slope specific to that buyer and good. Exact clearing with binary rational data and exact security-game equilibrium are polynomial-time Turing equivalent. A4i recovers the minimum prices from one equilibrium of a game with one defender resource. Applying Kintali’s algorithm to that game settles the polynomial-time existence question. [A4i reverse reduction](investigation/A4i.md) · [Kintali’s short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf)
 
+For one supplied market, the recovered minimum-price vector is the complete singleton candidate list requested in A4h5. [Supplied-capacity result](notes/A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities) · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+
 The A4 branches below study direct market algorithms. A4c recovers the original minimum from any clearing of an enlarged market. L4b recovers an exact game equilibrium at the requested budget with polynomially many clearing calls. [A4 question and certificate](investigation/A4.md) · [A4c supply perturbation](investigation/A4c.md) · [L4b budget recovery](investigation/L4b.md)
 
 Unit-market search is also equivalent to exact equilibrium search in games with uniform priors and equal defender gains. A4i1 studies direct solvers for arbitrary affine slopes at unit quantities. [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Direct search question](investigation/A4i1.md)
@@ -39,7 +43,7 @@ A4h9's projected Hall cut excludes a region of boundary quotes after a failed jo
 | Question | What would advance it | Join |
 | --- | --- | --- |
 | [A4i1 · Exact unit-market prices](investigation/A4i1.md) | Find the minimum prices of one supplied unit market with arbitrary affine slopes in polynomial bit time and recover a clearing assignment. | [A4i1 node](investigation/A4i1.md) |
-| [A4h · Complete candidate prices](investigation/A4h.md) | For one supplied capacity vector, generate polynomial-size lists in polynomial bit time. Each good’s list must contain its minimum price. | [A4h5 node](investigation/A4h5.md) · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1) |
+| [A4h · Direct candidate-price search](investigation/A4h.md) | Find a polynomial-bit-time direct rule for choosing which affine region to query next. | [Candidate generation](investigation/A4h.md) |
 | [A4e · Reweighted covering LP](investigation/A4e.md) | Each iteration costs polynomial work. Prove a polynomial bound on the number of iterations or construct a family forcing a superpolynomial run for this rule. | [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2) |
 | [A4f · Complementarity formulation](investigation/A4f.md) | Find an equivalent formulation with polynomially bounded handicap, the parameter controlling the Newton iteration bound. Show that solving it and recovering an exact equilibrium take polynomial bit time. | [Contribute to A4f](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4f%5D+) |
 

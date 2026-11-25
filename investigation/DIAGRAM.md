@@ -99,7 +99,7 @@ flowchart TD
   n42 --> n45
   n46["A4h4"]:::scoped
   n42 --> n46
-  n47["A4h5"]:::open
+  n47["A4h5"]:::scoped
   n42 --> n47
   n48["A4h6"]:::partial
   n42 --> n48

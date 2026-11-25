@@ -358,9 +358,9 @@
       "parent": "A4",
       "title": "Generate complete candidate lists before the Hall search",
       "state": "open",
-      "summary": "Polynomially many adaptive queries suffice in the abstract. Selecting the queries efficiently is open.",
+      "summary": "A4h5 obtains a singleton list via A4i and Kintali's algorithm. For direct affine-region search, polynomially many adaptive queries suffice in the abstract and selecting them efficiently remains open.",
       "source": "notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible",
-      "next": "Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market."
+      "next": "Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market."
     },
     {
       "id": "A4h1",
@@ -399,10 +399,9 @@
       "id": "A4h5",
       "parent": "A4h",
       "title": "Generate complete candidates using the supplied capacities",
-      "state": "open",
-      "summary": "Clipping and querying branch loads give capacity-specific polynomial solvers on restricted cores.",
-      "source": "notes/A4h-supplied-capacity.md#query-branch-loads-at-selected-prices",
-      "next": "Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length.",
+      "state": "scoped",
+      "summary": "At supplied capacities, one call to Kintali's algorithm on the A4i game returns the exact minimum-price vector as a singleton candidate list in polynomial bit time.",
+      "source": "notes/A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities",
       "issue": 1
     },
     {

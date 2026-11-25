@@ -4,9 +4,9 @@
 
 **🟦 Open**
 
-Polynomially many adaptive queries suffice in the abstract. Selecting the queries efficiently is open.
+A4h5 obtains a singleton list via A4i and Kintali's algorithm. For direct affine-region search, polynomially many adaptive queries suffice in the abstract and selecting them efficiently remains open.
 
-**Open task** — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
+**Open task** — Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market.
 
 [Read the evidence](../notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible) · [Investigation index](README.md)
 
@@ -18,7 +18,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 - [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) · 🟩 Result for the stated scope
 - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) · 🟨 Partial result
 - [A4h4 · Count capacity-price intervals and boundary-load drops](A4h4.md) · 🟩 Result for the stated scope
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟩 Result for the stated scope · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)

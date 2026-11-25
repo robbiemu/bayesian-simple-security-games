@@ -111,7 +111,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4g | Exact bounded searches and path lower bounds | [Anchor price lists, region solves, and a long Lemke line](notes/A4g-budgeted-support-search.md) |
 | A4h | Polynomial subclasses and a query bound | [Complete candidate generation and limits on explicit lists](notes/A4h-complete-candidate-generation.md) |
 | A4h4 | NP-hard count | [Corollary 1.8 audit and price-table reduction](notes/A4h-table-count-hardness.md) |
-| A4h5 | Polynomial capacity-specific subclasses | [Hall counterexample, clipped loads, and core price queries](notes/A4h-supplied-capacity.md) |
+| A4h5 | Singleton list in polynomial bit time | [Exact candidate at the supplied capacities](notes/A4h-supplied-capacity.md#one-exact-candidate-at-the-supplied-capacities) |
 | A4h6 | Finite ascent, polynomial subclasses, and step lower bounds | [Safe jumps, rational directions, and restricted Hall solves](notes/A4h-alternating-tree.md) |
 | A4h7 | Exact contraction after certification | [Forced demand and trade, price groups, and disjunction limits](notes/A4h-forced-price-relations.md) |
 | A4h8 | One representative at fixed quotes | [Shared goods and buyers, joint loads, and antichains](notes/A4h-boundary-dominance.md) |

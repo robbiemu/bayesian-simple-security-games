@@ -101,10 +101,11 @@ flowchart TB
     AG --> AH["A4h · Generate complete price lists or regions"]
     AH --> AB["Bounded-size blocks · at most two articulation goods<br/>or bounded buyers and goods per block<br/>Complete polynomial lists"]
     AH --> AO["Small aggregate slope corrections or approximate common offsets<br/>Exact polynomial-time solvers"]
-    AH --> AQ["General markets<br/>Polynomial number of region queries"]
+    AH --> AQ["Direct search on general markets<br/>Polynomial number of region queries"]
     AH --> AX["Complete boundary tables and load hulls<br/>Exponential size"]
     AX --> AT["A4h4 · Count price plateaus or load drops<br/>NP-hard even with unit slopes"]
     AH --> AJ["A4h5 · Use supplied capacities"]
+    AJ --> AK["A4i + Kintali<br/>Exact singleton in polynomial time"]
     AJ --> ASB["Clip branch loads on bounded-size blocks<br/>Polynomial with bounded usable quantity range"]
     AJ --> ASC["Query loads on a near-factorized core<br/>Exact polynomial solver with conditional branch solvers"]
     AJ --> AJT["A4h6 · Safe alternating price jumps<br/>Finite ascent · superpolynomial general path count"]
@@ -146,7 +147,7 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG,AHC proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,US,UD3 settled
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,US,UD3,AK settled
     class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB,A4MQ,A4MF,A4MC cap
 ```
 

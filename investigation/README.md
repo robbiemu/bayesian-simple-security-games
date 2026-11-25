@@ -11,8 +11,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
 - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule. · [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
-- [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time rule to choose the next region on an unrestricted supplied market.
-- [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) — Generate a polynomial-size list guaranteed to contain the minimum price in every coordinate of one supplied market, in time polynomial in its binary input length. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market.
 - [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Find a direct polynomial-bit-time market solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem.
 - [H1 · Pin down compact complexity and certificate bounds](H1.md) — Strengthen a general upper or lower bound under the explicit rational encoding.
 - [H2 · Test a structural conjecture or a candidate hardness reduction](H2.md) — State a precise conjecture or reduction and show which exact equilibrium problem it addresses.
@@ -86,7 +85,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
         - [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) · 🟩 Result for the stated scope
         - [A4h3 · Use contraction queries, load corrections, and price transforms](A4h3.md) · 🟨 Partial result
         - [A4h4 · Count capacity-price intervals and boundary-load drops](A4h4.md) · 🟩 Result for the stated scope
-        - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟦 Open
+        - [A4h5 · Generate complete candidates using the supplied capacities](A4h5.md) · 🟩 Result for the stated scope
         - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) · 🟨 Partial result
         - [A4h7 · Find and contract forced price relations](A4h7.md) · 🟨 Partial result
         - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) · 🟨 Partial result
