@@ -140,7 +140,7 @@ It checks the Python lottery marginals and exercises a default trial
 that clears after one blocker-interval doubling. The systematic option
 adds Python-only cases. Use `--python-only` to run the replay without Lean.
 The correctness and binary work theorems apply to the Lean implementation.
-[Replay harness](../../experiments/kintali_replay.py) · [Lean binary adapter](../Replay/KintaliBinary.lean)
+[Replay harness](../../experiments/kintali_replay.py) · [Lean binary adapter](../Replay/KintaliBinary.lean) · [Python contribution record](../../records/d59760a9-7139-47e9-9df1-cb8d423ba3ed.md)
 
 The algorithm and original quota comparison come from Kintali’s
 preprint. The witness extension, constructive recovery, and Lean
