@@ -32,7 +32,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [A4h6 · Jump to new demand ties using alternating forests](A4h6.md) — Bound a stronger shortcut on general inputs, or identify another class with polynomially many jumps. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h7 · Find and contract forced price relations](A4h7.md) — Find enough forced relations in polynomial time without enumerating a large disjunction. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4h8 · Preserve completions when discarding partial solutions](A4h8.md) — Find the boundary prices and buyer utilities efficiently for broader separator classes. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
-- [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) — Find a polynomial-bit-time rule that selects useful certificates or solves the remaining core on unrestricted supplied markets. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
+- [A4h9 · Combine price jumps, certified ties, and boundary load queries](A4h9.md) — Find a polynomial-bit-time rule that combines projected Hall cuts and price-relation certificates to search independently quoted ports. · [Issue #1](https://github.com/robbiemu/bayesian-simple-security-games/issues/1)
 - [A4m · Transfer max-norm and lattice fixed-point algorithms to affine markets](A4m.md) — Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets.
 
 ## Full tree

@@ -114,17 +114,17 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h6 | Finite ascent, polynomial subclasses, and step lower bounds | [Safe jumps, rational directions, and restricted Hall solves](notes/A4h-alternating-tree.md) |
 | A4h7 | Exact contraction after certification | [Forced demand and trade, price groups, and disjunction limits](notes/A4h-forced-price-relations.md) |
 | A4h8 | One representative at fixed quotes | [Shared goods and buyers, joint loads, and antichains](notes/A4h-boundary-dominance.md) |
-| A4h9 | Exact relation tests and a polynomial subclass | [Grouped comparisons and safe restarts](notes/A4h-hybrid-jumps.md) · [Branches at shared buyers and goods](notes/A4h-mixed-port-composition.md) |
+| A4h9 | Exact relation tests and a polynomial subclass | [Grouped comparisons and safe restarts](notes/A4h-hybrid-jumps.md) · [Branches at shared buyers and goods](notes/A4h-mixed-port-composition.md) · [Projected Hall cuts](notes/A4h-two-port-hall-cuts.md) |
 | A4h10 | Polynomial search with certified synchronized quotes | [Signed loads and persistent ties](notes/A4h-synchronized-ports.md) |
 | A4h11 | Polynomial subclass and weak-sign transfer | [Offset cores and heterogeneous conditional solvers](notes/A4h-core-composition-closures.md) |
 | A4h12 | Polynomial on bounded incidence blocks | [Buyer proxies, mixed articulations, and margin counts](notes/A4h-buyer-proxy.md) |
 | A4i | Reverse reduction and unit-market equivalence proved | [One-resource reduction and jointly uniform games](notes/A4i-market-to-game.md) |
 | A4i1 | General unit-market polynomial time open | [Supplied unit market with arbitrary affine slopes](investigation/A4i1.md) |
-| A4i1a–b | Polynomial in degree two and additional slope classes | [Conditional Hall search](investigation/A4i1a.md) · [Deletion-matching ascent](investigation/A4i1b.md) |
+| A4i1a–b | Polynomial in degree two and additional graph or slope classes. Superpolynomial ascent lower bound at degree three. | [Conditional Hall search](investigation/A4i1a.md) · [Deletion components and cycle bounds](notes/A4j-deletion-matching-components.md) · [Forced switches](notes/A4j-forced-deletion-switches.md) |
 | A4i1c | General unit market reduces to degree three | [Degree-three reduction](investigation/A4i1c.md) |
 | A4i1d | Polynomial with a small multiplier-list product or fixed cycle-gain rank | [Representatives and price-box tests](investigation/A4i1d.md) |
 | A4l | Polynomial with separated cutoffs at binary quotas | [Ordinal stable allocation](investigation/A4l.md) |
-| A4m | Polynomial time under max-norm or graph conditions, with a subexponential general bound and direct integer flow recovery | [Fixed-point algorithms and source theorems](investigation/A4m.md) |
+| A4m | October subexponential general bound and exact integer flow recovery. Conditional November polynomial bounds on certified classes. | [Fixed-point results](investigation/A4m.md) · [Source audit](notes/A4m-november-source-audit.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points

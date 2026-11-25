@@ -84,6 +84,8 @@ flowchart TB
     UM <--> UG["A4i · Exact equilibrium search<br/>Uniform priors and equal gains"]
     UM --> UD["A4i1a · Degree two on either side<br/>Exact polynomial-time solver"]
     UM --> UA["A4i1b · Deletion matchings<br/>Polynomial with logarithmically many slope exceptions"]
+    UA --> US["Add component minima and charge nonunit cycles<br/>Polynomial ascent in the stated graph classes"]
+    UA --> UD3["Degree-three unit markets<br/>Superpolynomially many strict drops for the ascent"]
     UM --> U3["A4i1c · Degree three retains the general unit problem"]
     UM --> UL["A4i1d · Multiplier lists or fixed cycle-gain rank<br/>Exact polynomial-time solvers"]
     C --> PS["A4f3 · Stable price-contract phases<br/>Polynomial with bounded products of slope ratios"]
@@ -106,14 +108,15 @@ flowchart TB
     AJR --> AHY
     AJD --> AHM["A4h9 · Tractable branches at single buyers or goods<br/>Polynomial exact solving on a factorized core"]
     AHY -.-> AHM
+    AJD --> AHC["A4h9 · Project a failed Hall test<br/>Exclude a region after repricing the interior"]
     AHY --> AJG["A4h10 · Certified synchronized quotes<br/>Exact search using signed branch loads"]
     AJD --> AJG
     AHM --> AJC["A4h11 · Common-offset core<br/>Exact polynomial solver with mixed branches"]
     AB --> AJP["A4h12 · Buyer-to-good proxy<br/>Exact polynomial solver on bounded incidence blocks"]
     AS --> F["A4a · Near-factorized slopes<br/>Exact polynomial-time solver"]
-    F --> A4MF["A4m · LP-certified max-norm frozen prices<br/>Polynomial time using the November theorem"]
+    F --> A4MF["A4m · LP-certified max-norm frozen prices<br/>Polynomial time conditional on the November preprint"]
     AF --> A4MB["A4m · Vertex-cover elimination and lattice block search<br/>Exact subexponential bound from the October solver"]
-    A4MB --> A4MC["A4m · Cut circuit on a vertex cover<br/>Polynomial for logarithmic cover using the November theorem"]
+    A4MB --> A4MC["A4m · Cut circuit on a vertex cover<br/>Polynomial for logarithmic cover conditional on November"]
     A4MB --> A4MQ["A4m · Solve slope-balanced interiors by convex QP<br/>October search on the remaining coordinates"]
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
@@ -136,9 +139,9 @@ flowchart TB
     classDef settled fill:#dcf5e7,stroke:#38805c,color:#143e2a
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
-    class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,A4MF,A4MC settled
-    class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB,A4MQ cap
+    class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG,AHC proof
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,US,UD3 settled
+    class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB,A4MQ,A4MF,A4MC cap
 ```
 
 [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Open unit-market search](investigation/A4i1.md)

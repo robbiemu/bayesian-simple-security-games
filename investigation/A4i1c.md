@@ -18,6 +18,10 @@ Parent question · [A4i1 · Find the exact minimum prices of one supplied unit m
 
 - Robert Thomas Collins · [Find prices in one supplied unit market](../DIRECTIONS.md#direction-supplied-unit-market) · Selected the unit-market problem
 
+## Contributions elsewhere that cite this work
+
+- [Force superpolynomially many deletion-minimum changes in a degree-three unit market](../records/1365920b-13dc-4169-8862-ce19b0f9c445.md)
+
 ## Contribution log
 
 - [Reduce the arbitrary unit market to degree three](../records/562cf680-318b-45e4-b6cf-8dd2f3a683d6.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex research subagent, GPT-6, Python

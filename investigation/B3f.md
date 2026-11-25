@@ -19,6 +19,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 - [L4b · Transfer market endpoints and exact threshold search to L1/L2](L4b.md) **applies to** B3f. Endpoint search can skip B3f’s forced flow switches. On that family the near-factorized solver makes the clearing calls polynomial-time. [Evidence](../notes/L4-newton-and-continuation.md#limits-on-following-the-entire-path)
 - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) **is constrained by** B3f. Flow switches occur even at a fixed threshold and fixed target totals. Any certificate-based shortcut must account for these internal changes. [Evidence](../notes/B3f-forced-flow-switches.md)
 - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) **uses** B3f. Many distinct assignments are forced on one trajectory. This supplies the lower side of the remaining gap. [Evidence](../notes/B3f-forced-flow-switches.md)
+- [A4i1b · Bound exact ascent by deletion-matching products](A4i1b.md) **uses** B3f. The forced-flow family gives a fixed reached phase with superpolynomially many strictly decreasing deletion products even after degree-three splitting. [Evidence](../notes/A4j-forced-deletion-switches.md#transfer-the-forced-assignments-to-a-unit-market)
 
 ## Where the direction came from
 
@@ -29,6 +30,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 
 ## Contributions elsewhere that cite this work
 
+- [Force superpolynomially many deletion-minimum changes in a degree-three unit market](../records/1365920b-13dc-4169-8862-ce19b0f9c445.md)
 - [Certify minimum prices and bound two directional auctions](../records/f9e2da42-7475-4d20-a172-557b2a852ea3.md)
 
 ## Contribution log

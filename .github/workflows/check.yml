@@ -32,6 +32,11 @@ jobs:
           for check in experiments/market_checks/*.py; do
             python3 "$check"
           done
+      - name: Replay projected Hall cuts and deletion matchings
+        run: |
+          python3 -B experiments/a4h_two_port_replay.py
+          python3 -B experiments/a4j_deletion_product_replay.py
+          python3 -B experiments/a4j_deletion_scc_replay.py
       - name: Replay market fixed-point transfers
         run: |
           python3 -B experiments/a4m_maxnorm_replay.py
