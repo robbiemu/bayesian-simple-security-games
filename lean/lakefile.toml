@@ -17,3 +17,7 @@ globs = ["LibraryChecks.+"]
 [[lean_lib]]
 name = "StochasticGames"
 globs = ["StochasticGames.+"]
+
+[[lean_lib]]
+name = "Kintali"
+globs = ["Kintali.+"]
