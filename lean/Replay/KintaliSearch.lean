@@ -26,6 +26,36 @@ def rounded : Strategy 1 2 :=
 #guard (List.ofFn rounded.coverage) == [1 / 2, 1 / 2]
 #guard (List.ofFn (rounded.attacks 0)) == [1 / 2, 1 / 2]
 
+def crossedCosts : Game (Fin 2) (Fin 2) :=
+  ⟨1, fun _ => 1 / 2,
+    fun i j => if i = j then 0 else 3 / 2,
+    fun i j => if i = j then 2 else 0, fun _ => 1⟩
+
+/-- A feasible pattern whose supplied allocation fails the trial.
+Reassigning the attack masses satisfies all exact rows. -/
+def checksCrossedTrial : Bool :=
+  let hm : 0 < 2 := by decide
+  let selection : QuoteSearch.Selection (2 * 2) := #v[[], [], [], []]
+  let view := MarketTrial.sparseView crossedCosts hm selection
+  let p := MarketTrial.pattern crossedCosts hm view
+  let diagonal := fun (i j : Fin 2) => (if i = j then 1 / 2 else 0 : ℚ)
+  let threshold : ℚ := 1 / 2
+  let exactRowsHold := (List.finRange (ExactRecovery.exactRows 2 2)).all fun a =>
+    match (ExactRecovery.rowIndex 2 2).symm a with
+    | .inl row =>
+      let c := ExactRecovery.comparison p row
+      decide (c.left.value crossedCosts view.coverage diagonal threshold 0 ≤
+        c.right.value crossedCosts view.coverage diagonal threshold 0)
+    | .inr () => true
+  let hasBlocker := match MarketTrial.run crossedCosts hm (fun _ => view) selection with
+    | .cleared _ => false
+    | .blocked intervals => intervals.toArray.any fun interval => interval.lo < interval.hi
+  (List.ofFn view.coverage == [1 / 2, 1 / 2]) &&
+    (List.ofFn (fun i => List.ofFn (view.joint i)) == [[0, 1 / 2], [1 / 2, 0]]) &&
+    exactRowsHold && hasBlocker
+
+#guard checksCrossedTrial
+
 /-- An interior-budget game goes through the grouped sweep, search and repair. -/
 def flatCosts : Game (Fin 1) (Fin 2) :=
   { game with slope := fun _ _ => 0 }

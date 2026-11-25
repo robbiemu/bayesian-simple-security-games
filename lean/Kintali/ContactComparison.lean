@@ -87,13 +87,8 @@ theorem coverage_antitone
 one coverage vector. -/
 private theorem eq_of_le_of_sum_eq [Fintype Site] {x y : Site → ℚ}
     (hle : x ≤ y) (hsum : (∑ j, x j) = ∑ j, y j) : x = y := by
-  classical
-  have hzero : (∑ j, (y j - x j)) = 0 := by
-    rw [Finset.sum_sub_distrib, hsum, sub_self]
   funext j
-  have hz := (Finset.sum_eq_zero_iff_of_nonneg (fun i _ => sub_nonneg.mpr (hle i))).mp
-    hzero j (Finset.mem_univ j)
-  exact (sub_eq_zero.mp hz).symm
+  exact (Finset.sum_eq_sum_iff_of_le (fun i _ => hle i)).mp hsum j (Finset.mem_univ j)
 
 variable [DecidableEq Record]
 
