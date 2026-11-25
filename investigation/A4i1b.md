@@ -4,7 +4,7 @@
 
 **🟩 Result for the stated scope**
 
-Cycle charging and allowed-edge decomposition give polynomial ascent on cactus graphs and under logarithmic local rank. A degree-three family forces superpolynomially many strict minimum-product drops on the specified ascent.
+Cycle charging and allowed-edge decomposition give polynomial ascent on cactus graphs and under logarithmic local rank. A degree-three family forces superpolynomially many strict minimum-product drops on the deletion-matching ascent in every insertion order.
 
 [Read the evidence](../notes/A4j-unit-matching-ascent.md) · [Investigation index](README.md)
 
@@ -32,5 +32,6 @@ Parent question · [A4i1 · Find the exact minimum prices of one supplied unit m
 - [Separate attainable deletion products from actual changes on a prime chain](../records/39503b4c-3186-4947-adac-ad1608064152.md) · result · proof · Robert Thomas Collins, OpenAI Dot, OpenAI Codex · OpenAI Dot, GPT-6, Python
 - [Realize linear deletion-product drops and bound internal updates by simple cycles](../records/c15fec3c-5d6f-4014-8238-9752778f75eb.md) · result · proof · Robert Thomas Collins, OpenAI Codex · GPT-6.2 Astra, GPT-6, Python
 - [Count deletion-minimum decreases by allowed-edge component](../records/eea8b91b-f0a0-446b-a896-4a3bbb6cf4f3.md) · result · proof · Robert Thomas Collins, OpenAI Dot, OpenAI Codex · Dot, GPT-6.2 Astra, Python
+- [Force superpolynomial deletion-matching ascent in every insertion order](../records/e9ef6703-b3bc-44ed-8948-b519336264b0.md) · result · proof · ChatGPT 6 Pro, Robert Thomas Collins, OpenAI Codex · ChatGPT 6 Pro, GPT-6, Python
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4i1b%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4i1b%5D+) · [Contributor guide](../CONTRIBUTING.md)

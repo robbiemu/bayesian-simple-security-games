@@ -31,6 +31,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 ## Contributions elsewhere that cite this work
 
 - [Force superpolynomially many deletion-minimum changes in a degree-three unit market](../records/1365920b-13dc-4169-8862-ce19b0f9c445.md)
+- [Force superpolynomial deletion-matching ascent in every insertion order](../records/e9ef6703-b3bc-44ed-8948-b519336264b0.md)
 - [Certify minimum prices and bound two directional auctions](../records/f9e2da42-7475-4d20-a172-557b2a852ea3.md)
 
 ## Contribution log

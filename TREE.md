@@ -120,7 +120,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4h12 | Polynomial on bounded incidence blocks | [Buyer proxies, mixed articulations, and margin counts](notes/A4h-buyer-proxy.md) |
 | A4i | Reverse reduction and unit-market equivalence proved | [One-resource reduction and jointly uniform games](notes/A4i-market-to-game.md) |
 | A4i1 | General unit-market polynomial time open | [Supplied unit market with arbitrary affine slopes](investigation/A4i1.md) |
-| A4i1a–b | Polynomial in degree two and additional graph or slope classes. Superpolynomial ascent lower bound at degree three. | [Conditional Hall search](investigation/A4i1a.md) · [Deletion components and cycle bounds](notes/A4j-deletion-matching-components.md) · [Forced switches](notes/A4j-forced-deletion-switches.md) |
+| A4i1a–b | Polynomial in degree two and additional graph or slope classes. Superpolynomial ascent lower bound for every insertion order on a degree-three family. | [Conditional Hall search](investigation/A4i1a.md) · [Deletion components and cycle bounds](notes/A4j-deletion-matching-components.md) · [Forced switches](notes/A4j-forced-deletion-switches.md) |
 | A4i1c | General unit market reduces to degree three | [Degree-three reduction](investigation/A4i1c.md) |
 | A4i1d | Polynomial with a small multiplier-list product or fixed cycle-gain rank | [Representatives and price-box tests](investigation/A4i1d.md) |
 | A4l | Polynomial with separated cutoffs at binary quotas | [Ordinal stable allocation](investigation/A4l.md) |

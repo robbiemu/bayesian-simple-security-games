@@ -104,8 +104,34 @@ def check_hall_cut_after_reoptimization():
     assert all(good in choices for good, choices in enumerate(clearing_demand[:3]))
     assert clearing_demand[-1] == {-1}
     assert all(trapped(clearing_demand, goods) <= len(goods) for goods in subsets(range(3)))
-    print(f"Projected Hall cut: {tested} exact quote pairs rejected, including {moved} "
-          "after re-solving the private good and changing its demand graph.")
+    assert tested == 63
+    print(f"Projected Hall cut: {tested} grid points plus the off-grid quote {moved}, "
+          "where re-solving the private good changes its demand graph.")
+
+
+def check_aggregation_of_both_ports():
+    bids, slopes, outside = ((4, 4),) * 3, ((1, 1),) * 3, (0, 0, 0)
+    trial = (F(1), F(1))
+    demand = neighbors(bids, slopes, outside, trial)
+    assert demand == [{0, 1}] * 3
+    assert all(trapped(demand, {j}) == 0 for j in range(2))
+    assert trapped(demand, {0, 1}) == 3
+
+    # Represent the one capacity-two auxiliary good by two identical unit copies.
+    aggregate_bid = max(bid - p for bid, p in zip(bids[0], trial))
+    aggregate_bids = ((aggregate_bid, aggregate_bid),) * 3
+    prices, assignment, _ = solve(aggregate_bids, slopes)
+    assert tuple(prices) == (3, 3)
+    assert sorted(assignment.values()) == [-1, 0, 1]
+    check_certificate(aggregate_bids, slopes, prices, assignment, exhaustive=True)
+
+    for changed in range(2):
+        moved = tuple(p + F(1, 4) if j == changed else p for j, p in enumerate(trial))
+        assert max(bid - p for bid, p in zip(bids[0], moved)) == aggregate_bid
+        demand = neighbors(bids, slopes, outside, moved)
+        assert demand == [{1 - changed}] * 3
+        assert trapped(demand, {0, 1}) == 3
+    print("Joint boundary cut: both ports aggregate, auxiliary price 3, both repricings fail.")
 
 
 if __name__ == "__main__":
@@ -113,3 +139,4 @@ if __name__ == "__main__":
         raise SystemExit("Run without -O to retain exact assertions.")
     check_scalings_and_midpoint()
     check_hall_cut_after_reoptimization()
+    check_aggregation_of_both_ports()

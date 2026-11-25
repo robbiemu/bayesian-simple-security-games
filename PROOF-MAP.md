@@ -85,7 +85,7 @@ flowchart TB
     UM --> UD["A4i1a · Degree two on either side<br/>Exact polynomial-time solver"]
     UM --> UA["A4i1b · Deletion matchings<br/>Polynomial with logarithmically many slope exceptions"]
     UA --> US["Add component minima and charge nonunit cycles<br/>Polynomial ascent in the stated graph classes"]
-    UA --> UD3["Degree-three unit markets<br/>Superpolynomially many strict drops for the ascent"]
+    UA --> UD3["Degree-three family<br/>Superpolynomially many strict drops in every insertion order"]
     UM --> U3["A4i1c · Degree three retains the general unit problem"]
     UM --> UL["A4i1d · Multiplier lists or fixed cycle-gain rank<br/>Exact polynomial-time solvers"]
     C --> PS["A4f3 · Stable price-contract phases<br/>Polynomial with bounded products of slope ratios"]

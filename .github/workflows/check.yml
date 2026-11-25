@@ -37,6 +37,7 @@ jobs:
           python3 -B experiments/a4h_two_port_replay.py
           python3 -B experiments/a4j_deletion_product_replay.py
           python3 -B experiments/a4j_deletion_scc_replay.py
+          python3 -B experiments/a4j_any_insertion_replay.py
       - name: Replay market fixed-point transfers
         run: |
           python3 -B experiments/a4m_maxnorm_replay.py
