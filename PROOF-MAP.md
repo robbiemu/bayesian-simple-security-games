@@ -113,6 +113,8 @@ flowchart TB
     AS --> F["A4a · Near-factorized slopes<br/>Exact polynomial-time solver"]
     F --> A4MF["A4m · LP-certified max-norm frozen prices<br/>Polynomial time using the November theorem"]
     AF --> A4MB["A4m · Vertex-cover elimination and lattice block search<br/>Exact subexponential bound from the October solver"]
+    A4MB --> A4MC["A4m · Cut circuit on a vertex cover<br/>Polynomial for logarithmic cover using the November theorem"]
+    A4MB --> A4MQ["A4m · Solve slope-balanced interiors by convex QP<br/>October search on the remaining coordinates"]
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
     CV --> CD["Reweighted cover with slope tie-break<br/>Exact search · exponential iteration bound"]
@@ -135,8 +137,8 @@ flowchart TB
     classDef cap fill:#fff0cf,stroke:#a86c18,color:#502e07
 
     class AS,V,C,AF,AG,AH,AJ,CV,B,M,D,P,T,H,UM,UG proof
-    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,A4MF settled
-    class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB cap
+    class VC,F,G,CO,AC,AB,AO,AX,AT,ASB,ASC,AJR,AJD,AHM,AJG,AJC,AJP,AL,S,O,UD,UA,UL,PS,OA,A4MF,A4MC settled
+    class CL,PL,NH,CD,AQ,AJT,AHY,U3,A4MB,A4MQ cap
 ```
 
 [Unit-market equivalence](notes/A4i-market-to-game.md#jointly-uniform-games-and-unit-markets) · [Open unit-market search](investigation/A4i1.md)

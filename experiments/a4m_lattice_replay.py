@@ -6,7 +6,7 @@ integers; the continuous reference uses the signed physical variables (u,-p).
 
 from fractions import Fraction as F
 from itertools import combinations, product
-from math import floor
+from math import factorial, floor
 
 
 def clip(value, lower, upper):
@@ -14,14 +14,15 @@ def clip(value, lower, upper):
 
 
 class Market:
-    def __init__(self, masses, supplies, offers, width, epsilon, step):
+    def __init__(self, masses, supplies, offers, width, epsilon, step, regularize_nodes=True):
         self.width, self.epsilon, self.step = F(width), F(epsilon), F(step)
         self.g = tuple(map(F, masses)) + tuple(-F(c) for c in supplies)
         self.dimension = len(self.g)
         self.lower = (F(0),) * len(masses) + (-self.width,) * len(supplies)
         self.edges = [(i, len(masses) + j, F(b), F(d)) for i, j, b, d in offers]
         self.rho = self.step / self.epsilon
-        self.q = 1 - self.step * self.epsilon
+        self.node_epsilon = self.epsilon if regularize_nodes else F(0)
+        self.q = 1 - self.step * self.node_epsilon
         self.bias = [((self.q - 1) * lo - self.step * g) / self.width
                      for lo, g in zip(self.lower, self.g)]
         self.beta = [self.rho * (b - self.lower[i] + d * self.lower[j]) / self.width
@@ -43,7 +44,7 @@ class Market:
 
     def exact(self, z):
         h = [lo + self.width * x for lo, x in zip(self.lower, z)]
-        residual = [g + self.epsilon * y for g, y in zip(self.g, h)]
+        residual = [g + self.node_epsilon * y for g, y in zip(self.g, h)]
         for i, j, b, d in self.edges:
             flow = max(0, b - h[i] + d * h[j]) / self.epsilon
             residual[i] -= flow
@@ -52,14 +53,19 @@ class Market:
                      for y, r, lo in zip(h, residual, self.lower))
 
     def rounded(self, x, mesh):
+        return self.rounded_with_transfers(x, mesh)[0]
+
+    def rounded_with_transfers(self, x, mesh):
         pieces = [split(count, weights) for count, weights in zip(x, self.weights)]
         out = [p[-2] + round(mesh * bias) for p, bias in zip(pieces, self.bias)]
+        transfers = []
         for (i, j, _, _), (ip, jp), beta in zip(self.edges, self.ports, self.beta):
             s, t = pieces[i][ip], pieces[j][jp]
-            offset = round(mesh * beta)
-            out[i] += max(s, offset + t)
-            out[j] += min(t, s - offset)
-        return tuple(clip(value, 0, mesh) for value in out)
+            transfer = max(0, round(mesh * beta) + t - s)
+            out[i] += s + transfer
+            out[j] += t - transfer
+            transfers.append(transfer)
+        return tuple(clip(value, 0, mesh) for value in out), tuple(transfers)
 
 
 def split(count, weights):
@@ -265,6 +271,51 @@ def check_rational_recovery():
           f"flow {sold} real and {outside} outside")
 
 
+def check_aligned_transfers():
+    width, transfer_scale = 8, 1
+    gap_denominator = factorial(3) * width**3
+    epsilon = F(1, 4 * width * gap_denominator)
+    step = epsilon / 4
+    mass, capacity, bid, slope = 2, 1, 2, 2
+    market = Market([mass], [capacity], [(0, 0, bid, slope)],
+                    width, epsilon, step, regularize_nodes=False)
+    mesh = int(transfer_scale * width / step)
+    zero_hinge_at = mesh - mesh * bid // (slope * width)
+    points = ((0, zero_hinge_at + 2), (0, zero_hinge_at + 3))
+    for point, expected_hinge in zip(points, (1, F(3, 2))):
+        updated, transfers = market.rounded_with_transfers(point, mesh)
+        assert updated == point and transfers == (transfer_scale,)
+        price = width * (1 - F(point[1], mesh))
+        assert 0 < bid - slope * price < F(1, gap_denominator)
+        assert (bid - slope * price) / epsilon == expected_hinge
+        # Keep the transfer and the zero utility. The used edge gives the repaired price.
+        flow, repaired = F(transfers[0], transfer_scale), F(bid, slope)
+        assert flow == capacity and mass - flow == 1 and bid - slope * repaired == 0
+
+    # A good at the artificial upper price has zero transfer, including with slope 1/2.
+    epsilon = F(1, 16)
+    market = Market([1], [0, F(1, 3)], [(0, 0, 2, F(1, 2)), (0, 1, F(3, 2), 2)],
+                    4, epsilon, epsilon / 4, regularize_nodes=False)
+    point, mesh = (0, 0, 6260), 7680
+    assert market.rounded_with_transfers(point, mesh) == (point, (0, 10))
+
+    # Integer quantities use unit transfers even if the full port counts are fractional.
+    epsilon = F(1, 131)
+    unit = Market([1, 1], [1, 1],
+                  [(0, 0, 2, F(2, 7)), (0, 1, 1, 1), (1, 0, 1, F(4, 3)), (1, 1, 2, F(5, 11))],
+                  8, epsilon, epsilon / 3, regularize_nodes=False)
+    point, mesh = (0, 0, 401, 1413), 3144
+    assert (mesh * unit.rho * F(2, 7)).denominator > 1
+    assert unit.rounded_with_transfers(point, mesh) == (point, (1, 0, 0, 1))
+    _, matching = unit.rounded_with_transfers(point, mesh)
+    for buyer in range(2):
+        offers = [(bid, flow) for (i, _, bid, _), flow in zip(unit.edges, matching) if i == buyer]
+        assert sum(flow for _, flow in offers) == 1
+        assert all(bid == max(b for b, _ in offers) for bid, flow in offers if flow)
+    print("Conservative transfers: one kept flow at two fixed prices, zero flow at the upper bound, "
+          "and a unit matching with fractional slopes")
+
+
 if __name__ == "__main__":
     if not __debug__:
         raise SystemExit("Run without -O to keep the exact checks enabled.")
@@ -291,3 +342,4 @@ if __name__ == "__main__":
     check_one_offer(single)
     check_mixed_cover()
     check_rational_recovery()
+    check_aligned_transfers()

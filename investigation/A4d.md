@@ -25,5 +25,6 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 - [Obtain a subexponential exact market solver by lattice block search](../records/02970891-b5d8-42fe-8b87-a99dcfe5d543.md)
 - [Scale affine-market prices with stable contracts and exact support repair](../records/521d0fb1-878f-4e35-8f94-75eff883c296.md)
+- [Read an exact feasible flow from the lattice transfers](../records/affc1f41-6298-4cef-817e-f06d2ab4f233.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4d%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4d%5D+) · [Contributor guide](../CONTRIBUTING.md)

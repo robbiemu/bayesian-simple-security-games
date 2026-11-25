@@ -21,9 +21,14 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 ## Relevant work
 
 - [A4g2 · Bound breadth-first and all-ones Lemke searches](A4g2.md) **limits** A4g. A short verified route is valuable because indiscriminate searches have long examples. [Evidence](../notes/A4g-budgeted-support-search.md#a-long-all-ones-lemke-path-inside-a4d)
+- [A4m · Transfer max-norm and lattice fixed-point algorithms to affine markets](A4m.md) **extends** A4g. A conditional convex quadratic program handles balanced slopes and localizes hinge sign guesses to unbalanced biconnected blocks. [Evidence](../notes/A4m-structural-elimination.md#a-convex-quadratic-program-for-a-balanced-interior)
 
 ## Where the direction came from
 
 - Robert Thomas Collins · [Use maze search as an analogy for bounded support search](../DIRECTIONS.md#direction-maze) · Proposed analogy in the research discussion
+
+## Contributions elsewhere that cite this work
+
+- [Search smaller market boundaries by quadratic programs and cut coordinates](../records/3ffbd547-faad-440b-89ee-94c498f81ebc.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4g%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4g%5D+) · [Contributor guide](../CONTRIBUTING.md)

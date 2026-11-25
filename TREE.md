@@ -124,7 +124,7 @@ L1, A1, and B1 established the source baseline, exact certificate and classifica
 | A4i1c | General unit market reduces to degree three | [Degree-three reduction](investigation/A4i1c.md) |
 | A4i1d | Polynomial with a small multiplier-list product or fixed cycle-gain rank | [Representatives and price-box tests](investigation/A4i1d.md) |
 | A4l | Polynomial with separated cutoffs at binary quotas | [Ordinal stable allocation](investigation/A4l.md) |
-| A4m | Polynomial time under a max-norm certificate and a subexponential general bound in the vertex-cover size | [Fixed-point algorithms and source theorems](investigation/A4m.md) |
+| A4m | Polynomial time under max-norm or graph conditions, with a subexponential general bound and direct integer flow recovery | [Fixed-point algorithms and source theorems](investigation/A4m.md) |
 | H1, H2 | Open | Analyze full complexity beyond threshold-zero selection and the matching and rent reductions |
 
 ## Resume points

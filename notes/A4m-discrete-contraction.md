@@ -48,6 +48,31 @@ The conditional map on $B$ has unit increments by the cancellation argument. Run
 
 For **any** lattice fixed point $X$, the original normalized contraction gives distance at most $C/(N(1-q))$ to the true fixed point. In the original signed coordinates this is at most $WC/(N(1-q))$. The regularized complementarity basis in A4d gives a computable polynomial-bit denominator bound $Q_h$ for each signed coordinate. This is a bound on the regularized solution, separate from the original support-repair gap. Choose dyadic $N> 2WCQ_h^2/(1-q)$ and recover each original signed coordinate by continued fractions. This chooses $N$ with polynomial binary length even if quantities or slope ratios have large numerical values. Recover the regularized flows from the hinge equation, then apply the A4d support repair to get exact clearing, and A4c to select the original minimum when required. The determinant and precision arguments for the adaptive game-to-market calls have uniform polynomial bit size. [A4d exact repair](A4d-p-matrix-complementarity.md#one-exact-p-lcp-call) · [A4c exact transfer to the game](A4c-any-clearing-equilibrium.md#transfer-to-the-exact-game)
 
+## Recover a clearing from the integer transfers
+
+The October route also works with regularization only on edge flows. Use the same split and comparison circuit with $q=1$, so there is no node decay. Write $\Theta=2\lceil\log_2(\Delta+2)\rceil+1$. Choose an integer width $W$ at least $1$, every $1+b_e$ and $b_e/d_e$, and every $m_i+\Theta$. Take an integer $\Lambda\ge1$ at least each buyer degree and each sum of incident slopes at a good. Use $\rho=1/\Lambda$ and $a=\varepsilon/\Lambda$, with $\varepsilon$ the reciprocal of an integer chosen below. Let $T$ clear the denominators of the masses and capacities. Set $N=TW/a$, an integer of polynomial bit length. Every comparator still preserves unit increments, so the same solver on a vertex cover finds a fixed point.
+
+Use $X_i$ for a buyer count and $Y_j$ for a good count, giving $u_i=WX_i/N$ and $p_j=W(1-Y_j/N)$. The integer transfer at edge $e=ij$ is
+\[
+ k_e=[\operatorname{round}(N\beta_e)+t_e-s_e]_+,\qquad
+ \beta_e=\rho(b_e-d_eW)/W,
+\]
+where $s_e,t_e$ are the split buyer and good shares. With $q=1$ the self and edge shares add to the entire input. Thus the buyer and good updates are
+\[
+ \operatorname{clip}_{[0,N]}\left(X_i+\sum_{e\ni i}k_e-Tm_i\right),
+ \qquad
+ \operatorname{clip}_{[0,N]}\left(Y_j-\sum_{e\ni j}k_e+Tc_j\right).
+\]
+The node constants are integral by the choice of $T$.
+
+The comparator argument differs from $(T/\varepsilon)(b_e-u_i-d_e p_j)$ by at most $\Theta$, from two port errors and the rounded offset. At $X_i=N$ the argument is at most $-T/\varepsilon+\Theta\le0$ because $W\ge b_e+1$ and $1/\varepsilon\ge\Theta$. At $Y_j=0$, the good port is zero and $\beta_e\le0$, so again $k_e=0$. Hence the artificial upper bounds on $u_i$ and $p_j$ cannot conceal excess load.
+
+At any lattice fixed point, the flow $x_e=k_e/T$ is therefore exactly feasible for the original masses and capacities. Its buyer and good inequalities are equalities whenever $u_i>0$ or $p_j>0$, respectively. Integer quantities allow $T=1$, so this flow is integral. In a unit market it gives a matching to real goods, with unmatched buyers assigned outside. Write $w_e=u_i+d_e p_j-b_e$. The same comparator error bound gives $w_e\ge-\varepsilon(x_e+\Theta/T)$ on all edges and $w_e\le\varepsilon\Theta/T$ on positive-flow edges. Since $x_e\le m_i$ and $m_i+\Theta\le W$, these violations are bounded by $\varepsilon W$.
+
+Keep the exact flow and solve one LP in $d+1$ variables $(u',p',t)$, minimizing $t$ in $[0,1]$. Require $0\le u',p'\le W$, preserve every zero utility and price of the lattice point, and impose $u'_i+d_e p'_j-b_e\ge-t$ with the reverse bound $\le t$ on every edge with $k_e>0$. Clearing denominators in the common list of possible rows gives a maximum integer coefficient $H\ge1$. Set $Q_p=(d+1)!\,H^{d+1}$ and $\varepsilon=1/(4WQ_p)$. A positive optimum of any such LP is at least $1/Q_p$ by compactness and the determinant bound. The sampled node values show that the optimum is at most $\varepsilon W<1/Q_p$, so it is zero. The flow clears at the repaired prices and utilities since the LP keeps its positive edges tight and retains all zeros at underfilled nodes. Exact rational LP and this mesh construction both use polynomial bit time. A4c still recovers the original componentwise minimum with the usual supply enlargement and circulation. [Support-gap method](A4d-p-matrix-complementarity.md#one-exact-p-lcp-call) · [Supply enlargement](A4c-any-clearing-equilibrium.md#one-call-at-enlarged-capacities)
+
+This proof uses exact integer transfers and a price-and-utility LP. The strictly contractive variant above also gives the exact regularized point, which is used by the continuous and max-norm routes.
+
 ## Continuous variant and the scope of the comparison
 
 The same bound follows from the continuous contraction and the paper's deterministic deep-point routine. For exact interior solutions of a strict contraction with factor $q$, additivity gives the sharper inequality

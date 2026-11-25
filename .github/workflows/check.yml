@@ -36,6 +36,7 @@ jobs:
         run: |
           python3 -B experiments/a4m_maxnorm_replay.py
           python3 -B experiments/a4m_lattice_replay.py
+          python3 -B experiments/a4m_structure_replay.py
 
   stochastic-games-lean:
     name: Lean stochastic game build

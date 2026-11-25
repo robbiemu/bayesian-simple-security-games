@@ -26,6 +26,8 @@ Unit-market search is also equivalent to exact equilibrium search in games with 
 
 Using OpenAI's November max-norm residual theorem as stated, A4m gives a polynomial-bit-time least-price solver on markets that pass an alternating-path LP test. The LP covers some slope matrices outside the earlier column condition under every scaling. An inverse-polynomial strict gap in the certificate also suffices by ordinary iteration. [November theorem](https://github.com/openai/math/blob/3344da59991ed94f9ba711217b29c1d760badfa6/preprints/Strongly-polynomial-linear-programming-November-24-2026/build/contractions.tex#L16-L33) · [Certificate and exact price repair](notes/A4m-path-sensitive-freezing.md)
 
+A4m also obtains polynomial bit time for markets with a logarithmic-size vertex cover using the November exact circuit corollary. This covers explicitly supplied games with $O(\log(2+L))$ targets or positive-prior types. The October route can search a smaller set when deleting it leaves balanced slopes. Its lattice transfers already give a feasible allocation, which an LP makes demand-optimal at repaired prices. [Structural fixed-point results](notes/A4m-structural-elimination.md) · [Integer transfer recovery](notes/A4m-discrete-contraction.md#recover-a-clearing-from-the-integer-transfers)
+
 The unit-market branch now has polynomial algorithms for degree two on either side and for several restrictions on slope ratios. Stable-flow price scaling and a cutoff-separation test give additional polynomial classes with binary masses and capacities. [Unit-market methods](investigation/A4i1.md) · [Stable-flow scaling](investigation/A4f3.md) · [Ordinal allocation](investigation/A4l.md)
 
 | Question | What would advance it | Join |

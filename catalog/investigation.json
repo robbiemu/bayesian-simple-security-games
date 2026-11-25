@@ -577,7 +577,7 @@
       "parent": "A4",
       "title": "Transfer max-norm and lattice fixed-point algorithms to affine markets",
       "state": "partial",
-      "summary": "The November residual theorem gives polynomial time for markets passing an alternating-path LP. Conservative rounding and vertex-cover elimination give an exact subexponential algorithm using the October lattice block solver.",
+      "summary": "The November theorem gives polynomial time under an alternating-path LP or logarithmic vertex-cover size. The October solver gives exact subexponential search using vertex-cover elimination and direct integer flow recovery. Convex quadratic programming handles slope-balanced interiors.",
       "source": "notes/A4m-november-transfer.md",
       "next": "Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets."
     }
@@ -1212,6 +1212,13 @@
       "relation": "uses",
       "reason": "The signed node contraction admits an integer approximation that preserves unit increments.",
       "source": "notes/A4m-discrete-contraction.md#round-transfers-while-preserving-unit-increments"
+    },
+    {
+      "origin": "A4m",
+      "target": "A4g",
+      "relation": "extends",
+      "reason": "A conditional convex quadratic program handles balanced slopes and localizes hinge sign guesses to unbalanced biconnected blocks.",
+      "source": "notes/A4m-structural-elimination.md#a-convex-quadratic-program-for-a-balanced-interior"
     },
     {
       "origin": "A4m",
