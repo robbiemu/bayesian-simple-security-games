@@ -428,3 +428,64 @@ Build completed successfully (7112 jobs).
 real 269.78
 user 541.95
 sys 138.21
+
+Three-target group count
+------------------------
+The second review of PR #15 supplied a one-type, one-resource game with
+gains (1, 1, 0) and constant attack costs (1, 1, 0). The outside target
+has cost zero. The two active targets have cost one at every quote, so
+the selection has no eligible real bids. The grid has G = 1.
+
+Run from lean/ at the software revision above after building Kintali.
+The input uses payoff pairs. The check reads the measured group rows
+and reports each group's mass divided by the private scale.
+
+$ lake env lean -DwarningAsError=true --stdin <<'LEAN'
+import Kintali.Solver
+import Kintali.InputOutput.MeasuredSolver
+
+open Kintali Kintali.InputOutput Kintali.ExactRecovery Kintali.MarketTrial
+open Kintali.TrialWork.Selected
+
+namespace StorageReplay
+def data : Input := (1, [(0, 1), (0, 1), (0, 0)], [(1, [(-1, -1), (-1, -1), (0, 0)])])
+example : data.Valid := by unfold Input.Valid; decide +kernel
+def dest := redirect data.game (by decide)
+def sel : QuoteSearch.Selection (data.types * data.targets) := #v[[], [], []]
+def gsize := grid data.game
+def stored : Lists data dest sel where
+  bids := Sparse.realOrder (G := grid data.game) data.game dest sel
+  cuts := Vector.ofFn fun j => (Sparse.siteCuts (G := grid data.game) data.game dest sel j).sort
+  bidOrder := rfl
+  cutOrder := by intro j; simp
+def counts := (List.finRange data.targets).map fun j => (stored.groupRow j).value.length
+def shares : List ℚ :=
+  let scale := privateScale data.game
+  let p := Sparse.selectedParameters (G := grid data.game) data.game dest sel scale
+  stored.groups.value.map fun h => p.mass (.inr h) / scale
+#eval (gsize, stored.bids.length, counts, shares)
+#guard (gsize, stored.bids.length, counts, shares) == (1, 0, [1, 1, 1], [1, 1, 0])
+end StorageReplay
+LEAN
+(1, 0, [1, 1, 1], [1, 1, 0])
+
+The entries are grid size, retained real bids, group counts by target,
+and relative masses in group order. For the same game, run the independent
+Python grouping routine from experiments/.
+
+$ python3 -B - <<'PY'
+from kintali_market import _grouped_bids
+from kintali_model import Game
+from kintali_repair import contact_tolerance
+from kintali_solver import prepare_quotes
+game = Game(1, (1,), ((1, 1, 0),), ((0, 0, 0),), (1, 1, 0))
+grid, scale, dest, eligible = prepare_quotes(game, contact_tolerance(game))
+bids, masses = _grouped_bids(game, grid, scale, dest, eligible, ((), (), ()))
+real = sum(b.buyer < game.types for b in bids)
+counts = [sum(b.buyer >= game.types and b.site == j for b in bids)
+          for j in range(game.targets)]
+shares = [mass / scale for mass in masses[game.types:]]
+assert (grid, real, counts, shares) == (1, 0, [1, 1, 0], [1, 1])
+print(grid, real, counts, list(map(str, shares)))
+PY
+1 0 [1, 1, 0] ['1', '1']

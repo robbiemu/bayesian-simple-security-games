@@ -46,7 +46,7 @@ A4h9's projected Hall cut excludes a region of boundary quotes after a failed jo
 
 | Question | What would advance it | Join |
 | --- | --- | --- |
-| [A4i1 · Exact unit-market prices](investigation/A4i1.md) | Find the minimum prices of one supplied unit market with arbitrary affine slopes in polynomial bit time and recover a clearing assignment. | [A4i1 node](investigation/A4i1.md) |
+| [A4i1 · Direct unit-market solver](investigation/A4i1.md) | Give a direct market algorithm that computes minimum prices and a clearing assignment for one supplied unit market with arbitrary affine slopes in polynomial bit time. | [A4i1 node](investigation/A4i1.md) |
 | [A4h · Direct candidate-price search](investigation/A4h.md) | Find a polynomial-bit-time direct rule for choosing which affine region to query next. | [Candidate generation](investigation/A4h.md) |
 | [A4e · Reweighted covering LP](investigation/A4e.md) | Each iteration costs polynomial work. Prove a polynomial bound on the number of iterations or construct a family forcing a superpolynomial run for this rule. | [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2) |
 | [A4f · Complementarity formulation](investigation/A4f.md) | Find an equivalent formulation with polynomially bounded handicap, the parameter controlling the Newton iteration bound. Show that solving it and recovering an exact equilibrium take polynomial bit time. | [Contribute to A4f](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4f%5D+) |

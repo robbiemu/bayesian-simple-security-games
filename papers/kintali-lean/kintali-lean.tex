@@ -38,8 +38,8 @@
 \end{center}
 
 \begin{abstract}
-We implement Shiva Kintali's polynomial-time equilibrium algorithm for
-Bayesian simple security games in Lean. Kintali solves a linear program
+We verify in Lean a constructive variant of Shiva Kintali's polynomial-time
+equilibrium algorithm for Bayesian simple security games. Kintali solves a linear program
 whose constraints come from a quota sweep. Our executable tests the
 sweep's allocation and uses a nonsingular integer minor to repair it.
 A two-target restriction gives an exactly feasible pattern whose allocation
@@ -173,13 +173,11 @@ Section~\ref{sec:repair}. \cite{h4}
 \section{Computing the contact at the supplied budget}
 \label{sec:sweep}
 
-For zero or full budget the defender's choice is fixed. If the budget
-suffices to cover every positive-gain target, cover them all and fill any
-remaining places in target order. Each type then chooses a cheapest target.
-For the sweep write $S=\{j:d_j>0\}$,
-$m_+=|S|$, and assume $0<r<m_+$. All $m$ targets remain available for
-attack, and all $k$ type rows remain in the implementation, including
-those of mass zero. Put $\eta=1/(4H)$. Kintali's grid uses $\tau=\eta$.
+Let $S=\{j:d_j>0\}$ and $m_+=|S|$. At zero or full budget the coverage
+is fixed. If $r\ge m_+$, cover $S$ and fill spare places in target order.
+In each case every type chooses a cheapest target. The sweep handles
+$0<r<m_+$. All $m$ targets are available for attack, and Lean keeps
+all $k$ type rows, including those of mass zero. Put $\eta=1/(4H)$. Kintali's grid uses $\tau=\eta$.
 The program takes the smaller of $\eta$ and the repair precision in
 Section~\ref{sec:repair}. For either choice let
 \[
@@ -191,38 +189,38 @@ Section~\ref{sec:repair}. For either choice let
 Then $d_j\sigma\le\tau$ and $b_{ij}/G\le\tau$ at active sites.
 \cite[\S\S1--2]{kintali}
 
-A real buyer $i$ has mass $\pi_i$. It may leave mass unassigned to a
-bid at outside cost $w_i=\min_j F_{ij}(\mathbf 1_{j\in S})$.
-Write $o(i)$ for the least-index target attaining this minimum, computed
-once from coverage one on $S$ and zero elsewhere. An eligible bid $(i,j,z)$ has
+A real buyer $i$ has mass $\pi_i$ and outside cost
+$w_i=\min_j F_{ij}(\mathbf 1_{j\in S})$. Its outside target $o(i)$ is the
+least-index minimizer at coverage one on $S$ and zero elsewhere. An eligible bid $(i,j,z)$ has
 $j\in S$ and $F_{ij}(p_z)\le w_i$. The buyer ranks eligible bids by
-increasing cost, site index and quote, with its outside option last.
-Sites prefer higher quotes and break ties by lower buyer index.
+increasing cost, site index and quote. Sites prefer higher quotes, then lower buyer indices.
 A restriction keeps eligible caps ($p_G=1$) and any selected eligible
-bids below the cap. Each grid gap at a site contains a private buyer of
-mass $\sigma/G$ who prefers buying at that site to staying outside. Its
-sole bid ranks between the adjacent quotes and is always retained. At
-pressure $t$ active site $j$ has quota $t/d_j$. An ordinary bid records
-a purchase at both its buyer and its site, with no separate limit on its
-size. An outside option records
-unused buyer mass, and a vacancy records unused site quota. These last
-two kinds of record each rank last at their sole endpoint. An endpoint
-\emph{accepts} a bid if it holds positive
-mass on a strictly worse record and could transfer some of that mass to the
-bid. If both endpoints accept, the bid \emph{blocks}. Stability means that
-no retained bid blocks.
+bids below the cap. Each grid gap at an active site has a private buyer of
+mass $\sigma/G$ whose sole bid ranks between the adjacent quotes and is always
+retained. At pressure $t$ active site $j$ has quota $t/d_j$. A purchase counts
+at both its buyer and its site, with no separate size limit. Unused buyer mass
+goes to the outside option and unused site quota to a vacancy, each ranked last
+at its sole endpoint. An endpoint \emph{accepts} a bid if it could move
+positive mass to it from a strictly worse record. A bid that both endpoints
+accept \emph{blocks}. Stability means that no retained bid blocks.
 \cite[\S2, pp.~3--4]{kintali}
 
-The grouped sweep stores just one private buyer of mass $(b-a)\sigma/G$
-between successive retained quote indices $a,b$ at a site, adjoining
-$0,G$ as boundaries. To expand a purchase, fill the elementary private
-buyers in descending site priority. All retained real bids have the same
-order relative to every member of a group. Consequently a block across
-groups would already block the grouped allocation, and descending fill
-precludes a block inside a group. This lets the executable store at most
-the number of retained real bids plus $m_+$ private groups. Its correctness
-proof compares their expansions on the common elementary market.
+At an active site, adjoin $0,G$ to the retained quote indices. Consecutive cuts
+$a<b$ give one private buyer of mass $(b-a)\sigma/G$. Expand its purchase
+by filling elementary buyers in descending site priority. This prevents a block
+within the group. Each other retained bid at the site ranks above the whole
+group or below it. A block against another group, a real bid or a vacancy
+would therefore block the grouped allocation. Expansion puts the restricted
+and full allocations on the same elementary grid.
 \cite[\S2]{kintali}
+
+Each active site has one group plus one per interior cut. The $R$ retained real
+bids supply at most $R$ interior cuts, giving at most $R+m_+$ positive-mass groups.
+Lean \atfile{lean/Kintali/TrialWork/SelectedLists.lean\#L69}{enumerates all $m$ targets}.
+An inactive target admits no real bid, so its \atfile{lean/Kintali/RetainedQuotes.lean\#L88}{cuts $0,G$}
+give one \atfile{lean/Kintali/QuotaSweep/BuilderParameters.lean\#L24}{zero-mass group}.
+Thus Lean stores at most $R+m$ groups. The
+\atfile{experiments/kintali_market.py\#L52}{Python sweep} skips inactive targets.
 
 Each active site has total private mass $\sigma$. If $U_j$ is the part
 purchased at $j$, the fraction still outside is its coverage. Write $O$
@@ -232,11 +230,9 @@ for the total private mass still outside. Then
  O=\sum_{j\in S}(\sigma-U_j)=\sigma\sum_j x_j .
  \label{eq:contact}
 \end{equation}
-The sweep must therefore stop at $O=\sigma r$. At $t=0$ all buyers are
-outside and $O=\sigma m_+$. At the upper pressure $\bar t=1+\max_j d_j$,
-each active quota exceeds $1+\sigma$, the most real and private mass that
-site could buy. With vacancy at a site, any unfilled private buyer would
-block. Thus all private mass is purchased and $O=0$.
+The sweep stops at $O=\sigma r$. At $t=0$ all buyers are outside, so $O=\sigma m_+$.
+At $\bar t=1+\max_j d_j$ each active quota exceeds $1+\sigma$, the most a
+site could buy. Any unfilled private buyer would block against that vacancy, so $O=0$.
 
 At each stage a site proposes its highest-ranked bid whose buyer would
 accept more of it, or points to a terminal for vacancy if there is none. Each positive-mass
@@ -1032,9 +1028,9 @@ argument, with a named lemma for each major step. He carried this design
 into the formalization of Shiva Kintali's algorithm and requested the
 independent Python implementation. \cite{leansetup,leanrecord,pythonrecord}
 
-Kintali's pattern test calls for an LP feasibility check. At that point
-the project had yet to find a checked general-purpose rational LP solver
-it could call from Lean. The H4 investigation that Collins had directed already supplied a
+A verified rational LP solver would implement Kintali's pattern test
+directly. At that point the project had yet to find one it could call from
+Lean. The H4 investigation that Collins had directed already supplied a
 determinant-based feasibility gap and a way to account for work on binary
 integers. In that setting, OpenAI Codex proposed repairing the allocation
 returned by the sweep. It enlarged the fixed witness to prove progress
