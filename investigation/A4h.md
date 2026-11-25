@@ -31,9 +31,14 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 - A4h **uses** [A4g3 · Generate and search price lists from anchored paths](A4g3.md). The Hall search finishes once each supplied list contains its true price. [Evidence](../notes/A4h-complete-candidate-generation.md#polynomially-many-queries-are-possible)
 - [A4h2 · Test fixed libraries and complete parametric tables](A4h2.md) **limits** A4h. A fixed input-independent library can miss a required formula. [Evidence](../notes/A4h-complete-candidate-generation.md#limits-on-complete-tables-and-fixed-formulas)
+- [A4m · Transfer max-norm and lattice fixed-point algorithms to affine markets](A4m.md) **tests the search interface of** A4h. Identical local formulas can require opposite labels and different solution regions, so a single local evaluation cannot select the correct region. [Evidence](../notes/A4m-extremal-price-interface.md#identical-local-formulas-and-opposite-required-signs)
 
 ## Where the direction came from
 
 - Robert Thomas Collins · [Require a short list that contains a solution](../DIRECTIONS.md#direction-shortlist) · Research direction
+
+## Contributions elsewhere that cite this work
+
+- [Certify exact polynomial-time clearing with a path bound on frozen prices](../records/e3aa26cd-1de3-424f-97c3-82db725e63cf.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4h%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4h%5D+) · [Contributor guide](../CONTRIBUTING.md)

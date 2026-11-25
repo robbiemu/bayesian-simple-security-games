@@ -571,6 +571,15 @@
       "state": "scoped",
       "summary": "An edgewise separation test on two cutoff rankings gives exact polynomial-time clearing with binary masses and capacities. Supply enlargement recovers the minimum prices.",
       "source": "notes/A4l-ordinal-stable-allocations.md"
+    },
+    {
+      "id": "A4m",
+      "parent": "A4",
+      "title": "Transfer max-norm and lattice fixed-point algorithms to affine markets",
+      "state": "partial",
+      "summary": "The November theorem gives polynomial time under an alternating-path LP or logarithmic vertex-cover size. The October solver gives exact subexponential search using vertex-cover elimination and direct integer flow recovery. Convex quadratic programming handles slope-balanced interiors.",
+      "source": "notes/A4m-november-transfer.md",
+      "next": "Find a polynomial-time block search for the resulting integer maps or a polynomial-size max-norm formulation for general markets."
     }
   ],
   "links": [
@@ -1189,6 +1198,34 @@
       "relation": "solves a subclass of",
       "reason": "On the ordinally separated unit subclass deferred acceptance determines a matching supported at the minimum.",
       "source": "notes/A4l-ordinal-stable-allocations.md#exact-minimum-prices-and-the-unit-shortcut"
+    },
+    {
+      "origin": "A4m",
+      "target": "A4a",
+      "relation": "extends",
+      "reason": "The path-based factor LP certifies additional frozen assignment maps, and the original tie repair returns the minimum.",
+      "source": "notes/A4m-path-sensitive-freezing.md"
+    },
+    {
+      "origin": "A4m",
+      "target": "A4f2",
+      "relation": "uses",
+      "reason": "The signed node contraction admits an integer approximation that preserves unit increments.",
+      "source": "notes/A4m-discrete-contraction.md#round-transfers-while-preserving-unit-increments"
+    },
+    {
+      "origin": "A4m",
+      "target": "A4g",
+      "relation": "extends",
+      "reason": "A conditional convex quadratic program handles balanced slopes and localizes hinge sign guesses to unbalanced biconnected blocks.",
+      "source": "notes/A4m-structural-elimination.md#a-convex-quadratic-program-for-a-balanced-interior"
+    },
+    {
+      "origin": "A4m",
+      "target": "A4h",
+      "relation": "tests the search interface of",
+      "reason": "Identical local formulas can require opposite labels and different solution regions, so a single local evaluation cannot select the correct region.",
+      "source": "notes/A4m-extremal-price-interface.md#identical-local-formulas-and-opposite-required-signs"
     }
   ],
   "decisions": {}
