@@ -6,6 +6,7 @@ import Kintali.ContactSize.Output
 import Kintali.ExactRecovery.FullMarket
 import Kintali.QuotaSweep.RealContinuity
 import Kintali.QuotaSweep.SparseWork
+import Kintali.QuotaSweep.NativeComparison
 import Kintali.SolverWork
 import Kintali.InputOutput.MeasuredSolver
 import Kintali.InputOutput.LotteryWork
@@ -23,6 +24,7 @@ import Kintali.Machine.PublicSolver
 #print axioms Kintali.ExactRecovery.repair_correct
 #print axioms Kintali.LinearProgramming.RationalInput.run_binary_work
 #print axioms Kintali.QuoteSearch.DriverWork.search_bound
+#print axioms Kintali.QuotaSweep.RankRun.NativeComparison.keyLess_compiled
 #print axioms Kintali.InputOutput.interior_work
 #print axioms Kintali.InputOutput.CodecWork.solveRun_correct
 #print axioms Kintali.ContactSize.solveBits_length

@@ -2,6 +2,7 @@ module
 
 public import Kintali.QuotaSweep.KeyColumns
 public import Kintali.QuotaSweep.RuntimeRanks
+public import Kintali.QuotaSweep.NativeComparison
 
 /-!
 # Restricted contact from a supplied sparse inventory

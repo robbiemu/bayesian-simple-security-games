@@ -51,8 +51,10 @@ def zeroGain : Game (Fin 2) (Fin 2) :=
 
 open InputOutput
 
+def measuredAffine : List Bool := Binary.input (writeGame affineCosts)
 def measuredDirect : List Bool := Binary.input (writeGame { affineCosts with resources := 0 })
 
+#guard (MeasuredSolver.run measuredAffine).value == Binary.output ([1, 0], [[1, 0]])
 #guard (MeasuredSolver.run measuredDirect).value == Binary.output ([0, 0], [[1, 0]])
 #guard (MeasuredSolver.run (Binary.input (0, [], []))).value == Binary.output ([], [])
 #guard (MeasuredSolver.run []).value == []
