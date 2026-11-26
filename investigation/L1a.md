@@ -2,13 +2,11 @@
 
 # L1a · Count strict threshold drops within one fixed-boundary phase
 
-**🟦 Open**
+**🟩 Result for the stated scope**
 
-The maximizing Hall sets can change even while the threshold stays fixed. Algorithm 4 strictly lowers the threshold. B3b bounds the number of distinct thresholds polynomially when the numbers of prior and inverse-gain classes are fixed.
+Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The construction applies uniformly over the exact optimizing flows and fixed seed orders.
 
-**Open task** — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds.
-
-[Read the evidence](../notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed) · [Investigation index](README.md)
+[Read the evidence](../notes/L1a-strict-threshold-drops.md) · [Investigation index](README.md)
 
 Parent question · [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md)
 
@@ -22,5 +20,9 @@ Parent question · [L1 · Locate the exact algorithm and its worst-case bottlene
 ## Where the direction came from
 
 - OpenAI Codex · [Track Hall certificates and the size of exact intermediate states](../DIRECTIONS.md#direction-continuation-followups) · Follow-up questions recorded in L1 and L2
+
+## Contribution log
+
+- [Exponential strict threshold drops on one fixed open boundary](../records/8d52deb9-efe9-4870-896a-2fab554a6e93.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex (underlying model snapshots unspecified), Python
 
 [Join the discussion in issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3) · [Find other discussions](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BL1a%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BL1a%5D+) · [Contributor guide](../CONTRIBUTING.md)

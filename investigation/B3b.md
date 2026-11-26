@@ -19,4 +19,8 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 
 - Robert Thomas Collins · [Classify the longest single continuation run](../DIRECTIONS.md#direction-busy) · Independently proposed framing
 
+## Contributions elsewhere that cite this work
+
+- [Exponential strict threshold drops on one fixed open boundary](../records/8d52deb9-efe9-4870-896a-2fab554a6e93.md)
+
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BB3b%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BB3b%5D+) · [Contributor guide](../CONTRIBUTING.md)
