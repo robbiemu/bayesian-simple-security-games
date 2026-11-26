@@ -17,7 +17,7 @@ flowchart TD
   n1 --> n4
   n5["L2a"]:::open
   n4 --> n5
-  n6["L2b"]:::open
+  n6["L2b"]:::scoped
   n4 --> n6
   n7["L3"]:::background
   n1 --> n7
