@@ -1,0 +1,392 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hmargin=1.05in,vmargin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\definecolor{linkblue}{RGB}{30,69,101}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\hypersetup{
+  pdftitle={A superpolynomial lower bound for fixed-flow continuation in Bayesian simple security games},
+  pdfauthor={Robert Thomas Collins}
+}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\recordlink}[2]{\href{https://github.com/robbiemu/bayesian-simple-security-games/blob/fd0e76a3090ffaf4b3f85cd166fb57b69285d3be/#1}{#2}}
+\setlength{\emergencystretch}{1.5em}
+\raggedbottom
+
+\begin{document}
+\begin{center}
+  {\LARGE\bfseries A superpolynomial lower bound for fixed-flow\\[.10em]
+    continuation in Bayesian simple security games\par}
+  \medskip{\large Robert Thomas Collins\par}
+  \medskip{\small Working draft \enspace\textperiodcentered\enspace 21 November 2026\par}
+\end{center}
+
+\begin{abstract}
+One way to find an equilibrium in a security game is to start with no defender
+coverage and increase it while the attacker keeps playing a best response.
+How often must the attack distribution change along the way? We construct
+one-resource games in which every such continuation that holds attack flow
+fixed during each budget increase needs \(L^{\Omega(\log L)}\) segments,
+where \(L\) is the binary input length. Distinct shortest paths in a parametric
+graph prescribe which target each type attacks on successive budget intervals.
+Every equilibrium obeys the prescription, even as total attack probability
+stays equal across targets. On the same games an assignment and a linear
+program compute an equilibrium at the final budget in polynomial time.
+\end{abstract}
+
+\section{Following equilibria as coverage increases}
+
+A defender has one resource and must choose which target to cover. Only
+the attacker observes its type before choosing a target. Both players may
+randomize. Increasing the probability of covering a target makes it less
+attractive to an attacker. Eventually a type may have to move its attack
+elsewhere for the two players to remain in equilibrium.
+
+Li, Conitzer and Korzhyk use this observation in their algorithm for
+catcher-evader games, which include Bayesian simple security games. They
+start with zero defender resources and increase coverage in steps, reallocating
+attacks between steps. They ask whether their algorithm always runs in
+polynomial time~\cite[\S\S3.1, 6.2 and 7]{LCK}. Here a single completed run
+can require superpolynomially many steps, whichever eligible moves the
+algorithm chooses.
+
+Write \(x_v\) for the probability of covering target \(v\) and \(b=\sum_v x_v\)
+for the current budget. At an intermediate budget the defender can cover
+one target with probability \(b\) and leave the resource idle with probability
+\(1-b\). At \(b=1\) this is the one-resource game. The \emph{attack flow}
+\(q_{iv}\) is the joint probability of type \(i\) and an attack on \(v\).
+A \emph{completed fixed-flow continuation} follows equilibria in increasing
+budget order from \(0\) to \(1\). Its positive-length budget segments,
+together with their endpoints, cover \([0,1]\). On each segment the entire
+matrix \(q\) stays fixed and the players are in equilibrium at every
+intervening budget. Attacks may be rerouted at a shared endpoint. Segments
+may have any length.
+
+\begin{theorem}\label{thm:main}
+There is an explicit family of rational Bayesian simple security games with
+\(n\) targets, \(n\) equally likely attacker types and one defender resource
+in which every completed fixed-flow continuation needs \(n^{\Omega(\log n)}\)
+positive-length segments. In the binary length \(L\) of the explicitly
+listed game the lower bound is \(L^{\Omega(\log L)}\). Covering the attacked
+target raises the defender's payoff by one and lowers the attacker's payoff
+by an amount within \(1/(64n)\) of one.
+
+Throughout \([1/4,1]\), every equilibrium gives every target interior
+coverage and total attack probability \(1/n\). Within this range there are
+\(K=n^{\Omega(\log n)}\) disjoint intervals of positive length. On each
+interval a single permutation prescribes the target attacked by each type
+in every equilibrium. The \(K\) permutations are distinct.
+\end{theorem}
+
+\section{From shortest paths to assignments}\label{sec:paths}
+
+We first construct a table of affine weights for which different permutations
+win in turn. Fix an integer \(h\ge4\), put \(m=\lfloor\log_2 h\rfloor\), and
+let \(K=h^m\). Take \(B=1\) and \(D=0\) in the parametric shortest-path
+construction of Gajjar and Radhakrishnan~\cite[Lemma~14 and proof of
+Theorem~1]{GR}. Their layered directed acyclic graph has one source \(o\)
+and rational affine arc costs in a parameter \(\lambda\). For \(K\) disjoint
+intervals \(I_1,\ldots,I_K\) of positive length, in increasing order, they
+give paths \(P_j\) from \(o\) to the last layer. Throughout \(I_j\), every
+other path from \(o\) to that layer costs at least one more than \(P_j\)
+(property~(iii)). The \(P_j\) are distinct (property~(vi)).
+
+Join every last-layer vertex to a new sink \(t\) by a zero-cost arc. If
+arcs are parallel, subdivide each through its own vertex, assigning the
+original cost to the first half and zero to the second. Paths to the last
+layer now correspond bijectively to \(o\)-to-\(t\) paths of the same cost.
+Pad with isolated vertices if needed to bring the vertex count \(n\) up to \(h\).
+
+Use the vertices as both the rows and the columns of an assignment. Allow
+each graph arc at its negated cost, a zero-weight loop at each vertex
+except \(t\), and a zero-weight return arc \(t\to o\). An allowed
+permutation must use the return arc, the only choice in row \(t\).
+Deleting it from its cycle leaves an \(o\)-to-\(t\) path. Every other
+cycle is a loop by acyclicity. Conversely, closing a path and fixing its
+off-path vertices gives exactly one permutation. Its weight is the
+negative of the path cost, so the permutation \(\pi_j\) of \(P_j\) beats
+every other allowed permutation by at least one on \(I_j\). This is the
+path-to-matching correspondence of~\cite[Appendix~B]{GR} in assignment form.
+
+For \(1/4\le b\le1\), mean coverage \(s=b/n\) ranges from \(1/(4n)\) to
+\(1/n\). Let \(\lambda_-\) and \(\lambda_+\) be the midpoints of the first
+and last intervals. Set
+\begin{equation}
+  \lambda(s)=\lambda_-+\frac{4ns-1}{3}(\lambda_+-\lambda_-),\qquad
+  J_j=\{b\in[1/4,1]\mid\lambda(b/n)\in I_j\}.
+  \label{eq:rescale}
+\end{equation}
+This increasing map takes the two endpoint budgets to the two midpoints.
+Even the first and last intervals retain half their length in the
+\(\lambda\) coordinate. Thus all \(J_j\) have positive length, and
+\(1\in J_K\).
+
+Write each allowed weight after substitution as \(w_{iv}(s)=B_{iv}-C_{iv}s\).
+We need a payoff for \emph{every} type--target pair. Put
+\[
+  H=1+\Bigl\lceil\max_{iv\ \mathrm{allowed}}(|B_{iv}|+|C_{iv}|)\Bigr\rceil,
+  \qquad M=(2n+1)H,
+\]
+and set \(B_{iv}=-M,\ C_{iv}=0\) on missing pairs. Allowed weights lie
+in \([-H,H]\) for \(0\le s\le1\). A permutation using a missing pair
+therefore weighs at most \(-M+(n-1)H=-(n+2)H\), while every allowed
+permutation weighs at least \(-nH\). The full table satisfies
+\begin{equation}
+  W_\pi(s)=\sum_i w_{i,\pi(i)}(s),\qquad
+  W_{\pi_j}(s)-W_\rho(s)\ge1
+  \quad (ns\in J_j,\ \rho\ne\pi_j).
+  \label{eq:gap}
+\end{equation}
+Also \(|B_{iv}|+|C_{iv}|\le M\) on every pair.
+
+\section{What the game forces at a fixed budget}\label{sec:game}
+
+Li, Conitzer and Korzhyk encode a fixed matching problem in a catcher-evader
+game~\cite[\S6.1]{LCK}. We use a single game to realize the assignments
+in~\eqref{eq:gap} as its budget changes. Give each type prior \(1/n\).
+The defender earns \(0\) if the attacked target is uncovered and \(1\)
+if it is covered. Type \(i\) earns \(a_{iv}\)
+and \(a_{iv}-d_{iv}\), respectively, for an attack on \(v\), where
+\[
+  \varepsilon=\frac1{64nM^2},\qquad
+  a_{iv}=\varepsilon B_{iv},\qquad d_{iv}=1+\varepsilon C_{iv}.
+\]
+Covering a target reduces the attacker's payoff by \(d_{iv}>0\), with
+\(|d_{iv}-1|\le\varepsilon M\le1/(64n)\). At coverage \(x\) the utility
+of attacking \(v\) is
+\[
+  u_{iv}(x)=a_{iv}-d_{iv}x_v=-x_v+\varepsilon w_{iv}(x_v).
+\]
+The first term draws attacks toward the least-covered targets. The second
+carries the assignment weights and has magnitude at most \(\varepsilon M\).
+
+At equilibrium the nonnegative flow in row \(i\) sums to \(1/n\) and uses
+only targets maximizing \(u_{iv}(x)\). Against the target totals
+\(z_v=\sum_iq_{iv}\), the defender maximizes \(\sum_v x_vz_v\) over
+\(\X_b=\{x\in[0,1]^n\mid\sum_v x_v=b\}\). An equilibrium exists at each
+\(0\le b\le1\). Indeed, \(\X_b\) is the convex hull of the \(n\) allocations
+\(b e_v\) that put the whole budget on one target. These defender actions
+and the attacker's maps from types to targets form a finite game with a mixed
+Nash equilibrium~\cite{Nash}. Payoffs depend only on \(x,q\), and a profitable
+deviation by a single type would improve the attacker's payoff since its prior
+is positive.
+
+The defender can put the whole budget on a target of maximum mass
+\(z_*=\max_v z_v\), earning \(bz_*\). The shortfall at any feasible \(x\) is
+\begin{equation}
+  bz_*-\sum_v x_vz_v=\sum_v x_v(z_*-z_v).
+  \label{eq:defender}
+\end{equation}
+Each term is nonnegative. Hence a coverage is optimal exactly when every
+positively covered target has mass \(z_*\).
+
+At \(b>0\) a most-covered target \(v\) therefore has mass \(z_*\ge1/n\).
+Some type \(i\) attacks it, so \(u_{iv}(x)\ge u_{iw}(x)\) for a
+least-covered target \(w\). Since \(|u_{it}(x)+x_t|\le\varepsilon M\)
+for each target \(t\), we get \(x_v-x_w\le2\varepsilon M\). The mean
+\(s=b/n\) lies between the extremes, giving
+\begin{equation}
+  |x_t-s|\le2\varepsilon M=\frac1{32nM}\qquad\text{for all targets }t.
+  \label{eq:spread}
+\end{equation}
+For \(1/4\le b\le1\), every coverage is at least
+\(1/(4n)-1/(32n)>0\). Each is also below one since \(n\ge2\) and the
+sum is at most one. By~\eqref{eq:defender} all targets have maximum mass.
+Their masses sum to one, so \(z_v=1/n\) for every \(v\).
+
+\begin{lemma}\label{lem:force}
+Fix \(1/4\le b\le1\) and let \(s=b/n\). If \(W_\pi(s)\ge W_\rho(s)+1\)
+for every permutation \(\rho\ne\pi\), then every equilibrium at \(b\) has
+flow \(q=q^\pi\), where \(q^\pi_{iv}=\ind_{\{v=\pi(i)\}}/n\).
+\end{lemma}
+
+\begin{proof}
+Fix an equilibrium \((x,q)\). The priors give \(q\) row sums \(1/n\).
+All coverages are positive, so~\eqref{eq:defender} gives the same column
+sums. Thus \(nq\) is doubly stochastic. By the Birkhoff--von Neumann theorem it is a
+convex combination of permutation matrices~\cite{Birkhoff}. If \(\rho\) has
+coefficient \(\alpha_\rho>0\), then \(nq_{i,\rho(i)}\ge\alpha_\rho\) for every \(i\).
+Thus \(\rho(i)\) is a best response for type \(i\). Consequently
+\(\rho\) maximizes \(\sum_i u_{i,\rho(i)}(x)\) among all permutations,
+even when a type has several best responses.
+
+Every permutation uses each target once, so its common coverage terms sum
+to \(-\sum_v x_v=-b\). The remaining utility is
+\(\varepsilon\sum_i w_{i,\rho(i)}(x_{\rho(i)})\).
+By~\eqref{eq:spread}, the assignment sum at the actual coverages satisfies
+\[
+ \left|\sum_i w_{i,\rho(i)}(x_{\rho(i)})-W_\rho(s)\right|
+ \le \sum_i |C_{i,\rho(i)}|\,|x_{\rho(i)}-s|
+ \le 2n\varepsilon M^2=\tfrac1{32}.
+\]
+The two errors in a comparison cost at most \(1/16\) of the unit gap.
+Thus \(\pi\) is the unique maximizer of the summed
+utilities. Every positive coefficient in the decomposition belongs to
+\(\pi\), which gives \(q=q^\pi\).
+\end{proof}
+
+\section{Counting segments in one run}\label{sec:count}
+
+Fix one completed continuation. By~\eqref{eq:gap} and Lemma~\ref{lem:force},
+every equilibrium on \(J_j\) has flow \(q^{\pi_j}\). If the run has finitely
+many positive-length segments, choose a budget in the interior of each
+\(J_j\) away from all segment endpoints. The segments and their endpoints
+cover \([0,1]\), so each chosen budget lies inside a segment carrying
+\(q^{\pi_j}\). The \(K\) distinct matrices require \(K\) different segments
+of this run. Infinitely many positive-length segments already meet the
+bound. In either case the prescribed flows occur in order and require
+at least \(K-1\) changes.
+
+To express the count in bits, consider the graph before subdivision. With
+its sink it has at most \(6h^8+1\) vertices, and its arc coefficients use
+\(O((\log h)^3)\) bits per numerator and denominator~\cite[Lemma~14(i)--(ii)
+and proof of Theorem~1]{GR}. Its \(O(3^m)\) recursive pieces each use at most
+\((1+mh)(h+1)\) straight segments in a linking graph~\cite[\S\S2.1 and 3.3]{GR}.
+Each pair crosses at most once, giving \(h^{O(1)}\) arcs after splitting at
+crossings. Subdivision and padding therefore give \(h\le n\le h^{O(1)}\).
+
+All interval endpoints are integers in \([0,(h^2)^{m+1}]\). The smallest
+and largest digit at each level of the interval recurrence give the first
+and last intervals~\cite[\S3.1]{GR}. Their midpoints have denominator at
+most two and \(O((\log h)^2)\) bits. Substitution~\eqref{eq:rescale} takes
+only a constant number of rational operations per arc, giving
+\(O((\log n)^3)\) bits per allowed coefficient \(B_{iv},C_{iv}\). The
+maximum and ceiling in \(H\) and the formulas for \(M,\varepsilon\) and
+the payoffs preserve this bound per entry.
+
+Listing the \(n^2\) type--target pairs gives \(L=\Omega(n^2)\) and
+\(L=O(n^2(\log n)^3)\). The intervals serve only as witnesses. Since
+\(\log L=\Theta(\log n)=\Theta(\log h)\), Theorem~\ref{thm:main} follows from
+\[
+  \log K=\lfloor\log_2 h\rfloor\log h
+        =\Theta\bigl((\log n)^2\bigr)=\Theta\bigl((\log L)^2\bigr).
+\]
+
+\section{The published continuation and the final budget}
+
+In the reduction of Li, Conitzer and Korzhyk, evader \(i\)'s allocation is
+row \(i\) of \(q\). With one attack per type, its resource and its cap at
+each target are both \(1/n\), and its payoff change upon coverage is
+\(-d_{iv}\)~\cite[\S3.1]{LCK}. On \([1/4,1]\) every target is below its
+defender cap and has maximum mass, so all targets belong to their
+\emph{open defender boundary}.
+
+Algorithm~1 completes the traversal from zero to the full defender
+budget~\cite[Theorem~5]{LCK}. Algorithms~2 and~4 reroute attacks at
+fixed coverage. A successful call to Algorithm~3 moves \(x\) along a
+straight line with \(q\) fixed and preserves equilibrium~\cite[Lemma~4]{LCK}.
+The attack comparisons on its support are affine in \(x\). The defender's
+shortfall~\eqref{eq:defender} is linear in \(x\) since \(b=\sum_v x_v\).
+The comparisons hold and the shortfall vanishes at both endpoints, hence
+throughout the step. Each successful call is a fixed-flow segment, so
+Algorithm~1 requires at least \(K\) such calls for every legal seed choice
+and min-cost tie rule. Taking the greatest feasible increase at each fixed
+flow also requires \(K\) segments or more.
+
+\paragraph{Reallocation cost.}
+Algorithm~2 uses the cost \(\ell(q)=\sum_{iv}q_{iv}\log d_{iv}\), with
+natural logarithms. The prescribed flows have strictly decreasing cost in
+budget order. Indeed, let \(ns_1<ns_2\) lie in different witness intervals,
+with winners \(\pi,\rho\), respectively. Write \(C_\pi=\sum_i C_{i,\pi(i)}\).
+The difference \(W_\pi-W_\rho\) is at least \(1\) at \(s_1\) and at
+most \(-1\) at \(s_2\). Thus \((C_\pi-C_\rho)(s_2-s_1)\ge2\), giving
+\(C_\pi-C_\rho\ge8n/3\) since \(s_2-s_1\le3/(4n)\).
+For \(|t|\le1/2\), integration of \(|t/(1+t)|\le2|t|\) gives
+\(|\log(1+t)-t|\le t^2\). Applying this with \(t=\varepsilon C_{iv}\) gives
+\[
+  n\bigl(\ell(q^\pi)-\ell(q^\rho)\bigr)
+  \ge\varepsilon(C_\pi-C_\rho)-2n\varepsilon^2M^2
+  \ge\varepsilon(8n/3-1/32)>0 .
+\]
+
+\paragraph{Computing the endpoint directly.}
+Conitzer asked whether one Bayes--Nash equilibrium of a given game can be
+found in polynomial time~\cite{Conitzer}. On this family two rational linear
+programs suffice at \(b=1\). First maximize the assignment objective with weights
+\(a_{iv}-d_{iv}/n=-1/n+\varepsilon w_{iv}(1/n)\) over the doubly stochastic
+matrices. Since \(1\in J_K\), the unique optimum is the permutation
+matrix of \(\pi=\pi_K\). Next find any \(x\in\X_1\) satisfying
+\[
+  a_{i,\pi(i)}-d_{i,\pi(i)}x_{\pi(i)}
+    \ge a_{iv}-d_{iv}x_v\qquad\text{for all }i,v .
+\]
+Existence of an equilibrium with flow \(q^\pi\) guarantees feasibility.
+Every solution makes the assigned attacks optimal, and their uniform
+column totals make every \(x\in\X_1\) optimal for the defender. Both
+programs have polynomial encoding length and can be solved in polynomial
+bit time~\cite{Khachiyan}. The defender covers target \(v\) with probability \(x_v\).
+
+\section*{Contributions and use of AI}
+
+Robert Thomas Collins asked about the longest single run in each class of
+games, motivated by the Busy Beaver problem. He directed the investigation
+and reviewed the scope and presentation of the result. In OpenAI Codex,
+GPT-6.2 Sol reviewed sources and tested small examples in exact arithmetic.
+GPT-6.2 Astra helped derive and check the reduction from parametric paths
+to forced attack flows and drafted the proof. Gajjar and Radhakrishnan
+proved the shortest-path result, including the interval-wide gaps~\cite{GR}.
+
+A separate model-assisted audit checked the reduction, the segment count,
+the input length and the endpoint argument. In the four-target example,
+enumerating all \(24\) assignments gives three different winners at the
+three reported budgets, each with gap two. In the three-target audit,
+testing the row inequalities for all six permutations gives one feasible
+assignment at each of two budgets. The project record supplies both
+examples~\cite{record}.
+
+The Lean checks accompanying this edition cover affine path sums,
+permutation sums and the decomposition of a given doubly stochastic
+matrix. They also check that an open interval contains a point outside any
+given finite set and that an injection between finite sets bounds their
+sizes. Run \texttt{lake build LibraryChecks} from the repository's
+\texttt{lean/} directory to reproduce them~\cite{record}. The forcing
+lemma, the segment count and the binary input-length bound are verified
+by the written argument in Sections~\ref{sec:paths}--\ref{sec:count}.
+
+\begin{thebibliography}{9}
+\small
+\raggedright
+\setlength{\itemsep}{.25em}
+\bibitem{LCK}
+Y. Li, V. Conitzer, and D. Korzhyk.
+\emph{Catcher-Evader Games}. IJCAI, 2016.
+\href{https://arxiv.org/pdf/1602.01896v2}{arXiv:1602.01896v2}.
+
+\bibitem{GR}
+K. Gajjar and J. Radhakrishnan.
+\emph{Parametric Shortest Paths in Planar Graphs}. FOCS, 2019.
+\href{https://arxiv.org/pdf/1811.05115v3}{arXiv:1811.05115v3}.
+
+\bibitem{Nash}
+J. F. Nash, Jr. \href{https://doi.org/10.1073/pnas.36.1.48}{\emph{Equilibrium
+points in \(n\)-person games}}. Proc. Natl. Acad. Sci. USA 36, 48--49, 1950.
+
+\bibitem{Birkhoff}
+G. Birkhoff. \emph{Tres observaciones sobre el \'algebra lineal}.
+Univ. Nac. Tucum\'an, Ser. A 5, 147--151, 1946.
+
+\bibitem{Conitzer}
+V. Conitzer. \emph{Open problem: Computing Bayes-Nash equilibrium in
+simple security games}.
+\href{https://arxiv.org/pdf/2610.08796v2}{arXiv:2610.08796v2}, 2026.
+
+\bibitem{Khachiyan}
+L. G. Khachiyan. \href{https://www.mathnet.ru/eng/zvmmf5239}{\emph{Polynomial
+algorithms in linear programming}}. USSR Comput. Math. Math. Phys. 20(1), 53--72, 1980.
+
+\bibitem{record}
+R. T. Collins and contributors. \emph{Bayesian simple security games},
+project records at revision \texttt{fd0e76a3}.
+\recordlink{notes/B3f-forced-flow-switches.md}{Construction and four-target example},
+\recordlink{notes/B3g-lower-bound-audit.md}{audit and three-target example},
+\recordlink{lean/README.md}{Lean checks}, and
+\recordlink{records/21a3ca77-54c5-4e22-8493-9926749662d4.md}{contribution record}.
+\end{thebibliography}
+\end{document}

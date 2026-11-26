@@ -26,7 +26,7 @@ On a fresh checkout with Elan on your path, run `lake exe cache get` in this dir
 - Rational arithmetic exposes the reduced numerator and denominator, their binary sizes, and the ceiling. Rational affine expressions retain their values when cast to the reals. [ExactArithmetic.lean](LibraryChecks/ExactArithmetic.lean)
 - An open interval contains a point outside any finite set of endpoints. Further examples check counting by injections, the floor of the base-two logarithm, asymptotic comparison, and a logarithmic remainder estimate. [IntervalsAndGrowth.lean](LibraryChecks/IntervalsAndGrowth.lean)
 
-The current sketch also uses the Gajjar–Radhakrishnan parametric shortest-path construction, finite mixed Nash existence, and polynomial bit-time bounds for assignment and rational linear programming. A search of the pinned mathlib sources found no ready-to-import statements for those results.
+The fixed-flow paper also uses the Gajjar–Radhakrishnan parametric shortest-path construction, finite mixed Nash existence, and polynomial bit-time bounds for assignment and rational linear programming. A search of the pinned mathlib sources found no ready-to-import statements for those results. [Fixed-flow paper (PDF)](../papers/fixed-flow-continuation-lower-bound.pdf) · [Verification record](../papers/fixed-flow-continuation-lower-bound-verification.md)
 
 ## Stochastic game reduction
 
