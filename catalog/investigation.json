@@ -263,10 +263,9 @@
       "id": "A4e",
       "parent": "A4",
       "title": "Test covering LPs with reweighting and Hall cuts",
-      "state": "open",
-      "summary": "Reweighted cover LPs descend exactly. Each iteration costs polynomial work. The known general iteration bound is exponential.",
+      "state": "scoped",
+      "summary": "Reweighted covers descend exactly. A defect-one counting-network family forces superpolynomially many solves for the stated logarithmic tie-break, including with near-factorized slopes.",
       "source": "notes/A4e-covering-lp.md",
-      "next": "Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule.",
       "issue": 2
     },
     {
@@ -1239,6 +1238,13 @@
       "relation": "tests the search interface of",
       "reason": "Identical local formulas can require opposite labels and different solution regions, so a single local evaluation cannot select the correct region.",
       "source": "notes/A4m-extremal-price-interface.md#identical-local-formulas-and-opposite-required-signs"
+    },
+    {
+      "origin": "A4e",
+      "relation": "uses the counting family from",
+      "target": "A4h6",
+      "reason": "Project the frozen assignment and reweighted cover onto the source price to bound the solve count for every choice of optimal cover vertex.",
+      "source": "notes/A4h6-reweighted-cover-lower-bound.md"
     }
   ],
   "decisions": {}
