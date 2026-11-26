@@ -40,7 +40,7 @@ def check_four_targets():
         (0, 3): (0, 0), (0, 1): (Fraction(-14, 3), Fraction(-128, 3)),
         (0, 2): (Fraction(-40, 3), Fraction(-256, 3)),
         (1, 3): (0, 0), (2, 3): (0, 0), (3, 0): (0, 0),
-        (1, 1): (0, 0), (2, 2): (0, 0),
+        (0, 0): (0, 0), (1, 1): (0, 0), (2, 2): (0, 0),
     }
     fixtures = [
         (Fraction(1, 4), (3, 1, 2, 0), Fraction(1)),
@@ -48,6 +48,7 @@ def check_four_targets():
         (Fraction(1), (2, 1, 3, 0), Fraction(2429999, 2430000)),
     ]
     offsets, losses = affine_game(4, arcs, 900, Fraction(1, 207360000))
+    assert (offsets[0][0], losses[0][0]) == (offsets[0][3], losses[0][3])
     for budget, expected, expected_product in fixtures:
         uniform = budget / 4
         scores = []
