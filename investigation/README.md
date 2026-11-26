@@ -6,7 +6,6 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Open questions
 
-- [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds. · [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3)
 - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis. · [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4)
 - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
@@ -38,7 +37,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [R · Exact equilibrium in polynomial time](R.md) · 🟨 Partial result
   - [L · Published results and algorithm](L.md) · Background
     - [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md) · 🟩 Result for the stated scope
-      - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟦 Open
+      - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟩 Result for the stated scope
     - [L2 · Account for exact arithmetic along a run](L2.md) · 🟩 Result for the stated scope
       - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) · 🟦 Open
       - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) · 🟦 Open
