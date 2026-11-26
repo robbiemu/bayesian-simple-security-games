@@ -31,7 +31,7 @@ flowchart TB
     A --> C["L1 / L2 · Follow increasing budgets<br/>with one attack flow per step"]
     C --> CP["B3a / B3b · Sparse cycles or<br/>bounded slope and mass classes<br/>Polynomial time"]
     C --> HW["L1a · Strict threshold drops"]
-    HW --> HT["Fixed open boundary<br/>Exponentially many threshold drops"]:::settled
+    HW --> HT["Fixed open boundary<br/>Tight exponential threshold-drop count"]:::settled
     HT --> W
     C --> W["L2a · OPEN<br/>Tight worst-case outer-call count"]
     C --> BL["L2b · OPEN<br/>Polynomial input-only bit length at every step?"]

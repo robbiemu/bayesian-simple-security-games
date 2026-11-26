@@ -4,7 +4,7 @@
 
 **🟩 Result for the stated scope**
 
-Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The construction applies uniformly over the exact optimizing flows and fixed seed orders.
+Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The Hall-ratio upper bound gives a matching exponential worst-case count when the numbers of types and targets are equal. The lower bound holds over all exact optimizing flows and fixed seed orders.
 
 [Read the evidence](../notes/L1a-strict-threshold-drops.md) · [Investigation index](README.md)
 

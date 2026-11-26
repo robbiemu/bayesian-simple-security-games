@@ -30,7 +30,7 @@
       "parent": "L1",
       "title": "Count strict threshold drops within one fixed-boundary phase",
       "state": "scoped",
-      "summary": "Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The construction applies uniformly over the exact optimizing flows and fixed seed orders.",
+      "summary": "Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The Hall-ratio upper bound gives a matching exponential worst-case count when the numbers of types and targets are equal. The lower bound holds over all exact optimizing flows and fixed seed orders.",
       "source": "notes/L1a-strict-threshold-drops.md",
       "issue": 3
     },

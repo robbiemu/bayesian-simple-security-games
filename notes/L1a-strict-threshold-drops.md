@@ -63,9 +63,21 @@ There are at least \(F-1\) distinct landings, by the disjoint intervals above. E
 
 The construction has more types than targets. To equalize the counts, add targets with uncovered utility $-2$ for every type, unit attacker loss, and one of the two existing gains. Every original target has utility greater than $-2$ throughout the coverage box, so no type attacks an added target. Added targets stay outside the positive-threshold boundary. The $2^{\Omega(N)}$ lower bound on threshold drops thus also holds with $N$ targets and $N$ positive-prior types, where $N=\Theta(h)$.
 
+## Tight worst-case count in balanced dimensions
+
+**Corollary.** For the exact L2 continuation on strictly signed games with equal numbers of targets and positive-prior types, both at most \(N\), the worst-case number of strict Algorithm 4 drops within one unchanged open-boundary phase is \(2^{\Theta(N)}\).
+
+Each counted drop preserves the boundary \(B\) and leaves coverage unchanged. The budget is still unfilled. L2's maximum-drop argument therefore gives a successful Algorithm 3 input at the new threshold. Let \(U\) and \(S\) be the rows and targets reachable from its seed. With \(k\) positive-prior types, \(U\subseteq[k]\), \(\varnothing\ne S\subseteq B\), and the weighted Hall equality gives
+
+\[
+  \lambda=\frac{\sum_{i\in U}p_i}{\sum_{t\in S}1/\beta_t}.
+\]
+
+The landing thresholds are distinct because the threshold is nonincreasing and each counted drop is strict. The empty numerator gives at most one value, zero. There are at most \(1+(2^k-1)(2^{|B|}-1)\) possible values altogether, which is at most \(4^N\) when \(k\) and the number of targets are at most \(N\). The construction above has at most \(6h+2\) positive-prior types, including its \(4h+1\) arc rows, at most \(2h\) internal fillers, and the terminal row. After padding the targets to match, taking \(h=\lfloor(N-2)/6\rfloor\) gives \(2^{\Omega(N)}\) drops for every sufficiently large \(N\). The tight count of all outer calls is the separate L2a question. [Hall-ratio count](B3b-closed-group-rank.md#thresholds-and-changes-of-seed) · [Exact L2 steps](L2-exact-arithmetic-audit.md#state-and-exact-steps) · [L2a](../investigation/L2a.md) · [PR review](https://github.com/robbiemu/bayesian-simple-security-games/pull/17#issuecomment-7179946015)
+
 ## Exact small replays
 
-Run `python3 experiments/l1a_threshold_replay.py 1 2 3 4` from the project root. The replay uses rational arithmetic, the first eligible seed in target order and the identity transportation normalization, a valid minimum-cost choice because the logarithmic costs all vanish. At each threshold reset it finds one optimizing flow by a lower-bound transportation solve. It checks the active graph and the predicted witness intervals during the full run. [Replay script](../experiments/l1a_threshold_replay.py)
+Run `python3 experiments/l1a_threshold_replay.py 1 2 3 4 5` from the project root. The replay uses rational arithmetic, the first eligible seed in target order and the identity transportation normalization, a valid minimum-cost choice because the logarithmic costs all vanish. At each threshold reset it finds one optimizing flow by a lower-bound transportation solve. It checks the active graph and the predicted witness intervals during the full run. [Replay script](../experiments/l1a_threshold_replay.py)
 
 | Depth \(h\) | Strict drops with \(B=V\setminus\{s\}\) unchanged | Total Algorithm 4 calls | Successful coverage steps |
 | --- | ---: | ---: | ---: |
@@ -73,3 +85,4 @@ Run `python3 experiments/l1a_threshold_replay.py 1 2 3 4` from the project root.
 | 2 | 7 | 12 | 13 |
 | 3 | 15 | 22 | 24 |
 | 4 | 31 | 41 | 47 |
+| 5 | 63 | 76 | 83 |
