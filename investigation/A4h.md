@@ -39,6 +39,7 @@ Parent question · [A4 · Solve the binary-mass minimum-price market with arbitr
 
 ## Contributions elsewhere that cite this work
 
+- [Exponential strict threshold drops on one fixed open boundary](../records/8d52deb9-efe9-4870-896a-2fab554a6e93.md)
 - [Certify exact polynomial-time clearing with a path bound on frozen prices](../records/e3aa26cd-1de3-424f-97c3-82db725e63cf.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BA4h%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BA4h%5D+) · [Contributor guide](../CONTRIBUTING.md)

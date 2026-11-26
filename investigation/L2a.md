@@ -4,7 +4,7 @@
 
 **🟦 Open**
 
-With $n$ targets and $n$ positive-prior types, the known lower bound on one run is $n^{\Omega(\log n)}$ steps. The exact implementation has an upper bound of $n^{O(n)}$ outer calls. The tight growth rate remains open.
+With $n$ targets and $n$ positive-prior types, L1a forces $2^{\Omega(n)}$ outer calls, including on a single fixed-boundary phase. The exact implementation has an upper bound of $n^{O(n)}$ calls. The tight growth rate remains open.
 
 **Open task** — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis.
 

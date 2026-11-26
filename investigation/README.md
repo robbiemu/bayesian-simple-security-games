@@ -6,10 +6,8 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 ## Open questions
 
-- [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds. · [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3)
 - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis. · [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4)
 - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
-- [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule. · [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market.
 - [A4i1 · Find the exact minimum prices of one supplied unit market](A4i1.md) — Find a direct polynomial-bit-time market solver with arbitrary affine slopes and recover a clearing assignment. The degree-three reduction gives a sufficient restricted problem.
@@ -39,7 +37,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
 - [R · Exact equilibrium in polynomial time](R.md) · 🟨 Partial result
   - [L · Published results and algorithm](L.md) · Background
     - [L1 · Locate the exact algorithm and its worst-case bottleneck](L1.md) · 🟩 Result for the stated scope
-      - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟦 Open
+      - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟩 Result for the stated scope
     - [L2 · Account for exact arithmetic along a run](L2.md) · 🟩 Result for the stated scope
       - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) · 🟦 Open
       - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) · 🟦 Open
@@ -68,7 +66,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
       - [A4b · Seek direct search through Hall inequalities](A4b.md) · 🟩 Result for the stated scope
       - [A4c · Reduce minimum-price search to any clearing equilibrium](A4c.md) · 🟩 Result for the stated scope
       - [A4d · Reduce market and game equilibrium to P-matrix complementarity](A4d.md) · 🟩 Result for the stated scope
-      - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) · 🟦 Open
+      - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) · 🟩 Result for the stated scope
         - [A4e1 · Identify when one weighted cover gives an unweighted flow](A4e1.md) · 🟩 Result for the stated scope
         - [A4e2 · Test cuts across changing demand graphs](A4e2.md) · 🟩 Result for the stated scope
         - [A4e3 · Prove strict descent and solve common-offset markets](A4e3.md) · 🟩 Result for the stated scope
