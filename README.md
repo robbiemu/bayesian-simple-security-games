@@ -24,6 +24,10 @@ While looking for a hardness reduction for affine-market clearing, we found a wa
 
 Yuqian Li, Vincent Conitzer, and Dmytro Korzhyk asked in February 2016 whether their continuation has a polynomial worst-case running time. The November 21 paper constructs Bayesian simple security games in which following the defender's budget with a fixed attack flow per step requires superpolynomially many steps. The defender threshold and target attack totals stay fixed across the counted budget interval. An assignment and a feasibility LP compute an exact equilibrium at the final budget on the same family. Lean checks supporting lemmas for the November 21 paper, and exact Python replays check the small witnesses. [Catcher–Evader Games, §7 (2016)](https://arxiv.org/pdf/1602.01896v1#page=11) · [Paper (PDF)](papers/fixed-flow-continuation-lower-bound.pdf) · [TeX source](papers/fixed-flow-continuation-lower-bound.tex) · [Verification record](papers/fixed-flow-continuation-lower-bound-verification.md)
 
+### Exponentially many threshold drops
+
+Our earlier result showed that Algorithm 4 can make exponentially many strict threshold drops in one phase with a fixed open boundary. The fixed-flow paper superseded it as our answer to the runtime question. Its hard family forces superpolynomially many attack-flow changes at a constant threshold, even with the largest feasible fixed-flow jumps. On that same family, one assignment solve and one feasibility LP recover the final equilibrium directly. [Threshold-drop proof and replay](notes/L1a-strict-threshold-drops.md)
+
 ## State of the investigation when Kintali solved the problem
 
 The sections below record where our investigation stood when Shiva Kintali solved the general equilibrium problem on November 24, 2026. They preserve the bounds and methods we had reached, with links to later checks and write-ups for the individual results.
