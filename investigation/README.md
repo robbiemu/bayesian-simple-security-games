@@ -8,7 +8,6 @@ Choose an open question to see its evidence, the reason for each connection, wor
 
 - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) — For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds. · [Issue #3](https://github.com/robbiemu/bayesian-simple-security-games/issues/3)
 - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) — Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis. · [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4)
-- [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) — Bound the bit lengths of the reduced numerators and denominators of every retained coverage and flow by a polynomial in the original input length, or exhibit a family exceeding every such bound under specified optimizer choices. · [Issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5)
 - [A4e · Test covering LPs with reweighting and Hall cuts](A4e.md) — Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule. · [Issue #2](https://github.com/robbiemu/bayesian-simple-security-games/issues/2)
 - [A4f · Seek a polynomial-handicap formulation for A4d](A4f.md) — Construct an equivalent bounded-handicap formulation with exact polynomial-time recovery.
 - [A4h · Generate complete candidate lists before the Hall search](A4h.md) — Give a polynomial-bit-time direct rule to choose the next affine region on an unrestricted supplied market.
@@ -42,7 +41,7 @@ Choose an open question to see its evidence, the reason for each connection, wor
       - [L1a · Count strict threshold drops within one fixed-boundary phase](L1a.md) · 🟦 Open
     - [L2 · Account for exact arithmetic along a run](L2.md) · 🟩 Result for the stated scope
       - [L2a · Tighten the worst-case outer-call count on a single run](L2a.md) · 🟦 Open
-      - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) · 🟦 Open
+      - [L2b · Bound intermediate rational bit lengths by the original input size](L2b.md) · 🟩 Result for the stated scope
     - [L3 · Check the prior partial results and reconcile overlap](L3.md) · Background
     - [L4 · Compare the Newton bound with the continuation landscape](L4.md) · 🟨 Partial result
       - [L4a · Apply the handicap-dependent theorem to A4d](L4a.md) · 🟩 Result for the stated scope

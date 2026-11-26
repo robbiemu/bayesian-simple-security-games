@@ -32,7 +32,8 @@ flowchart TB
     C --> CP["B3a / B3b · Sparse cycles or<br/>bounded slope and mass classes<br/>Polynomial time"]
     C --> HW["L1a · OPEN<br/>How often can the threshold drop?"]
     C --> W["L2a · OPEN<br/>Tight worst-case outer-call count"]
-    C --> BL["L2b · OPEN<br/>Polynomial input-only bit length at every step?"]
+    C --> BL["L2b · Intermediate arithmetic"]
+    BL --> BA["Fixed-order Algorithm 4<br/>Polynomial input-only bit lengths"]:::settled
     C --> J["L4 · Least and greatest coverage at one threshold<br/>Exact jumps with a clearing oracle"]
     J --> JE["L4c · Structure at one answer endpoint<br/>Polynomial exact budget search"]
     S --> IB["A4h12 + L4b · Bounded viable incidence blocks<br/>Exact polynomial-time equilibrium"]
