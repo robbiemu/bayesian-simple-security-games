@@ -333,13 +333,12 @@ GPT-6.2 Astra helped derive and check the reduction from parametric paths
 to forced attack flows and drafted the proof. Gajjar and Radhakrishnan
 proved the shortest-path result, including the interval-wide gaps~\cite{GR}.
 
-A separate model-assisted audit checked the reduction, the segment count,
-the input length and the endpoint argument. In the four-target example,
-enumerating all \(24\) assignments gives three different winners at the
-three reported budgets, each with gap two. In the three-target audit,
-testing the row inequalities for all six permutations gives one feasible
-assignment at each of two budgets. The project record supplies both
-examples~\cite{record}.
+A separate model-assisted audit checked the reduction, segment count,
+input length and endpoint argument. Enumerating the \(24\) four-target
+assignments at budgets \(1/4\), \(5/8\), and \(1\) gives three distinct
+winners, each with gap two. The three-target audit finds one feasible
+assignment at each of two budgets by checking all six permutations~\cite{record}.
+See the \href{https://github.com/robbiemu/bayesian-simple-security-games/blob/3cbb839a967a8c81084f3cfeb496314fb3628ca9/papers/fixed-flow-continuation-lower-bound-verification.md}{verification record}.
 
 The Lean checks accompanying this edition cover affine path sums,
 permutation sums and the decomposition of a given doubly stochastic
