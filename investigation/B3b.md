@@ -22,5 +22,6 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 ## Contributions elsewhere that cite this work
 
 - [Input-only bit lengths for fixed-order exact continuation](../records/6d779579-7c48-4255-aa4c-82ee4a56a99d.md)
+- [Exponential strict threshold drops on one fixed open boundary](../records/8d52deb9-efe9-4870-896a-2fab554a6e93.md)
 
 [Join an existing discussion](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BB3b%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BB3b%5D+) · [Contributor guide](../CONTRIBUTING.md)

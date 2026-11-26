@@ -29,10 +29,9 @@
       "id": "L1a",
       "parent": "L1",
       "title": "Count strict threshold drops within one fixed-boundary phase",
-      "state": "open",
-      "summary": "The maximizing Hall sets can change even while the threshold stays fixed. Algorithm 4 strictly lowers the threshold. B3b bounds the number of distinct thresholds polynomially when the numbers of prior and inverse-gain classes are fixed.",
-      "source": "notes/B3b-closed-group-rank.md#thresholds-and-changes-of-seed",
-      "next": "For arbitrary binary priors and gains, bound the number of strict Algorithm 4 threshold drops while the open boundary is fixed, or construct one run forcing many distinct successful thresholds.",
+      "state": "scoped",
+      "summary": "Counting-network transportation margins force at least $2^h-1$ strict Algorithm 4 threshold drops on one fixed open boundary with $2h+2$ targets, unit losses, and two gains. The Hall-ratio upper bound gives a matching exponential worst-case count when the numbers of types and targets are equal. The lower bound holds over all exact optimizing flows and fixed seed orders.",
+      "source": "notes/L1a-strict-threshold-drops.md",
       "issue": 3
     },
     {
@@ -48,7 +47,7 @@
       "parent": "L2",
       "title": "Tighten the worst-case outer-call count on a single run",
       "state": "open",
-      "summary": "With $n$ targets and $n$ positive-prior types, the known lower bound on one run is $n^{\\Omega(\\log n)}$ steps. The exact implementation has an upper bound of $n^{O(n)}$ outer calls. The tight growth rate remains open.",
+      "summary": "With $n$ targets and $n$ positive-prior types, L1a forces $2^{\\Omega(n)}$ outer calls, including on a single fixed-boundary phase. The exact implementation has an upper bound of $n^{O(n)}$ calls. The tight growth rate remains open.",
       "source": "notes/L2-exact-arithmetic-audit.md#non-repetition-with-exact-flow-ties",
       "next": "Improve either bound using comparable dimensions, binary input sizes and tie rules. For a restricted class, identify the additional hypothesis.",
       "issue": 4
@@ -262,10 +261,9 @@
       "id": "A4e",
       "parent": "A4",
       "title": "Test covering LPs with reweighting and Hall cuts",
-      "state": "open",
-      "summary": "Reweighted cover LPs descend exactly. Each iteration costs polynomial work. The known general iteration bound is exponential.",
+      "state": "scoped",
+      "summary": "Reweighted covers descend exactly. A defect-one counting-network family forces superpolynomially many solves for the stated logarithmic tie-break, including with near-factorized slopes.",
       "source": "notes/A4e-covering-lp.md",
-      "next": "Bound the number of iterations polynomially or construct a family forcing superpolynomially many for the stated rule.",
       "issue": 2
     },
     {
@@ -1238,6 +1236,13 @@
       "relation": "tests the search interface of",
       "reason": "Identical local formulas can require opposite labels and different solution regions, so a single local evaluation cannot select the correct region.",
       "source": "notes/A4m-extremal-price-interface.md#identical-local-formulas-and-opposite-required-signs"
+    },
+    {
+      "origin": "A4e",
+      "relation": "uses the counting family from",
+      "target": "A4h6",
+      "reason": "Project the frozen assignment and reweighted cover onto the source price to bound the solve count for every choice of optimal cover vertex.",
+      "source": "notes/A4h6-reweighted-cover-lower-bound.md"
     }
   ],
   "decisions": {}

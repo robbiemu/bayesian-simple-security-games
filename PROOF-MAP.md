@@ -30,7 +30,9 @@ flowchart TB
 
     A --> C["L1 / L2 · Follow increasing budgets<br/>with one attack flow per step"]
     C --> CP["B3a / B3b · Sparse cycles or<br/>bounded slope and mass classes<br/>Polynomial time"]
-    C --> HW["L1a · OPEN<br/>How often can the threshold drop?"]
+    C --> HW["L1a · Strict threshold drops"]
+    HW --> HT["Fixed open boundary<br/>Tight exponential threshold-drop count"]:::settled
+    HT --> W
     C --> W["L2a · OPEN<br/>Tight worst-case outer-call count"]
     C --> BL["L2b · Intermediate arithmetic"]
     BL --> BA["Fixed-order Algorithm 4<br/>Polynomial input-only bit lengths"]:::settled
@@ -129,6 +131,7 @@ flowchart TB
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
     CV --> CD["Reweighted cover with slope tie-break<br/>Exact search · exponential iteration bound"]
+    CD --> CDL["Defect-one family<br/>Superpolynomial reweighted solves"]:::settled
     CV --> CO["Common intercept offsets with arbitrary slopes<br/>Exact polynomial-time solver"]
     CO --> AJC
 
@@ -156,7 +159,7 @@ flowchart TB
 
 [Unit-market endpoint support](investigation/A4i1d.md) · [Price-contract scaling](investigation/A4f3.md) · [Ordinal stable allocation](investigation/A4l.md) · [Max-norm certificate and lattice block search](investigation/A4m.md)
 
-[Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
+[Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Reweighted-cover lower bound](notes/A4h6-reweighted-cover-lower-bound.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
 
 [B3f assignment-forcing proof](notes/B3f-forced-flow-switches.md#why-every-equilibrium-uses-the-prescribed-assignment) · [A4 market construction and iteration bounds](notes/A4-minimum-price-markets.md#lower-bound-for-the-directional-ascending-auctions)
 
