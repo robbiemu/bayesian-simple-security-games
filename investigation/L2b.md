@@ -21,6 +21,7 @@ Parent question · [L2 · Account for exact arithmetic along a run](L2.md)
 
 ## Contribution log
 
-- [Input-only bit lengths for fixed-order exact continuation](../records/6d779579-7c48-4255-aa4c-82ee4a56a99d.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex (underlying model snapshots unspecified)
+- [Input-only bit lengths for fixed-order exact continuation](../records/6d779579-7c48-4255-aa4c-82ee4a56a99d.md) · result · proof · superseded · Robert Thomas Collins, OpenAI Codex · Codex (underlying model snapshots unspecified)
+- [Input-only arithmetic for fixed-order continuation (review correction)](../records/2986e72a-afb9-4871-b3bd-001a01f18f02.md) · result · proof · Robert Thomas Collins, OpenAI Codex · Codex (underlying model snapshots unspecified), Python
 
 [Join the discussion in issue #5](https://github.com/robbiemu/bayesian-simple-security-games/issues/5) · [Find other discussions](https://github.com/robbiemu/bayesian-simple-security-games/issues?q=is%3Aissue+in%3Atitle+%22%5BL2b%5D%22) · [Contribute to this question](https://github.com/robbiemu/bayesian-simple-security-games/issues/new?template=research.yml&title=%5BL2b%5D+) · [Contributor guide](../CONTRIBUTING.md)

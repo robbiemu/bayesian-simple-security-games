@@ -21,6 +21,7 @@ Parent question · [B3 · Bound progress with overlapping types](B3.md)
 
 ## Contributions elsewhere that cite this work
 
+- [Input-only arithmetic for fixed-order continuation (review correction)](../records/2986e72a-afb9-4871-b3bd-001a01f18f02.md)
 - [Input-only bit lengths for fixed-order exact continuation](../records/6d779579-7c48-4255-aa4c-82ee4a56a99d.md)
 - [Exponential strict threshold drops on one fixed open boundary](../records/8d52deb9-efe9-4870-896a-2fab554a6e93.md)
 
