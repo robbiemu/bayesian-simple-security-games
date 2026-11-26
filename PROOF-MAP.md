@@ -128,6 +128,7 @@ flowchart TB
     AS --> G["A4b · Interaction graphs of bounded elimination depth<br/>or forests after a fixed number of deletions<br/>Exact polynomial-time solvers"]
     AS --> CV["A4e · Covering LP and unweighted flow"]
     CV --> CD["Reweighted cover with slope tie-break<br/>Exact search · exponential iteration bound"]
+    CD --> CDL["Defect-one family<br/>Superpolynomial reweighted solves"]:::settled
     CV --> CO["Common intercept offsets with arbitrary slopes<br/>Exact polynomial-time solver"]
     CO --> AJC
 
@@ -155,7 +156,7 @@ flowchart TB
 
 [Unit-market endpoint support](investigation/A4i1d.md) · [Price-contract scaling](investigation/A4f3.md) · [Ordinal stable allocation](investigation/A4l.md) · [Max-norm certificate and lattice block search](investigation/A4m.md)
 
-[Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
+[Minimum-price certificate](notes/A4-minimum-price-markets.md#certifying-a-candidate-minimum-price) · [Near-factorized solver](notes/A4a-near-factorized-slopes.md) · [Hall search and good elimination](notes/A4b-direct-hall-search.md) · [Covering LPs](notes/A4e-covering-lp.md) · [Reweighted-cover lower bound](notes/A4h6-reweighted-cover-lower-bound.md) · [Bounded-handicap formulation](notes/A4f-handicap-formulation.md)
 
 [B3f assignment-forcing proof](notes/B3f-forced-flow-switches.md#why-every-equilibrium-uses-the-prescribed-assignment) · [A4 market construction and iteration bounds](notes/A4-minimum-price-markets.md#lower-bound-for-the-directional-ascending-auctions)
 

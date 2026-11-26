@@ -67,7 +67,7 @@ flowchart TD
   n26 --> n29
   n30["A4d"]:::scoped
   n26 --> n30
-  n31["A4e"]:::open
+  n31["A4e"]:::scoped
   n26 --> n31
   n32["A4e1"]:::scoped
   n31 --> n32
