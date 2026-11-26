@@ -10,15 +10,29 @@ Vincent Conitzer asked whether an exact Bayes–Nash equilibrium can be computed
 
 Kintali’s result and the checked Lean development conclude this repository’s main investigation.
 
-The companion manuscript presents the stability argument, exact recovery, and verification of the constructive Lean variant. [Read the manuscript (PDF)](papers/kintali-lean/kintali-lean.pdf) · [Source and verification record](papers/kintali-lean)
+The companion manuscript presents the stability argument, exact recovery, and verification of the constructive Lean variant. [Read the manuscript (PDF)](papers/kintali-lean/kintali-lean.pdf) · [TeX source](papers/kintali-lean/kintali-lean.tex) · [Verification record](papers/kintali-lean/verification.txt)
 
 The standalone Python implementation reads rational game data and emits an exact equilibrium and a sparse defender lottery. Its replay checks the Python and Lean outputs against the same equilibrium conditions. [Python solver and replay](lean/Kintali/README.md#python-implementation)
+
+## Other accomplishments
+
+### From stochastic reachability to deterministic mean payoff
+
+While looking for a hardness reduction for affine-market clearing, we found a way to turn a simple stochastic reachability game and a rational threshold into one deterministic mean-payoff game in polynomial time. The reduction preserves the threshold answer at equality and for games with nonterminating plays. Lean proves that the binary compiler preserves that answer and that its execution has polynomial bit cost under the stated model. This is the reverse reduction described as open in the October 2026 seminar. [Manuscript (PDF)](papers/H4-stochastic-to-mean-payoff.pdf) · [Original proof and Python replay (PR #10)](notes/H4-ssg-to-mean-payoff.md) · [Current Lean theorem and replay](lean/README.md#stochastic-game-reduction) · [October seminar](https://mimuw.edu.pl/en/seminars/talk/quasipolynomial-algorithms-for-mean-payoff-and-simple-stochastic-games/)
+
+### Fixed-flow continuation lower bound
+
+Yuqian Li, Vincent Conitzer, and Dmytro Korzhyk asked in February 2016 whether their continuation has a polynomial worst-case running time. The November 21 paper constructs Bayesian simple security games in which following the defender's budget with a fixed attack flow per step requires superpolynomially many steps. The defender threshold and target attack totals stay fixed across the counted budget interval. An assignment and a feasibility LP compute an exact equilibrium at the final budget on the same family. Lean checks supporting lemmas for the November 21 paper, and exact Python replays check the small witnesses. [Catcher–Evader Games, §7 (2016)](https://arxiv.org/pdf/1602.01896v1#page=11) · [Paper (PDF)](papers/fixed-flow-continuation-lower-bound.pdf) · [TeX source](papers/fixed-flow-continuation-lower-bound.tex) · [Verification record](papers/fixed-flow-continuation-lower-bound-verification.md)
+
+## State of the investigation when Kintali solved the problem
+
+The sections below record where our investigation stood when Shiva Kintali solved the general equilibrium problem on November 24, 2026. They preserve the bounds and methods we had reached, with links to later checks and write-ups for the individual results.
 
 **L1/L2** studies how equilibrium changes as the defender’s budget increases and which steps can be skipped. **A4** studies direct algorithms for exact market clearing and lower bounds for specific methods.
 
 [**L1/L2 · Continuation complexity and shortcuts**](#open-l1l2-continuation-questions) · [**A4 · Direct market algorithms**](#open-a4-market-questions) · [Investigation archive](investigation/README.md) · [How to contribute](CONTRIBUTING.md)
 
-## Open L1/L2 continuation questions
+### Open L1/L2 continuation questions
 
 L1 describes the published continuation. L2 gives an exact implementation. Some games force superpolynomially many changes of attack flow, even when each step takes the largest possible jump at fixed flow. A general polynomial-time algorithm along this line would have to skip those changes. The questions below measure the cost of following the original path. [Lower bound and its scope](investigation/B3f.md) · [Exact upper bound](investigation/L2.md)
 
@@ -26,7 +40,7 @@ L1 describes the published continuation. L2 gives an exact implementation. Some 
 | --- | --- | --- |
 | [L2a · Tight worst-case run length](investigation/L2a.md) | Narrow the gap between the superpolynomial number of steps forced on one run and the general upper bound. | [Issue #4](https://github.com/robbiemu/bayesian-simple-security-games/issues/4) |
 
-## Open A4 market questions
+### Open A4 market questions
 
 Each buyer’s utility for a good is a decreasing affine function of its price, with a slope specific to that buyer and good. Exact clearing with binary rational data and exact security-game equilibrium are polynomial-time Turing equivalent. A4i recovers the minimum prices from one equilibrium of a game with one defender resource. Applying Kintali’s algorithm to that game settles the polynomial-time existence question. [A4i reverse reduction](investigation/A4i.md) · [Kintali’s short proof](https://shivakintali.github.io/papers/SecurityGames-short.pdf)
 
@@ -100,9 +114,3 @@ Write $a_{it}=u_2^0(i,t)$, $d_{it}=u_2^0(i,t)-u_2^1(i,t)\ge0$, and $\beta_t=u_1^
 | $x_t=1$ | $s_t\ge\lambda$ |
 
 Every feasible $x$ is a convex combination of incidence vectors of $r$-element subsets. The defender’s uncovered utility contributes a term constant in $x$. The assumptions allow zero payoff slopes and zero priors. A zero-prior type can be assigned any best response when reporting conditional strategies.
-
-## Other accomplishments
-
-### From stochastic reachability to deterministic mean payoff
-
-While looking for a hardness reduction for affine-market clearing, we found a way to turn a simple stochastic reachability game and a rational threshold into one deterministic mean-payoff game in polynomial time. The reduction preserves the threshold answer at equality and for games with nonterminating plays. Lean proves that the binary compiler preserves that answer and that its execution has polynomial bit cost under the stated model. This is the reverse reduction described as open in the October 2026 seminar. [Manuscript (PDF)](papers/H4-stochastic-to-mean-payoff.pdf) · [Original proof and Python replay (PR #10)](notes/H4-ssg-to-mean-payoff.md) · [Current Lean theorem and replay](lean/README.md#stochastic-game-reduction) · [October seminar](https://mimuw.edu.pl/en/seminars/talk/quasipolynomial-algorithms-for-mean-payoff-and-simple-stochastic-games/)
