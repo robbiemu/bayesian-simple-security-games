@@ -1,6 +1,6 @@
 # A4e Covering linear programs for market equilibrium
 
-The covering inequalities describe the permissible utility and price pairs. Market equilibrium also requires an unweighted transportation flow supported by the tight inequalities. A fixed covering objective can select a point with no such flow, and a failed flow test need not give a linear cut. A particular reweighting rule always reaches a clearing point with polynomial work per iteration and an exponential bound on iterations. Covering LPs give polynomial-time algorithms for nearly factorized slopes and for arbitrary slopes with common intercept offsets. The general polynomial-time question remains open.
+The covering inequalities describe the permissible utility and price pairs. Market equilibrium also requires an unweighted transportation flow supported by the tight inequalities. A fixed covering objective can select a point with no such flow, and a failed flow test need not give a linear cut. A particular reweighting rule always reaches a clearing point with polynomial work per iteration and an exponential bound on iterations. Covering LPs give polynomial-time algorithms for nearly factorized slopes and for arbitrary slopes with common intercept offsets. The tight worst-case iteration count for this descent rule remains open.
 
 ## The weighted dual can miss clearance
 
